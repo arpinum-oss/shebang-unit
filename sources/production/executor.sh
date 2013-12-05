@@ -29,11 +29,9 @@ function _initialiseTestsExecution() {
 function _executeAllTestfilesWithPatternInDirectory() {
 	local testFilePattern=${1}; local directory=${2}
 
-	find "${directory}" -name ${testFilePattern} | {
-		local file; while read file; do
-			_executeTestFile "${file}"
-		done
-	}
+	local file; for file in $(find "${directory}" -name ${testFilePattern}); do
+		_executeTestFile "${file}"
+	done
 }
 
 function _executeTestFile() {
