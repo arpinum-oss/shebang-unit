@@ -1,4 +1,4 @@
-[[ "${SOURCE_EXECUTOR}" != "" ]] && return || readonly SOURCE_EXECUTOR=1
+[[ "${SOURCE_RUNNER}" != "" ]] && return || readonly SOURCE_RUNNER=1
 
 source ${0%/*}/../production/system.sh
 source ${0%/*}/../production/fileParser.sh
@@ -10,12 +10,12 @@ _DEFAULT_COLOR_CODE="\\e[0m"
 
 _DEFAULT_TEST_FILE_PATTERN=*Test.sh
 
-function executor_executeAllTestFilesInDirectory() {
+function runner_runAllTestFilesInDirectory() {
 	local directory=${1}; local overridenTestFilePattern=${2}
 
 	_initialiseTestsExecution
 	local testFilePattern=$(system_getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")
-	_executeAllTestfilesWithPatternInDirectory "${testFilePattern}" "${directory}"
+	_runAllTestfilesWithPatternInDirectory "${testFilePattern}" "${directory}"
 	_printTestsResults
 	_testsAreSuccessful
 }
@@ -26,59 +26,59 @@ function _initialiseTestsExecution() {
 	_EXECUTION_BEGINING_DATE=$(system_getDateInSeconds)
 }
 
-function _executeAllTestfilesWithPatternInDirectory() {
+function _runAllTestfilesWithPatternInDirectory() {
 	local testFilePattern=${1}; local directory=${2}
 
 	local file; for file in $(find "${directory}" -name ${testFilePattern}); do
-		_executeTestFile "${file}"
+		_runTestFile "${file}"
 	done
 }
 
-function _executeTestFile() {
+function _runTestFile() {
 	local file=${1}
 	printf "[File] ${file}\n"
 	source "${file}"
-	_executeGlobalSetupInFile "${file}"
-	_executeAllTestsInFile "${file}"
-	_executeGlobalTeardownInFile "${file}"
+	_callGlobalSetupInFile "${file}"
+	_callAllTestsInFile "${file}"
+	_callGlobalTeardownInFile "${file}"
 	printf "\n"
 }
 
-function _executeGlobalSetupInFile() {
+function _callGlobalSetupInFile() {
 	local file=${1}
-	_executeFunctionIfExisting $(fileParser_findGlobalSetupFunctionInFile "${file}")
+	_callFunctionIfExisting $(fileParser_findGlobalSetupFunctionInFile "${file}")
 }
 
-function _executeGlobalTeardownInFile() {
+function _callGlobalTeardownInFile() {
 	local file=${1}
-	_executeFunctionIfExisting $(fileParser_findGlobalTeardownFunctionInFile "${file}")
+	_callFunctionIfExisting $(fileParser_findGlobalTeardownFunctionInFile "${file}")
 }
 
-function _executeAllTestsInFile() {
+function _callAllTestsInFile() {
 	local file=${1}
 	local testFunction; for testFunction in $(fileParser_findTestFunctionsInFile "${file}"); do
-		_executeTestFunctionInTheMiddleOfSetupAndTeardown "${testFunction}" "${file}"
+		_callTestFunctionInTheMiddleOfSetupAndTeardown "${testFunction}" "${file}"
 	done
 }
 
-function _executeTestFunctionInTheMiddleOfSetupAndTeardown() {
+function _callTestFunctionInTheMiddleOfSetupAndTeardown() {
 	local testFunction=${1}; local file=${2}
 
 	printf "[Test] ${testFunction}\n"
-	( _executeSetupInFile "${file}" &&
+	( _callSetupInFile "${file}" &&
 	( ${testFunction} ) &&
-	_executeTeardownInFile "${file}" )
+	_callTeardownInFile "${file}" )
 	_parseTestFunctionResult "${testFunction}" ${?}
 }
 
-function _executeSetupInFile() {
+function _callSetupInFile() {
 	local file=${1}
-	_executeFunctionIfExisting $(fileParser_findSetupFunctionInFile "${file}")
+	_callFunctionIfExisting $(fileParser_findSetupFunctionInFile "${file}")
 }
 
-function _executeTeardownInFile() {
+function _callTeardownInFile() {
 	local file=${1}
-	_executeFunctionIfExisting $(fileParser_findTeardownFunctionInFile "${file}")
+	_callFunctionIfExisting $(fileParser_findTeardownFunctionInFile "${file}")
 }
 
 function _parseTestFunctionResult() {
@@ -122,7 +122,7 @@ function _testsAreSuccessful() {
 	(( ${_RED_TESTS_COUNT} == 0 ))
 }
 
-function _executeFunctionIfExisting() {
+function _callFunctionIfExisting() {
 	local function=${1}
 	if [[ "${function}" != "" ]]; then
 		eval ${function}

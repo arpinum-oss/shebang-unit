@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source ${0%/*}/../production/executor.sh
+source ${0%/*}/../production/runner.sh
 
-executor_executeAllTestFilesInDirectory ${0%/*} ${@}
+runner_runAllTestFilesInDirectory ${0%/*} ${@}
