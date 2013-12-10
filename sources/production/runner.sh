@@ -1,9 +1,3 @@
-[[ "${SOURCE_RUNNER}" != "" ]] && return || readonly SOURCE_RUNNER=1
-
-source ${0%/*}/../production/system.sh
-source ${0%/*}/../production/fileParser.sh
-source ${0%/*}/../production/assertion.sh
-
 _GREEN_COLOR_CODE="\\033[1;32m"
 _RED_COLOR_CODE="\\033[1;31m"
 _DEFAULT_COLOR_CODE="\\e[0m"

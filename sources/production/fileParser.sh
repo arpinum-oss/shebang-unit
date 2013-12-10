@@ -1,5 +1,3 @@
-[[ "${SOURCE_FILE_PARSER}" != "" ]] && return || readonly SOURCE_FILE_PARSER=1
-
 _GLOBAL_SETUP_FUNCTION_NAME="globalSetup"
 _GLOBAL_TEARDOWN_FUNCTION_NAME="globalTeardown"
 _SETUP_FUNCTION_NAME="setup"

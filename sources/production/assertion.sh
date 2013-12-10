@@ -1,5 +1,3 @@
-[[ "${SOURCE_ASSERTION}" != "" ]] && return || readonly SOURCE_ASSERTION=1
-
 function assertEqual() {
 	local expected=${1}; local actual=${2}
 	if [[ "${expected}" != "${actual}" ]]; then

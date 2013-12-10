@@ -1,5 +1,3 @@
-[[ "${SOURCE_SYSTEM}" != "" ]] && return || readonly SOURCE_SYSTEM=1
-
 SUCCESS_STATUS_CODE=0
 FAILURE_STATUS_CODE=1
 

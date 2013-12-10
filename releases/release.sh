@@ -1,11 +1,11 @@
+_RELEASED_ARTIFACT_FILENAME='ShebangUnit.sh'
 _RELEASE_DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
-_RELEASE_FILENAME=SheBangUnit.sh
 _SOURCES_DIRECTORY="${_RELEASE_DIRECTORY}/../sources/production"
-_SOURCE_FILENAMES=('system.sh' 'fileParser.sh' 'assertion.sh' 'runner.sh')
+_SOURCES_FILENAMES=('system.sh' 'fileParser.sh' 'assertion.sh' 'runner.sh')
 
-function _concatenateSourcesInReleaseFile() {
+function release_concatenateSourcesInReleaseFile() {
 	_initialiseReleaseFile
-	local filename; for filename in "${_SOURCE_FILENAMES[@]}"; do
+	local filename; for filename in "${_SOURCES_FILENAMES[@]}"; do
 		_concatenateSourceInReleaseFile "${filename}"
 	done
 }
@@ -16,25 +16,23 @@ function _initialiseReleaseFile() {
 }
 
 function _deleteReleaseFileIfExisting() {
-	if [[ -f "$(_getReleaseFile)" ]]; then
-		rm "$(_getReleaseFile)"
+	if [[ -f "$(release_getReleasedArtifactFile)" ]]; then
+		rm "$(release_getReleasedArtifactFile)"
 	fi
 }
 
 function _printHeaderInReleaseFile() {
 	local releaseDate=$(date +"%Y-%m-%d_%H-%M-%S")
-	printf "#Last release: ${releaseDate}\n" >> "$(_getReleaseFile)"
+	printf "# Shebang unit all in one source file\n" >> "$(release_getReleasedArtifactFile)"
 }
 
 function _concatenateSourceInReleaseFile() {
 	local filename=${1}
-	printf "\n#Beginning of ${filename}\n" >> "$(_getReleaseFile)"
-	cat "${_SOURCES_DIRECTORY}/${filename}" >> "$(_getReleaseFile)"
-	printf "\n#End of ${filename}\n" >> "$(_getReleaseFile)"
+	printf "\n#Beginning of ${filename}\n" >> "$(release_getReleasedArtifactFile)"
+	cat "${_SOURCES_DIRECTORY}/${filename}" >> "$(release_getReleasedArtifactFile)"
+	printf "\n#End of ${filename}\n" >> "$(release_getReleasedArtifactFile)"
 }
 
-function _getReleaseFile() {
-	printf "${_RELEASE_DIRECTORY}/${_RELEASE_FILENAME}"
+function release_getReleasedArtifactFile() {
+	printf "${_RELEASE_DIRECTORY}/${_RELEASED_ARTIFACT_FILENAME}"
 }
-
-_concatenateSourcesInReleaseFile
