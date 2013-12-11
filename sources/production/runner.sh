@@ -88,9 +88,9 @@ function _parseTestFunctionResult() {
 }
 
 function _printTestsResults() {
+	printf "[Results]\n"
 	local color=$(_getColorCodeForTestsResult)
 	local executionTime=$(_getExecutionTime)
-	printf "[Results]\n"
 	_printWithColor "Green tests : ${_GREEN_TESTS_COUNT}, red : ${_RED_TESTS_COUNT} in ${executionTime}s" "${color}"
 }
 

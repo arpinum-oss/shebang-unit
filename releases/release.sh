@@ -1,18 +1,21 @@
 _RELEASED_ARTIFACT_FILENAME='ShebangUnit.sh'
 _RELEASE_DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
 _SOURCES_DIRECTORY="${_RELEASE_DIRECTORY}/../sources/production"
-_SOURCES_FILENAMES=('system.sh' 'fileParser.sh' 'assertion.sh' 'runner.sh')
 
 function release_concatenateSourcesInReleaseFile() {
 	_initialiseReleaseFile
-	local filename; for filename in "${_SOURCES_FILENAMES[@]}"; do
-		_concatenateSourceInReleaseFile "${filename}"
-	done
+	_concatenateSourcesInReleaseFile
 }
 
 function _initialiseReleaseFile() {
 	_deleteReleaseFileIfExisting
 	_printHeaderInReleaseFile
+}
+
+function _concatenateSourcesInReleaseFile() {
+	local file; for file in "${_SOURCES_DIRECTORY}"/*.sh; do
+		_concatenateSourceInReleaseFile "${file}"
+	done
 }
 
 function _deleteReleaseFileIfExisting() {
@@ -27,9 +30,10 @@ function _printHeaderInReleaseFile() {
 }
 
 function _concatenateSourceInReleaseFile() {
-	local filename=${1}
+	local file=${1}
+	local filename=$(basename "${file}")
 	printf "\n#Beginning of ${filename}\n" >> "$(release_getReleasedArtifactFile)"
-	cat "${_SOURCES_DIRECTORY}/${filename}" >> "$(release_getReleasedArtifactFile)"
+	cat "${file}" >> "$(release_getReleasedArtifactFile)"
 	printf "\n#End of ${filename}\n" >> "$(release_getReleasedArtifactFile)"
 }
 
