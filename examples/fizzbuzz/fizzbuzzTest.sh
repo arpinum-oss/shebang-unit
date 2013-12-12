@@ -17,4 +17,10 @@ function fizzbuzzShouldEnumerateFizzFor3() {
 	assertEqual "Fizz" "${result[2]}"
 }
 
+function fizzbuzzShouldEnumerateFizzForAllMultiplesOf3() {
+	local result=($(fizzbuzz_enumerate))
+
+	assertEqual "Fizz" "${result[5]}"
+}
+
 runner_runAllTestFilesInDirectory "${_TEST_DIRECTORY}" ${@}
