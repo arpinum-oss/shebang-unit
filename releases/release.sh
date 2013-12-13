@@ -5,6 +5,7 @@ _SOURCES_DIRECTORY="${_RELEASE_DIRECTORY}/../sources/production"
 function release_concatenateSourcesInReleaseFile() {
 	_initialiseReleaseFile
 	_concatenateSourcesInReleaseFile
+	_makeReleaseFileExecutable
 }
 
 function _initialiseReleaseFile() {
@@ -35,6 +36,10 @@ function _concatenateSourceInReleaseFile() {
 	printf "\n#Beginning of ${filename}\n" >> "$(release_getReleasedArtifactFile)"
 	cat "${file}" >> "$(release_getReleasedArtifactFile)"
 	printf "\n#End of ${filename}\n" >> "$(release_getReleasedArtifactFile)"
+}
+
+function _makeReleaseFileExecutable() {
+	chmod +x "$(release_getReleasedArtifactFile)"
 }
 
 function release_getReleasedArtifactFile() {
