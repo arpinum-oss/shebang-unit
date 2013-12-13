@@ -8,8 +8,12 @@ function fizzbuzz_enumerate() {
 
 function _getValueForNumber() {
 	local number=${1}
-	if _numberIsMultipleOfTheOtherNumber ${number} 3; then
+	if _numberIsMultipleOfTheOtherNumber ${number} 15; then
+		printf "FizzBuzz"
+	elif _numberIsMultipleOfTheOtherNumber ${number} 3; then
 		printf "Fizz"
+	elif _numberIsMultipleOfTheOtherNumber ${number} 5; then
+		printf "Buzz"
 	else
 		printf ${number}
 	fi
