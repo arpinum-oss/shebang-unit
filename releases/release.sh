@@ -1,5 +1,5 @@
 _RELEASED_ARTIFACT_FILENAME='ShebangUnit.sh'
-_RELEASE_DIRECTORY=$(dirname "${BASH_SOURCE[0]}")
+_RELEASE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 _SOURCES_DIRECTORY="${_RELEASE_DIRECTORY}/../sources/production"
 
 function release_concatenateSourcesInReleaseFile() {
@@ -20,19 +20,20 @@ function _concatenateSourcesInReleaseFile() {
 }
 
 function _deleteReleaseFileIfExisting() {
+	echo "$(release_getReleasedArtifactFile)"
 	if [[ -f "$(release_getReleasedArtifactFile)" ]]; then
 		rm "$(release_getReleasedArtifactFile)"
 	fi
 }
 
 function _printHeaderInReleaseFile() {
-	local releaseDate=$(date +"%Y-%m-%d_%H-%M-%S")
+	local releaseDate="$(date +"%Y-%m-%d_%H-%M-%S")"
 	printf "# Shebang unit all in one source file\n" >> "$(release_getReleasedArtifactFile)"
 }
 
 function _concatenateSourceInReleaseFile() {
-	local file=${1}
-	local filename=$(basename "${file}")
+	local file=$1
+	local filename="$(basename "${file}")"
 	printf "\n#Beginning of ${filename}\n" >> "$(release_getReleasedArtifactFile)"
 	cat "${file}" >> "$(release_getReleasedArtifactFile)"
 	printf "\n#End of ${filename}\n" >> "$(release_getReleasedArtifactFile)"

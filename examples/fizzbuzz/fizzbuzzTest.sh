@@ -5,34 +5,35 @@ _TEST_DIRECTORY="$(dirname ${BASH_SOURCE[0]})"
 source "${_TEST_DIRECTORY}/../../releases/ShebangUnit.sh"
 source "${_TEST_DIRECTORY}/fizzbuzz.sh"
 
-function fizzbuzzShouldEnumerate100Elements() {
-	local result=($(fizzbuzz_enumerate))
+_enumeration=()
 
-	assertEqual 100 ${#result[@]}
+function setup() {
+	_enumeration=($(fizzbuzz_enumerate))
+}
+
+function fizzbuzzShouldEnumerate100Elements() {
+	assertEqual 100 ${#_enumeration[@]}
 }
 
 function fizzbuzzShouldEnumerateFizzFor3() {
-	local result=($(fizzbuzz_enumerate))
-
-	assertEqual "Fizz" "${result[2]}"
+	assertEqual "Fizz" "$(_getResultForNumber 3)"
 }
 
 function fizzbuzzShouldEnumerateFizzForAllMultiplesOf3() {
-	local result=($(fizzbuzz_enumerate))
-
-	assertEqual "Fizz" "${result[5]}"
+	assertEqual "Fizz" "$(_getResultForNumber 6)"
 }
 
 function fizzbuzzShouldEnumerateBuzzFor5() {
-	local result=($(fizzbuzz_enumerate))
-
-	assertEqual "Buzz" "${result[4]}"
+	assertEqual "Buzz" "$(_getResultForNumber 5)"
 }
 
 function fizzbuzzShouldEnumerateBuzzFor15() {
-	local result=($(fizzbuzz_enumerate))
-
-	assertEqual "FizzBuzz" "${result[14]}"
+	assertEqual "FizzBuzz" "$(_getResultForNumber 15)"
 }
 
-runner_runAllTestFilesInDirectory "${_TEST_DIRECTORY}" ${@}
+function _getResultForNumber() {
+	local arrayIndex=$(($1 - 1))
+	printf "${_enumeration[${arrayIndex}]}"
+}
+
+runner_runAllTestFilesInDirectory "${_TEST_DIRECTORY}" $@

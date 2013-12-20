@@ -9,4 +9,4 @@ function _releaseShebangUnit() {
 }
 
 _releaseShebangUnit
-runner_runAllTestFilesInDirectory "${_SUITE_DIRECTORY}" ${@}
+runner_runAllTestFilesInDirectory "${_SUITE_DIRECTORY}" $@

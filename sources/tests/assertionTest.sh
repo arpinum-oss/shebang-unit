@@ -1,7 +1,7 @@
 function assertingThatSuccessfulCommandHasSuccessStatusCodeIsTrue() {
 	_succesfulCommand
 
-	( assertStatusCodeIsSuccess ${?} > /dev/null )
+	( assertStatusCodeIsSuccess $? > /dev/null )
 
 	_assertSuccess
 }
@@ -9,7 +9,7 @@ function assertingThatSuccessfulCommandHasSuccessStatusCodeIsTrue() {
 function assertingThatFailingCommandHasSuccessStatusCodeIsFalse() {
 	_failingCommand
 
-	( assertStatusCodeIsSuccess ${?} > /dev/null )
+	( assertStatusCodeIsSuccess $? > /dev/null )
 
 	_assertFailure
 }
@@ -17,7 +17,7 @@ function assertingThatFailingCommandHasSuccessStatusCodeIsFalse() {
 function assertingThatFailingCommandHasFailureStatusCodeIsTrue() {
 	_failingCommand
 
-	( assertStatusCodeIsFailure ${?} > /dev/null )
+	( assertStatusCodeIsFailure $? > /dev/null )
 
 	_assertSuccess
 }
@@ -25,7 +25,7 @@ function assertingThatFailingCommandHasFailureStatusCodeIsTrue() {
 function assertingThatSuccessfulCommandHasFailureStatusCodeIsFalse() {
 	_succesfulCommand
 
-	( assertStatusCodeIsFailure ${?} > /dev/null )
+	( assertStatusCodeIsFailure $? > /dev/null )
 
 	_assertFailure
 }
@@ -67,11 +67,11 @@ function assertingThatStringDoesNotContainSubstringIsFalse() {
 }
 
 function _assertSuccess() {
-    return $( (( ${?} == 0 )) )
+    return $( (( $? == 0 )) )
 }
 
 function _assertFailure() {
-    return $( (( ${?} != 0 )) )
+    return $( (( $? != 0 )) )
 }
 
 function _succesfulCommand() {

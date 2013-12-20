@@ -5,10 +5,10 @@ _DEFAULT_COLOR_CODE="\\e[0m"
 _DEFAULT_TEST_FILE_PATTERN=*Test.sh
 
 function runner_runAllTestFilesInDirectory() {
-	local directory=${1}; local overridenTestFilePattern=${2}
+	local directory=$1; local overridenTestFilePattern=$2
 
 	_initialiseTestsExecution
-	local testFilePattern=$(system_getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")
+	local testFilePattern="$(system_getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
 	_runAllTestfilesWithPatternInDirectory "${testFilePattern}" "${directory}"
 	_printTestsResults
 	_testsAreSuccessful
@@ -17,11 +17,11 @@ function runner_runAllTestFilesInDirectory() {
 function _initialiseTestsExecution() {
 	_GREEN_TESTS_COUNT=0
 	_RED_TESTS_COUNT=0
-	_EXECUTION_BEGINING_DATE=$(system_getDateInSeconds)
+	_EXECUTION_BEGINING_DATE="$(system_getDateInSeconds)"
 }
 
 function _runAllTestfilesWithPatternInDirectory() {
-	local testFilePattern=${1}; local directory=${2}
+	local testFilePattern=$1; local directory=$2
 
 	local file; for file in $(find "${directory}" -name ${testFilePattern}); do
 		_runTestFile "${file}"
@@ -29,7 +29,7 @@ function _runAllTestfilesWithPatternInDirectory() {
 }
 
 function _runTestFile() {
-	local file=${1}
+	local file=$1
 	printf "[File] ${file}\n"
 	source "${file}"
 	_callGlobalSetupInFile "${file}"
@@ -39,44 +39,44 @@ function _runTestFile() {
 }
 
 function _callGlobalSetupInFile() {
-	local file=${1}
-	_callFunctionIfExisting $(fileParser_findGlobalSetupFunctionInFile "${file}")
+	local file=$1
+	_callFunctionIfExisting "$(fileParser_findGlobalSetupFunctionInFile "${file}")"
 }
 
 function _callGlobalTeardownInFile() {
-	local file=${1}
-	_callFunctionIfExisting $(fileParser_findGlobalTeardownFunctionInFile "${file}")
+	local file=$1
+	_callFunctionIfExisting "$(fileParser_findGlobalTeardownFunctionInFile "${file}")"
 }
 
 function _callAllTestsInFile() {
-	local file=${1}
+	local file=$1
 	local testFunction; for testFunction in $(fileParser_findTestFunctionsInFile "${file}"); do
 		_callTestFunctionInTheMiddleOfSetupAndTeardown "${testFunction}" "${file}"
 	done
 }
 
 function _callTestFunctionInTheMiddleOfSetupAndTeardown() {
-	local testFunction=${1}; local file=${2}
+	local testFunction=$1; local file=$2
 
 	printf "[Test] ${testFunction}\n"
 	( _callSetupInFile "${file}" &&
 	( ${testFunction} ) &&
 	_callTeardownInFile "${file}" )
-	_parseTestFunctionResult "${testFunction}" ${?}
+	_parseTestFunctionResult "${testFunction}" $?
 }
 
 function _callSetupInFile() {
-	local file=${1}
-	_callFunctionIfExisting $(fileParser_findSetupFunctionInFile "${file}")
+	local file=$1
+	_callFunctionIfExisting "$(fileParser_findSetupFunctionInFile "${file}")"
 }
 
 function _callTeardownInFile() {
-	local file=${1}
-	_callFunctionIfExisting $(fileParser_findTeardownFunctionInFile "${file}")
+	local file=$1
+	_callFunctionIfExisting "$(fileParser_findTeardownFunctionInFile "${file}")"
 }
 
 function _parseTestFunctionResult() {
-	local testFunction=${1}; local statusCode=${2}
+	local testFunction=$1; local statusCode=$2
 
 	if (( ${statusCode} == ${SUCCESS_STATUS_CODE} )); then
 		(( _GREEN_TESTS_COUNT++ ))
@@ -89,8 +89,8 @@ function _parseTestFunctionResult() {
 
 function _printTestsResults() {
 	printf "[Results]\n"
-	local color=$(_getColorCodeForTestsResult)
-	local executionTime=$(_getExecutionTime)
+	local color="$(_getColorCodeForTestsResult)"
+	local executionTime="$(_getExecutionTime)"
 	_printWithColor "Green tests : ${_GREEN_TESTS_COUNT}, red : ${_RED_TESTS_COUNT} in ${executionTime}s" "${color}"
 }
 
@@ -103,12 +103,12 @@ function _getColorCodeForTestsResult() {
 }
 
 function _getExecutionTime() {
-	local endingDate=$(system_getDateInSeconds)
-	printf $((${endingDate} - ${_EXECUTION_BEGINING_DATE}))
+	local endingDate="$(system_getDateInSeconds)"
+	printf "$((${endingDate} - ${_EXECUTION_BEGINING_DATE}))"
 }
 
 function _printWithColor() {
-	local text=${1}; local colorCode=${2}
+	local text=$1; local colorCode=$2
 	system_printWithColor "${text}" "${colorCode}" "${_DEFAULT_COLOR_CODE}"
 }
 
@@ -117,8 +117,8 @@ function _testsAreSuccessful() {
 }
 
 function _callFunctionIfExisting() {
-	local function=${1}
-	if [[ "${function}" != "" ]]; then
+	local function=$1
+	if [[ -n "${function}" ]]; then
 		eval ${function}
 	fi
 }
