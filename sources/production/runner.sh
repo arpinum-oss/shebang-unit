@@ -4,20 +4,20 @@ _DEFAULT_COLOR_CODE="\\e[0m"
 
 _DEFAULT_TEST_FILE_PATTERN=*Test.sh
 
-function runner_runAllTestFilesInDirectory() {
+function runner::runAllTestFilesInDirectory() {
 	local directory=$1; local overridenTestFilePattern=$2
 
-	_initialiseTestsExecution
-	local testFilePattern="$(system_getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
+	runner::initialiseTestsExecution
+	local testFilePattern="$(system::getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
 	_runAllTestfilesWithPatternInDirectory "${testFilePattern}" "${directory}"
 	_printTestsResults
 	_testsAreSuccessful
 }
 
-function _initialiseTestsExecution() {
+function runner::initialiseTestsExecution() {
 	_GREEN_TESTS_COUNT=0
 	_RED_TESTS_COUNT=0
-	_EXECUTION_BEGINING_DATE="$(system_getDateInSeconds)"
+	_EXECUTION_BEGINING_DATE="$(system::getDateInSeconds)"
 }
 
 function _runAllTestfilesWithPatternInDirectory() {
@@ -40,17 +40,17 @@ function _runTestFile() {
 
 function _callGlobalSetupInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findGlobalSetupFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findGlobalSetupFunctionInFile "${file}")"
 }
 
 function _callGlobalTeardownInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findGlobalTeardownFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findGlobalTeardownFunctionInFile "${file}")"
 }
 
 function _callAllTestsInFile() {
 	local file=$1
-	local testFunction; for testFunction in $(fileParser_findTestFunctionsInFile "${file}"); do
+	local testFunction; for testFunction in $(file_parser::findTestFunctionsInFile "${file}"); do
 		_callTestFunctionInTheMiddleOfSetupAndTeardown "${testFunction}" "${file}"
 	done
 }
@@ -67,12 +67,12 @@ function _callTestFunctionInTheMiddleOfSetupAndTeardown() {
 
 function _callSetupInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findSetupFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findSetupFunctionInFile "${file}")"
 }
 
 function _callTeardownInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findTeardownFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findTeardownFunctionInFile "${file}")"
 }
 
 function _parseTestFunctionResult() {
@@ -103,13 +103,13 @@ function _getColorCodeForTestsResult() {
 }
 
 function _getExecutionTime() {
-	local endingDate="$(system_getDateInSeconds)"
+	local endingDate="$(system::getDateInSeconds)"
 	printf "$((${endingDate} - ${_EXECUTION_BEGINING_DATE}))"
 }
 
 function _printWithColor() {
 	local text=$1; local colorCode=$2
-	system_printWithColor "${text}" "${colorCode}" "${_DEFAULT_COLOR_CODE}"
+	system::printWithColor "${text}" "${colorCode}" "${_DEFAULT_COLOR_CODE}"
 }
 
 function _testsAreSuccessful() {

@@ -2,7 +2,7 @@
 
 _TEST_DIRECTORY="$(dirname ${BASH_SOURCE[0]})"
 
-source "${_TEST_DIRECTORY}/../../releases/ShebangUnit.sh"
+source "${_TEST_DIRECTORY}/../../releases/shebang_unit.sh"
 source "${_TEST_DIRECTORY}/fizzbuzz.sh"
 
 _enumeration=()
@@ -12,23 +12,23 @@ function setup() {
 }
 
 function fizzbuzzShouldEnumerate100Elements() {
-	assertEqual 100 ${#_enumeration[@]}
+	assertion::assertEqual 100 ${#_enumeration[@]}
 }
 
 function fizzbuzzShouldEnumerateFizzFor3() {
-	assertEqual "Fizz" "$(_getResultForNumber 3)"
+	assertion::assertEqual "Fizz" "$(_getResultForNumber 3)"
 }
 
 function fizzbuzzShouldEnumerateFizzForAllMultiplesOf3() {
-	assertEqual "Fizz" "$(_getResultForNumber 6)"
+	assertion::assertEqual "Fizz" "$(_getResultForNumber 6)"
 }
 
 function fizzbuzzShouldEnumerateBuzzFor5() {
-	assertEqual "Buzz" "$(_getResultForNumber 5)"
+	assertion::assertEqual "Buzz" "$(_getResultForNumber 5)"
 }
 
 function fizzbuzzShouldEnumerateBuzzFor15() {
-	assertEqual "FizzBuzz" "$(_getResultForNumber 15)"
+	assertion::assertEqual "FizzBuzz" "$(_getResultForNumber 15)"
 }
 
 function _getResultForNumber() {
@@ -36,4 +36,4 @@ function _getResultForNumber() {
 	printf "${_enumeration[${arrayIndex}]}"
 }
 
-runner_runAllTestFilesInDirectory "${_TEST_DIRECTORY}" $@
+runner::runAllTestFilesInDirectory "${_TEST_DIRECTORY}" $@

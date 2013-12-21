@@ -3,27 +3,27 @@ _GLOBAL_TEARDOWN_FUNCTION_NAME="globalTeardown"
 _SETUP_FUNCTION_NAME="setup"
 _TEARDOWN_FUNCTION_NAME="teardown"
 
-function fileParser_findGlobalSetupFunctionInFile() {
+function file_parser::findGlobalSetupFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_GLOBAL_SETUP_FUNCTION_NAME}"
 }
 
-function fileParser_findGlobalTeardownFunctionInFile() {
+function file_parser::findGlobalTeardownFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
-function fileParser_findSetupFunctionInFile() {
+function file_parser::findSetupFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_SETUP_FUNCTION_NAME}"
 }
 
-function fileParser_findTeardownFunctionInFile() {
+function file_parser::findTeardownFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_TEARDOWN_FUNCTION_NAME}"
 }
 
-function fileParser_findTestFunctionsInFile() {
+function file_parser::findTestFunctionsInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | _filterPrivateFunctions | _filterSpecialFunctions
 }

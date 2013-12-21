@@ -1,18 +1,18 @@
-function assertEqual() {
+function assertion::assertEqual() {
 	local expected=$1; local actual=$2
 	if [[ "${expected}" != "${actual}" ]]; then
 		_assertionFailed "Actual : <${actual}>, expected : <${expected}>."
 	fi
 }
 
-function assertStringContains() {
+function assertion::assertStringContains() {
 	local container=$1; local contained=$2
 	if ! _stringContains "${container}" "${contained}"; then
 		_assertionFailed "String: <${container}> does not contain: <${contained}>."
 	fi
 }
 
-function assertStringDoesNotContain() {
+function assertion::assertStringDoesNotContain() {
 	local container=$1; local contained=$2
 	if _stringContains "${container}" "${contained}"; then
 		_assertionFailed "String: <${container}> contains: <${contained}>."
@@ -24,14 +24,14 @@ function _stringContains() {
 	[[ "${container}" == *"${contained}"* ]]
 }
 
-function assertStatusCodeIsSuccess() {
+function assertion::assertStatusCodeIsSuccess() {
 	local statusCode=$1; local customMessage=$2
 	if (( ${statusCode} != ${SUCCESS_STATUS_CODE} )); then
 		_assertionFailed "Status code is failure instead of success." "${customMessage}"
 	fi
 }
 
-function assertStatusCodeIsFailure() {
+function assertion::assertStatusCodeIsFailure() {
 	local statusCode=$1; local customMessage=$2
 	if (( ${statusCode} == ${SUCCESS_STATUS_CODE} )); then
 		_assertionFailed "Status code is success instead of failure." "${customMessage}"

@@ -1,7 +1,7 @@
 function assertingThatSuccessfulCommandHasSuccessStatusCodeIsTrue() {
 	_succesfulCommand
 
-	( assertStatusCodeIsSuccess $? > /dev/null )
+	( assertion::assertStatusCodeIsSuccess $? > /dev/null )
 
 	_assertSuccess
 }
@@ -9,7 +9,7 @@ function assertingThatSuccessfulCommandHasSuccessStatusCodeIsTrue() {
 function assertingThatFailingCommandHasSuccessStatusCodeIsFalse() {
 	_failingCommand
 
-	( assertStatusCodeIsSuccess $? > /dev/null )
+	( assertion::assertStatusCodeIsSuccess $? > /dev/null )
 
 	_assertFailure
 }
@@ -17,7 +17,7 @@ function assertingThatFailingCommandHasSuccessStatusCodeIsFalse() {
 function assertingThatFailingCommandHasFailureStatusCodeIsTrue() {
 	_failingCommand
 
-	( assertStatusCodeIsFailure $? > /dev/null )
+	( assertion::assertStatusCodeIsFailure $? > /dev/null )
 
 	_assertSuccess
 }
@@ -25,43 +25,43 @@ function assertingThatFailingCommandHasFailureStatusCodeIsTrue() {
 function assertingThatSuccessfulCommandHasFailureStatusCodeIsFalse() {
 	_succesfulCommand
 
-	( assertStatusCodeIsFailure $? > /dev/null )
+	( assertion::assertStatusCodeIsFailure $? > /dev/null )
 
 	_assertFailure
 }
 
 function assertingThatEqualObjectsAreEqualIsTrue() {
-	( assertEqual equal equal > /dev/null )
+	( assertion::assertEqual equal equal > /dev/null )
 
 	_assertSuccess
 }
 
 function assertingThatDifferentObjectsAreEqualIsFalse() {
-	( assertEqual equal different > /dev/null )
+	( assertion::assertEqual equal different > /dev/null )
 
 	_assertFailure
 }
 
 function assertingThatStringContainsSubstringIsTrue() {
- 	( assertStringContains string tri > /dev/null )
+ 	( assertion::assertStringContains string tri > /dev/null )
 
 	_assertSuccess
 }
 
 function assertingThatStringContainsTotallyDifferentStringIsFalse() {
- 	( assertStringContains string z > /dev/null )
+ 	( assertion::assertStringContains string z > /dev/null )
 
 	_assertFailure
 }
 
 function assertingThatStringDoesNotContainTotallyDifferentStringIsTrue() {
- 	( assertStringDoesNotContain string z > /dev/null )
+ 	( assertion::assertStringDoesNotContain string z > /dev/null )
 
 	_assertSuccess
 }
 
 function assertingThatStringDoesNotContainSubstringIsFalse() {
- 	( assertStringDoesNotContain string tri > /dev/null )
+ 	( assertion::assertStringDoesNotContain string tri > /dev/null )
 
 	_assertFailure
 }

@@ -1,21 +1,21 @@
 # Shebang unit all in one source file
 
 #Beginning of assertion.sh
-function assertEqual() {
+function assertion::assertEqual() {
 	local expected=$1; local actual=$2
 	if [[ "${expected}" != "${actual}" ]]; then
 		_assertionFailed "Actual : <${actual}>, expected : <${expected}>."
 	fi
 }
 
-function assertStringContains() {
+function assertion::assertStringContains() {
 	local container=$1; local contained=$2
 	if ! _stringContains "${container}" "${contained}"; then
 		_assertionFailed "String: <${container}> does not contain: <${contained}>."
 	fi
 }
 
-function assertStringDoesNotContain() {
+function assertion::assertStringDoesNotContain() {
 	local container=$1; local contained=$2
 	if _stringContains "${container}" "${contained}"; then
 		_assertionFailed "String: <${container}> contains: <${contained}>."
@@ -27,14 +27,14 @@ function _stringContains() {
 	[[ "${container}" == *"${contained}"* ]]
 }
 
-function assertStatusCodeIsSuccess() {
+function assertion::assertStatusCodeIsSuccess() {
 	local statusCode=$1; local customMessage=$2
 	if (( ${statusCode} != ${SUCCESS_STATUS_CODE} )); then
 		_assertionFailed "Status code is failure instead of success." "${customMessage}"
 	fi
 }
 
-function assertStatusCodeIsFailure() {
+function assertion::assertStatusCodeIsFailure() {
 	local statusCode=$1; local customMessage=$2
 	if (( ${statusCode} == ${SUCCESS_STATUS_CODE} )); then
 		_assertionFailed "Status code is success instead of failure." "${customMessage}"
@@ -64,27 +64,27 @@ _GLOBAL_TEARDOWN_FUNCTION_NAME="globalTeardown"
 _SETUP_FUNCTION_NAME="setup"
 _TEARDOWN_FUNCTION_NAME="teardown"
 
-function fileParser_findGlobalSetupFunctionInFile() {
+function file_parser::findGlobalSetupFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_GLOBAL_SETUP_FUNCTION_NAME}"
 }
 
-function fileParser_findGlobalTeardownFunctionInFile() {
+function file_parser::findGlobalTeardownFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
-function fileParser_findSetupFunctionInFile() {
+function file_parser::findSetupFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_SETUP_FUNCTION_NAME}"
 }
 
-function fileParser_findTeardownFunctionInFile() {
+function file_parser::findTeardownFunctionInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | grep "${_TEARDOWN_FUNCTION_NAME}"
 }
 
-function fileParser_findTestFunctionsInFile() {
+function file_parser::findTestFunctionsInFile() {
 	local file=$1
 	_findFunctionsInFile "${file}" | _filterPrivateFunctions | _filterSpecialFunctions
 }
@@ -114,20 +114,20 @@ _DEFAULT_COLOR_CODE="\\e[0m"
 
 _DEFAULT_TEST_FILE_PATTERN=*Test.sh
 
-function runner_runAllTestFilesInDirectory() {
+function runner::runAllTestFilesInDirectory() {
 	local directory=$1; local overridenTestFilePattern=$2
 
-	_initialiseTestsExecution
-	local testFilePattern="$(system_getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
+	runner::initialiseTestsExecution
+	local testFilePattern="$(system::getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
 	_runAllTestfilesWithPatternInDirectory "${testFilePattern}" "${directory}"
 	_printTestsResults
 	_testsAreSuccessful
 }
 
-function _initialiseTestsExecution() {
+function runner::initialiseTestsExecution() {
 	_GREEN_TESTS_COUNT=0
 	_RED_TESTS_COUNT=0
-	_EXECUTION_BEGINING_DATE="$(system_getDateInSeconds)"
+	_EXECUTION_BEGINING_DATE="$(system::getDateInSeconds)"
 }
 
 function _runAllTestfilesWithPatternInDirectory() {
@@ -150,17 +150,17 @@ function _runTestFile() {
 
 function _callGlobalSetupInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findGlobalSetupFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findGlobalSetupFunctionInFile "${file}")"
 }
 
 function _callGlobalTeardownInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findGlobalTeardownFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findGlobalTeardownFunctionInFile "${file}")"
 }
 
 function _callAllTestsInFile() {
 	local file=$1
-	local testFunction; for testFunction in $(fileParser_findTestFunctionsInFile "${file}"); do
+	local testFunction; for testFunction in $(file_parser::findTestFunctionsInFile "${file}"); do
 		_callTestFunctionInTheMiddleOfSetupAndTeardown "${testFunction}" "${file}"
 	done
 }
@@ -177,12 +177,12 @@ function _callTestFunctionInTheMiddleOfSetupAndTeardown() {
 
 function _callSetupInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findSetupFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findSetupFunctionInFile "${file}")"
 }
 
 function _callTeardownInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(fileParser_findTeardownFunctionInFile "${file}")"
+	_callFunctionIfExisting "$(file_parser::findTeardownFunctionInFile "${file}")"
 }
 
 function _parseTestFunctionResult() {
@@ -213,13 +213,13 @@ function _getColorCodeForTestsResult() {
 }
 
 function _getExecutionTime() {
-	local endingDate="$(system_getDateInSeconds)"
+	local endingDate="$(system::getDateInSeconds)"
 	printf "$((${endingDate} - ${_EXECUTION_BEGINING_DATE}))"
 }
 
 function _printWithColor() {
 	local text=$1; local colorCode=$2
-	system_printWithColor "${text}" "${colorCode}" "${_DEFAULT_COLOR_CODE}"
+	system::printWithColor "${text}" "${colorCode}" "${_DEFAULT_COLOR_CODE}"
 }
 
 function _testsAreSuccessful() {
@@ -238,7 +238,7 @@ function _callFunctionIfExisting() {
 SUCCESS_STATUS_CODE=0
 FAILURE_STATUS_CODE=1
 
-function system_getStringOfDefaultIfEmpty() {
+function system::getStringOfDefaultIfEmpty() {
 	local string=$1; local defaultString=$2
 	local result=${string}
 	if [[ -z "${string}" ]]; then
@@ -247,11 +247,11 @@ function system_getStringOfDefaultIfEmpty() {
 	printf "${result}"
 }
 
-function system_getDateInSeconds() {
+function system::getDateInSeconds() {
 	date +%s
 }
 
-function system_printWithColor() {
+function system::printWithColor() {
 	local text=$1; local color=$2; local defaultColor=$3
 	printf "${color}${text}${defaultColor}\n"
 }
