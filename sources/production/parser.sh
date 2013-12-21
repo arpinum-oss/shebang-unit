@@ -3,44 +3,44 @@ _GLOBAL_TEARDOWN_FUNCTION_NAME="globalTeardown"
 _SETUP_FUNCTION_NAME="setup"
 _TEARDOWN_FUNCTION_NAME="teardown"
 
-function file_parser::findGlobalSetupFunctionInFile() {
+function parser::find_global_setup_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_GLOBAL_SETUP_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_GLOBAL_SETUP_FUNCTION_NAME}"
 }
 
-function file_parser::findGlobalTeardownFunctionInFile() {
+function parser::find_global_teardown_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
-function file_parser::findSetupFunctionInFile() {
+function parser::find_setup_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_SETUP_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_SETUP_FUNCTION_NAME}"
 }
 
-function file_parser::findTeardownFunctionInFile() {
+function parser::find_teardown_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_TEARDOWN_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_TEARDOWN_FUNCTION_NAME}"
 }
 
-function file_parser::findTestFunctionsInFile() {
+function parser::find_test_functions_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | _filterPrivateFunctions | _filterSpecialFunctions
+	_find_functions_in_file "${file}" | _filter_private_functions | _filter_special_functions
 }
 
-function _findFunctionsInFile() {
+function _find_functions_in_file() {
 	local file=$1
-	grep -o "^function.*()" "${file}" | _getFunctionNameFromDeclaration | tr -d " "
+	grep -o "^function.*()" "${file}" | _get_function_name_from_declaration | tr -d " "
 }
 
-function _filterPrivateFunctions() {
+function _filter_private_functions() {
 	grep -v "^_.*"
 }
 
-function _filterSpecialFunctions() {
+function _filter_special_functions() {
 	grep -v "${_SETUP_FUNCTION_NAME}\|${_TEARDOWN_FUNCTION_NAME}\|${_GLOBAL_SETUP_FUNCTION_NAME}\|${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
-function _getFunctionNameFromDeclaration() {
+function _get_function_name_from_declaration() {
 	sed "s/function\(.*\)()/\1/"
 }

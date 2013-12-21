@@ -4,119 +4,119 @@ _DEFAULT_COLOR_CODE="\\e[0m"
 
 _DEFAULT_TEST_FILE_PATTERN=*_test.sh
 
-function runner::runAllTestFilesInDirectory() {
-	local directory=$1; local overridenTestFilePattern=$2
+function runner::run_all_test_files_in_directory() {
+	local directory=$1; local overriden_test_file_pattern=$2
 
-	runner::initialiseTestsExecution
-	local testFilePattern="$(system::getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
-	_runAllTestfilesWithPatternInDirectory "${testFilePattern}" "${directory}"
-	_printTestsResults
-	_testsAreSuccessful
+	runner::_initialise_tests_execution
+	local test_file_pattern="$(system::get_string_or_default_if_empty "${overriden_test_file_pattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
+	_run_all_test_files_with_pattern_in_directory "${test_file_pattern}" "${directory}"
+	_print_tests_results
+	_tests_are_successful
 }
 
-function runner::initialiseTestsExecution() {
+function runner::_initialise_tests_execution() {
 	_GREEN_TESTS_COUNT=0
 	_RED_TESTS_COUNT=0
-	_EXECUTION_BEGINING_DATE="$(system::getDateInSeconds)"
+	_EXECUTION_BEGINING_DATE="$(system::get_date_in_seconds)"
 }
 
-function _runAllTestfilesWithPatternInDirectory() {
-	local testFilePattern=$1; local directory=$2
+function _run_all_test_files_with_pattern_in_directory() {
+	local test_file_pattern=$1; local directory=$2
 
-	local file; for file in $(find "${directory}" -name ${testFilePattern}); do
-		_runTestFile "${file}"
+	local file; for file in $(find "${directory}" -name ${test_file_pattern}); do
+		_run_test_file "${file}"
 	done
 }
 
-function _runTestFile() {
+function _run_test_file() {
 	local file=$1
 	printf "[File] ${file}\n"
 	source "${file}"
-	_callGlobalSetupInFile "${file}"
-	_callAllTestsInFile "${file}"
-	_callGlobalTeardownInFile "${file}"
+	_call_global_setup_in_file "${file}"
+	_call_all_tests_in_file "${file}"
+	_call_global_teardown_in_file "${file}"
 	printf "\n"
 }
 
-function _callGlobalSetupInFile() {
+function _call_global_setup_in_file() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findGlobalSetupFunctionInFile "${file}")"
+	_call_function_if_existing "$(parser::find_global_setup_function_in_file "${file}")"
 }
 
-function _callGlobalTeardownInFile() {
+function _call_global_teardown_in_file() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findGlobalTeardownFunctionInFile "${file}")"
+	_call_function_if_existing "$(parser::find_global_teardown_function_in_file "${file}")"
 }
 
-function _callAllTestsInFile() {
+function _call_all_tests_in_file() {
 	local file=$1
-	local testFunction; for testFunction in $(file_parser::findTestFunctionsInFile "${file}"); do
-		_callTestFunctionInTheMiddleOfSetupAndTeardown "${testFunction}" "${file}"
+	local test_function; for test_function in $(parser::find_test_functions_in_file "${file}"); do
+		_call_test_function_in_the_middle_of_setup_and_teardown "${test_function}" "${file}"
 	done
 }
 
-function _callTestFunctionInTheMiddleOfSetupAndTeardown() {
-	local testFunction=$1; local file=$2
+function _call_test_function_in_the_middle_of_setup_and_teardown() {
+	local test_function=$1; local file=$2
 
-	printf "[Test] ${testFunction}\n"
-	( _callSetupInFile "${file}" &&
-	( ${testFunction} ) &&
-	_callTeardownInFile "${file}" )
-	_parseTestFunctionResult "${testFunction}" $?
+	printf "[Test] ${test_function}\n"
+	( _call_setup_in_file "${file}" &&
+	( ${test_function} ) &&
+	_call_teardown_in_file "${file}" )
+	_parse_test_function_result "${test_function}" $?
 }
 
-function _callSetupInFile() {
+function _call_setup_in_file() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findSetupFunctionInFile "${file}")"
+	_call_function_if_existing "$(parser::find_setup_function_in_file "${file}")"
 }
 
-function _callTeardownInFile() {
+function _call_teardown_in_file() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findTeardownFunctionInFile "${file}")"
+	_call_function_if_existing "$(parser::find_teardown_function_in_file "${file}")"
 }
 
-function _parseTestFunctionResult() {
-	local testFunction=$1; local statusCode=$2
+function _parse_test_function_result() {
+	local test_function=$1; local status_code=$2
 
-	if (( ${statusCode} == ${SUCCESS_STATUS_CODE} )); then
+	if (( ${status_code} == ${SUCCESS_STATUS_CODE} )); then
 		(( _GREEN_TESTS_COUNT++ ))
-		_printWithColor "OK" ${_GREEN_COLOR_CODE}
+		_print_with_color "OK" ${_GREEN_COLOR_CODE}
 	else
 		(( _RED_TESTS_COUNT++ ))
-		_printWithColor "KO" ${_RED_COLOR_CODE}
+		_print_with_color "KO" ${_RED_COLOR_CODE}
 	fi
 }
 
-function _printTestsResults() {
+function _print_tests_results() {
 	printf "[Results]\n"
 	local color="$(_getColorCodeForTestsResult)"
-	local executionTime="$(_getExecutionTime)"
-	_printWithColor "Green tests : ${_GREEN_TESTS_COUNT}, red : ${_RED_TESTS_COUNT} in ${executionTime}s" "${color}"
+	local execution_time="$(_getExecutionTime)"
+	_print_with_color "Green tests : ${_GREEN_TESTS_COUNT}, red : ${_RED_TESTS_COUNT} in ${execution_time}s" "${color}"
 }
 
 function _getColorCodeForTestsResult() {
-	local colorCode=${_GREEN_COLOR_CODE}
-	if ! _testsAreSuccessful; then
-		colorCode=${_RED_COLOR_CODE}
+	local color_code=${_GREEN_COLOR_CODE}
+	if ! _tests_are_successful; then
+		color_code=${_RED_COLOR_CODE}
 	fi
-	printf "${colorCode}"
+	printf "${color_code}"
 }
 
 function _getExecutionTime() {
-	local endingDate="$(system::getDateInSeconds)"
-	printf "$((${endingDate} - ${_EXECUTION_BEGINING_DATE}))"
+	local ending_date="$(system::get_date_in_seconds)"
+	printf "$((${ending_date} - ${_EXECUTION_BEGINING_DATE}))"
 }
 
-function _printWithColor() {
-	local text=$1; local colorCode=$2
-	system::printWithColor "${text}" "${colorCode}" "${_DEFAULT_COLOR_CODE}"
+function _print_with_color() {
+	local text=$1; local color_code=$2
+	system::print_with_color "${text}" "${color_code}" "${_DEFAULT_COLOR_CODE}"
 }
 
-function _testsAreSuccessful() {
+function _tests_are_successful() {
 	(( ${_RED_TESTS_COUNT} == 0 ))
 }
 
-function _callFunctionIfExisting() {
+function _call_function_if_existing() {
 	local function=$1
 	if [[ -n "${function}" ]]; then
 		eval ${function}

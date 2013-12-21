@@ -11,29 +11,29 @@ function setup() {
 	_enumeration=($(fizzbuzz_enumerate))
 }
 
-function fizzbuzzShouldEnumerate100Elements() {
-	assertion::assertEqual 100 ${#_enumeration[@]}
+function fizzbuzz_should_enumerate_100_elements() {
+	assertion::equal 100 ${#_enumeration[@]}
 }
 
-function fizzbuzzShouldEnumerateFizzFor3() {
-	assertion::assertEqual "Fizz" "$(_getResultForNumber 3)"
+function fizzbuzz_should_enumerate_fizz_for_3() {
+	assertion::equal "Fizz" "$(_get_result_for_number 3)"
 }
 
-function fizzbuzzShouldEnumerateFizzForAllMultiplesOf3() {
-	assertion::assertEqual "Fizz" "$(_getResultForNumber 6)"
+function fizzbuzz_should_enumerate_fizz_for_all_multiples_of_3() {
+	assertion::equal "Fizz" "$(_get_result_for_number 6)"
 }
 
-function fizzbuzzShouldEnumerateBuzzFor5() {
-	assertion::assertEqual "Buzz" "$(_getResultForNumber 5)"
+function fizzbuzz_should_enumerate_buzz_for_5() {
+	assertion::equal "Buzz" "$(_get_result_for_number 5)"
 }
 
-function fizzbuzzShouldEnumerateBuzzFor15() {
-	assertion::assertEqual "FizzBuzz" "$(_getResultForNumber 15)"
+function fizzbuzz_should_enumerate_buzz_for_15() {
+	assertion::equal "FizzBuzz" "$(_get_result_for_number 15)"
 }
 
-function _getResultForNumber() {
-	local arrayIndex=$(($1 - 1))
-	printf "${_enumeration[${arrayIndex}]}"
+function _get_result_for_number() {
+	local array_index=$(($1 - 1))
+	printf "${_enumeration[${array_index}]}"
 }
 
-runner::runAllTestFilesInDirectory "${_TEST_DIRECTORY}" $@
+runner::run_all_test_files_in_directory "${_TEST_DIRECTORY}" $@

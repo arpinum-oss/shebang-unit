@@ -1,166 +1,166 @@
 # Shebang unit all in one source file
 
 #Beginning of assertion.sh
-function assertion::assertEqual() {
+function assertion::equal() {
 	local expected=$1; local actual=$2
 	if [[ "${expected}" != "${actual}" ]]; then
-		_assertionFailed "Actual : <${actual}>, expected : <${expected}>."
+		_assertion_failed "Actual : <${actual}>, expected : <${expected}>."
 	fi
 }
 
-function assertion::assertStringContains() {
+function assertion::string_contains() {
 	local container=$1; local contained=$2
-	if ! _stringContains "${container}" "${contained}"; then
-		_assertionFailed "String: <${container}> does not contain: <${contained}>."
+	if ! _string_contains "${container}" "${contained}"; then
+		_assertion_failed "String: <${container}> does not contain: <${contained}>."
 	fi
 }
 
-function assertion::assertStringDoesNotContain() {
+function assertion::string_does_not_contain() {
 	local container=$1; local contained=$2
-	if _stringContains "${container}" "${contained}"; then
-		_assertionFailed "String: <${container}> contains: <${contained}>."
+	if _string_contains "${container}" "${contained}"; then
+		_assertion_failed "String: <${container}> contains: <${contained}>."
 	fi
 }
 
-function _stringContains() {
+function _string_contains() {
 	local container=$1; local contained=$2
 	[[ "${container}" == *"${contained}"* ]]
 }
 
-function assertion::assertStatusCodeIsSuccess() {
-	local statusCode=$1; local customMessage=$2
-	if (( ${statusCode} != ${SUCCESS_STATUS_CODE} )); then
-		_assertionFailed "Status code is failure instead of success." "${customMessage}"
+function assertion::status_code_is_success() {
+	local status_code=$1; local custom_message=$2
+	if (( ${status_code} != ${SUCCESS_STATUS_CODE} )); then
+		_assertion_failed "Status code is failure instead of success." "${custom_message}"
 	fi
 }
 
-function assertion::assertStatusCodeIsFailure() {
-	local statusCode=$1; local customMessage=$2
-	if (( ${statusCode} == ${SUCCESS_STATUS_CODE} )); then
-		_assertionFailed "Status code is success instead of failure." "${customMessage}"
+function assertion::status_code_is_failure() {
+	local status_code=$1; local custom_message=$2
+	if (( ${status_code} == ${SUCCESS_STATUS_CODE} )); then
+		_assertion_failed "Status code is success instead of failure." "${custom_message}"
 	fi
 }
 
-function _assertionFailed() {
-	local message=$1; local customMessage=$2
-	local messageToUse="$(_getAssertionMessageToUse "${message}" "${customMessage}")"
-	printf "Assertion failed. ${messageToUse}\n"
+function _assertion_failed() {
+	local message=$1; local custom_message=$2
+	local message_to_use="$(_get_assertion_message_to_use "${message}" "${custom_message}")"
+	printf "Assertion failed. ${message_to_use}\n"
 	exit ${FAILURE_STATUS_CODE}
 }
 
-function _getAssertionMessageToUse() {
-	local message=$1; local customMesssage=$2
-	if [[ -n "${customMesssage}" ]]; then
-		printf "%s %s\n" "${message}" "${customMesssage}"
+function _get_assertion_message_to_use() {
+	local message=$1; local custom_messsage=$2
+	if [[ -n "${custom_messsage}" ]]; then
+		printf "%s %s\n" "${message}" "${custom_messsage}"
 	else
 		printf "${message}\n"
 	fi
 }
 #End of assertion.sh
 
-#Beginning of fileParser.sh
+#Beginning of parser.sh
 _GLOBAL_SETUP_FUNCTION_NAME="globalSetup"
 _GLOBAL_TEARDOWN_FUNCTION_NAME="globalTeardown"
 _SETUP_FUNCTION_NAME="setup"
 _TEARDOWN_FUNCTION_NAME="teardown"
 
-function file_parser::findGlobalSetupFunctionInFile() {
+function file_parser::find_global_setup_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_GLOBAL_SETUP_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_GLOBAL_SETUP_FUNCTION_NAME}"
 }
 
-function file_parser::findGlobalTeardownFunctionInFile() {
+function file_parser::find_global_teardown_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
-function file_parser::findSetupFunctionInFile() {
+function file_parser::find_setup_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_SETUP_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_SETUP_FUNCTION_NAME}"
 }
 
-function file_parser::findTeardownFunctionInFile() {
+function file_parser::find_teardown_function_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | grep "${_TEARDOWN_FUNCTION_NAME}"
+	_find_functions_in_file "${file}" | grep "${_TEARDOWN_FUNCTION_NAME}"
 }
 
-function file_parser::findTestFunctionsInFile() {
+function file_parser::find_test_functions_in_file() {
 	local file=$1
-	_findFunctionsInFile "${file}" | _filterPrivateFunctions | _filterSpecialFunctions
+	_find_functions_in_file "${file}" | _filter_private_functions | _filter_special_functions
 }
 
-function _findFunctionsInFile() {
+function _find_functions_in_file() {
 	local file=$1
-	grep -o "^function.*()" "${file}" | _getFunctionNameFromDeclaration | tr -d " "
+	grep -o "^function.*()" "${file}" | _get_function_name_from_declaration | tr -d " "
 }
 
-function _filterPrivateFunctions() {
+function _filter_private_functions() {
 	grep -v "^_.*"
 }
 
-function _filterSpecialFunctions() {
+function _filter_special_functions() {
 	grep -v "${_SETUP_FUNCTION_NAME}\|${_TEARDOWN_FUNCTION_NAME}\|${_GLOBAL_SETUP_FUNCTION_NAME}\|${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
-function _getFunctionNameFromDeclaration() {
+function _get_function_name_from_declaration() {
 	sed "s/function\(.*\)()/\1/"
 }
-#End of fileParser.sh
+#End of parser.sh
 
 #Beginning of runner.sh
 _GREEN_COLOR_CODE="\\033[1;32m"
 _RED_COLOR_CODE="\\033[1;31m"
 _DEFAULT_COLOR_CODE="\\e[0m"
 
-_DEFAULT_TEST_FILE_PATTERN=*Test.sh
+_DEFAULT_TEST_FILE_PATTERN=*_test.sh
 
-function runner::runAllTestFilesInDirectory() {
-	local directory=$1; local overridenTestFilePattern=$2
+function runner::run_all_test_files_in_directory() {
+	local directory=$1; local overriden_test_file_pattern=$2
 
-	runner::initialiseTestsExecution
-	local testFilePattern="$(system::getStringOfDefaultIfEmpty "${overridenTestFilePattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
-	_runAllTestfilesWithPatternInDirectory "${testFilePattern}" "${directory}"
+	runner::_initialise_tests_execution
+	local testFilePattern="$(system::get_string_or_default_if_empty "${overriden_test_file_pattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
+	_run_all_test_files_with_pattern_in_directory "${testFilePattern}" "${directory}"
 	_printTestsResults
 	_testsAreSuccessful
 }
 
-function runner::initialiseTestsExecution() {
+function runner::_initialise_tests_execution() {
 	_GREEN_TESTS_COUNT=0
 	_RED_TESTS_COUNT=0
-	_EXECUTION_BEGINING_DATE="$(system::getDateInSeconds)"
+	_EXECUTION_BEGINING_DATE="$(system::get_date_in_seconds)"
 }
 
-function _runAllTestfilesWithPatternInDirectory() {
-	local testFilePattern=$1; local directory=$2
+function _run_all_test_files_with_pattern_in_directory() {
+	local test_file_pattern=$1; local directory=$2
 
-	local file; for file in $(find "${directory}" -name ${testFilePattern}); do
-		_runTestFile "${file}"
+	local file; for file in $(find "${directory}" -name ${test_file_pattern}); do
+		_run_test_file "${file}"
 	done
 }
 
-function _runTestFile() {
+function _run_test_file() {
 	local file=$1
 	printf "[File] ${file}\n"
 	source "${file}"
-	_callGlobalSetupInFile "${file}"
-	_callAllTestsInFile "${file}"
-	_callGlobalTeardownInFile "${file}"
+	_call_global_setup_in_file "${file}"
+	_call_all_tests_in_file "${file}"
+	_call_global_teardown_in_file "${file}"
 	printf "\n"
 }
 
-function _callGlobalSetupInFile() {
+function _call_global_setup_in_file() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findGlobalSetupFunctionInFile "${file}")"
+	_call_function_if_existing "$(file_parser::find_global_setup_function_in_file "${file}")"
 }
 
-function _callGlobalTeardownInFile() {
+function _call_global_teardown_in_file() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findGlobalTeardownFunctionInFile "${file}")"
+	_call_function_if_existing "$(file_parser::find_global_teardown_function_in_file "${file}")"
 }
 
-function _callAllTestsInFile() {
+function _call_all_tests_in_file() {
 	local file=$1
-	local testFunction; for testFunction in $(file_parser::findTestFunctionsInFile "${file}"); do
+	local testFunction; for testFunction in $(file_parser::find_test_functions_in_file "${file}"); do
 		_callTestFunctionInTheMiddleOfSetupAndTeardown "${testFunction}" "${file}"
 	done
 }
@@ -177,12 +177,12 @@ function _callTestFunctionInTheMiddleOfSetupAndTeardown() {
 
 function _callSetupInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findSetupFunctionInFile "${file}")"
+	_call_function_if_existing "$(file_parser::find_setup_function_in_file "${file}")"
 }
 
 function _callTeardownInFile() {
 	local file=$1
-	_callFunctionIfExisting "$(file_parser::findTeardownFunctionInFile "${file}")"
+	_call_function_if_existing "$(file_parser::find_teardown_function_in_file "${file}")"
 }
 
 function _parseTestFunctionResult() {
@@ -213,7 +213,7 @@ function _getColorCodeForTestsResult() {
 }
 
 function _getExecutionTime() {
-	local endingDate="$(system::getDateInSeconds)"
+	local endingDate="$(system::get_date_in_seconds)"
 	printf "$((${endingDate} - ${_EXECUTION_BEGINING_DATE}))"
 }
 
@@ -226,7 +226,7 @@ function _testsAreSuccessful() {
 	(( ${_RED_TESTS_COUNT} == 0 ))
 }
 
-function _callFunctionIfExisting() {
+function _call_function_if_existing() {
 	local function=$1
 	if [[ -n "${function}" ]]; then
 		eval ${function}
@@ -238,16 +238,16 @@ function _callFunctionIfExisting() {
 SUCCESS_STATUS_CODE=0
 FAILURE_STATUS_CODE=1
 
-function system::getStringOfDefaultIfEmpty() {
-	local string=$1; local defaultString=$2
+function system::get_string_or_default_if_empty() {
+	local string=$1; local default_string=$2
 	local result=${string}
 	if [[ -z "${string}" ]]; then
-		result="${defaultString}"
+		result="${default_string}"
 	fi
 	printf "${result}"
 }
 
-function system::getDateInSeconds() {
+function system::get_date_in_seconds() {
 	date +%s
 }
 

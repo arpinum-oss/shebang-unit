@@ -1,54 +1,54 @@
-function assertion::assertEqual() {
+function assertion::equal() {
 	local expected=$1; local actual=$2
 	if [[ "${expected}" != "${actual}" ]]; then
-		_assertionFailed "Actual : <${actual}>, expected : <${expected}>."
+		_assertion_failed "Actual : <${actual}>, expected : <${expected}>."
 	fi
 }
 
-function assertion::assertStringContains() {
+function assertion::string_contains() {
 	local container=$1; local contained=$2
-	if ! _stringContains "${container}" "${contained}"; then
-		_assertionFailed "String: <${container}> does not contain: <${contained}>."
+	if ! _string_contains "${container}" "${contained}"; then
+		_assertion_failed "String: <${container}> does not contain: <${contained}>."
 	fi
 }
 
-function assertion::assertStringDoesNotContain() {
+function assertion::string_does_not_contain() {
 	local container=$1; local contained=$2
-	if _stringContains "${container}" "${contained}"; then
-		_assertionFailed "String: <${container}> contains: <${contained}>."
+	if _string_contains "${container}" "${contained}"; then
+		_assertion_failed "String: <${container}> contains: <${contained}>."
 	fi
 }
 
-function _stringContains() {
+function _string_contains() {
 	local container=$1; local contained=$2
 	[[ "${container}" == *"${contained}"* ]]
 }
 
-function assertion::assertStatusCodeIsSuccess() {
-	local statusCode=$1; local customMessage=$2
-	if (( ${statusCode} != ${SUCCESS_STATUS_CODE} )); then
-		_assertionFailed "Status code is failure instead of success." "${customMessage}"
+function assertion::status_code_is_success() {
+	local status_code=$1; local custom_message=$2
+	if (( ${status_code} != ${SUCCESS_STATUS_CODE} )); then
+		_assertion_failed "Status code is failure instead of success." "${custom_message}"
 	fi
 }
 
-function assertion::assertStatusCodeIsFailure() {
-	local statusCode=$1; local customMessage=$2
-	if (( ${statusCode} == ${SUCCESS_STATUS_CODE} )); then
-		_assertionFailed "Status code is success instead of failure." "${customMessage}"
+function assertion::status_code_is_failure() {
+	local status_code=$1; local custom_message=$2
+	if (( ${status_code} == ${SUCCESS_STATUS_CODE} )); then
+		_assertion_failed "Status code is success instead of failure." "${custom_message}"
 	fi
 }
 
-function _assertionFailed() {
-	local message=$1; local customMessage=$2
-	local messageToUse="$(_getAssertionMessageToUse "${message}" "${customMessage}")"
-	printf "Assertion failed. ${messageToUse}\n"
+function _assertion_failed() {
+	local message=$1; local custom_message=$2
+	local message_to_use="$(_get_assertion_message_to_use "${message}" "${custom_message}")"
+	printf "Assertion failed. ${message_to_use}\n"
 	exit ${FAILURE_STATUS_CODE}
 }
 
-function _getAssertionMessageToUse() {
-	local message=$1; local customMesssage=$2
-	if [[ -n "${customMesssage}" ]]; then
-		printf "%s %s\n" "${message}" "${customMesssage}"
+function _get_assertion_message_to_use() {
+	local message=$1; local custom_messsage=$2
+	if [[ -n "${custom_messsage}" ]]; then
+		printf "%s %s\n" "${message}" "${custom_messsage}"
 	else
 		printf "${message}\n"
 	fi
