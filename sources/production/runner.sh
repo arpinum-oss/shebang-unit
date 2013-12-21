@@ -1,14 +1,8 @@
-_GREEN_COLOR_CODE="\\033[1;32m"
-_RED_COLOR_CODE="\\033[1;31m"
-_DEFAULT_COLOR_CODE="\\e[0m"
-
-_DEFAULT_TEST_FILE_PATTERN=*_test.sh
-
 function runner::run_all_test_files_in_directory() {
 	local directory=$1; local overriden_test_file_pattern=$2
 
 	runner::_initialise_tests_execution
-	local test_file_pattern="$(system::get_string_or_default_if_empty "${overriden_test_file_pattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
+	local test_file_pattern="$(system::get_string_or_default_if_empty "${overriden_test_file_pattern}" "${SBU_DEFAULT_TEST_FILE_PATTERN}")"
 	runner::_run_all_test_files_with_pattern_in_directory "${test_file_pattern}" "${directory}"
 	runner::_print_tests_results
 	runner::_tests_are_successful
@@ -78,12 +72,12 @@ function runner::_call_teardown_in_file() {
 function runner::_parse_test_function_result() {
 	local test_function=$1; local status_code=$2
 
-	if (( ${status_code} == ${SUCCESS_STATUS_CODE} )); then
+	if (( ${status_code} == ${SBU_SUCCESS_STATUS_CODE} )); then
 		(( _GREEN_TESTS_COUNT++ ))
-		runner::_print_with_color "OK" ${_GREEN_COLOR_CODE}
+		runner::_print_with_color "OK" ${SBU_GREEN_COLOR_CODE}
 	else
 		(( _RED_TESTS_COUNT++ ))
-		runner::_print_with_color "KO" ${_RED_COLOR_CODE}
+		runner::_print_with_color "KO" ${SBU_RED_COLOR_CODE}
 	fi
 }
 
@@ -95,9 +89,9 @@ function runner::_print_tests_results() {
 }
 
 function runner::_getColorCodeForTestsResult() {
-	local color_code=${_GREEN_COLOR_CODE}
+	local color_code=${SBU_GREEN_COLOR_CODE}
 	if ! runner::_tests_are_successful; then
-		color_code=${_RED_COLOR_CODE}
+		color_code=${SBU_RED_COLOR_CODE}
 	fi
 	printf "${color_code}"
 }
@@ -109,7 +103,7 @@ function runner::_get_execution_time() {
 
 function runner::_print_with_color() {
 	local text=$1; local color_code=$2
-	system::print_with_color "${text}" "${color_code}" "${_DEFAULT_COLOR_CODE}"
+	system::print_with_color "${text}" "${color_code}" "${SBU_DEFAULT_COLOR_CODE}"
 }
 
 function runner::_tests_are_successful() {

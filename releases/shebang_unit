@@ -2,6 +2,42 @@
 
 # Shebang unit all in one source file
 
+#Beginning of constants.sh
+SBU_DEFAULT_TEST_FILE_PATTERN=*_test.sh
+
+SBU_GREEN_COLOR_CODE="\\033[1;32m"
+SBU_RED_COLOR_CODE="\\033[1;31m"
+SBU_DEFAULT_COLOR_CODE="\\e[0m"
+
+SBU_GLOBAL_SETUP_FUNCTION_NAME="globalSetup"
+SBU_GLOBAL_TEARDOWN_FUNCTION_NAME="globalTeardown"
+SBU_SETUP_FUNCTION_NAME="setup"
+SBU_TEARDOWN_FUNCTION_NAME="teardown"
+
+SBU_SUCCESS_STATUS_CODE=0
+SBU_FAILURE_STATUS_CODE=1
+#End of constants.sh
+
+#Beginning of system.sh
+function system::get_string_or_default_if_empty() {
+	local string=$1; local default_string=$2
+	local result=${string}
+	if [[ -z "${string}" ]]; then
+		result="${default_string}"
+	fi
+	printf "${result}"
+}
+
+function system::get_date_in_seconds() {
+	date +%s
+}
+
+function system::print_with_color() {
+	local text=$1; local color=$2; local default_color=$3
+	printf "${color}${text}${default_color}\n"
+}
+#End of system.sh
+
 #Beginning of assertion.sh
 function assertion::equal() {
 	local expected=$1; local actual=$2
@@ -31,14 +67,14 @@ function assertion::_string_contains() {
 
 function assertion::status_code_is_success() {
 	local status_code=$1; local custom_message=$2
-	if (( ${status_code} != ${SUCCESS_STATUS_CODE} )); then
+	if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
 		assertion::_assertion_failed "Status code is failure instead of success." "${custom_message}"
 	fi
 }
 
 function assertion::status_code_is_failure() {
 	local status_code=$1; local custom_message=$2
-	if (( ${status_code} == ${SUCCESS_STATUS_CODE} )); then
+	if (( ${status_code} == ${SBU_SUCCESS_STATUS_CODE} )); then
 		assertion::_assertion_failed "Status code is success instead of failure." "${custom_message}"
 	fi
 }
@@ -47,7 +83,7 @@ function assertion::_assertion_failed() {
 	local message=$1; local custom_message=$2
 	local message_to_use="$(assertion::_get_assertion_message_to_use "${message}" "${custom_message}")"
 	printf "Assertion failed. ${message_to_use}\n"
-	exit ${FAILURE_STATUS_CODE}
+	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
 function assertion::_get_assertion_message_to_use() {
@@ -61,29 +97,24 @@ function assertion::_get_assertion_message_to_use() {
 #End of assertion.sh
 
 #Beginning of parser.sh
-_GLOBAL_SETUP_FUNCTION_NAME="globalSetup"
-_GLOBAL_TEARDOWN_FUNCTION_NAME="globalTeardown"
-_SETUP_FUNCTION_NAME="setup"
-_TEARDOWN_FUNCTION_NAME="teardown"
-
 function parser::find_global_setup_function_in_file() {
 	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${_GLOBAL_SETUP_FUNCTION_NAME}"
+	parser::_find_functions_in_file "${file}" | grep "${SBU_GLOBAL_SETUP_FUNCTION_NAME}"
 }
 
 function parser::find_global_teardown_function_in_file() {
 	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
+	parser::_find_functions_in_file "${file}" | grep "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
 function parser::find_setup_function_in_file() {
 	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${_SETUP_FUNCTION_NAME}"
+	parser::_find_functions_in_file "${file}" | grep "${SBU_SETUP_FUNCTION_NAME}"
 }
 
 function parser::find_teardown_function_in_file() {
 	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${_TEARDOWN_FUNCTION_NAME}"
+	parser::_find_functions_in_file "${file}" | grep "${SBU_TEARDOWN_FUNCTION_NAME}"
 }
 
 function parser::find_test_functions_in_file() {
@@ -101,7 +132,7 @@ function parser::_filter_private_functions() {
 }
 
 function parser::_filter_special_functions() {
-	grep -v "${_SETUP_FUNCTION_NAME}\|${_TEARDOWN_FUNCTION_NAME}\|${_GLOBAL_SETUP_FUNCTION_NAME}\|${_GLOBAL_TEARDOWN_FUNCTION_NAME}"
+	grep -v "${SBU_SETUP_FUNCTION_NAME}\|${SBU_TEARDOWN_FUNCTION_NAME}\|${SBU_GLOBAL_SETUP_FUNCTION_NAME}\|${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
 function parser::_get_function_name_from_declaration() {
@@ -110,17 +141,11 @@ function parser::_get_function_name_from_declaration() {
 #End of parser.sh
 
 #Beginning of runner.sh
-_GREEN_COLOR_CODE="\\033[1;32m"
-_RED_COLOR_CODE="\\033[1;31m"
-_DEFAULT_COLOR_CODE="\\e[0m"
-
-_DEFAULT_TEST_FILE_PATTERN=*_test.sh
-
 function runner::run_all_test_files_in_directory() {
 	local directory=$1; local overriden_test_file_pattern=$2
 
 	runner::_initialise_tests_execution
-	local test_file_pattern="$(system::get_string_or_default_if_empty "${overriden_test_file_pattern}" "${_DEFAULT_TEST_FILE_PATTERN}")"
+	local test_file_pattern="$(system::get_string_or_default_if_empty "${overriden_test_file_pattern}" "${SBU_DEFAULT_TEST_FILE_PATTERN}")"
 	runner::_run_all_test_files_with_pattern_in_directory "${test_file_pattern}" "${directory}"
 	runner::_print_tests_results
 	runner::_tests_are_successful
@@ -190,12 +215,12 @@ function runner::_call_teardown_in_file() {
 function runner::_parse_test_function_result() {
 	local test_function=$1; local status_code=$2
 
-	if (( ${status_code} == ${SUCCESS_STATUS_CODE} )); then
+	if (( ${status_code} == ${SBU_SUCCESS_STATUS_CODE} )); then
 		(( _GREEN_TESTS_COUNT++ ))
-		runner::_print_with_color "OK" ${_GREEN_COLOR_CODE}
+		runner::_print_with_color "OK" ${SBU_GREEN_COLOR_CODE}
 	else
 		(( _RED_TESTS_COUNT++ ))
-		runner::_print_with_color "KO" ${_RED_COLOR_CODE}
+		runner::_print_with_color "KO" ${SBU_RED_COLOR_CODE}
 	fi
 }
 
@@ -207,9 +232,9 @@ function runner::_print_tests_results() {
 }
 
 function runner::_getColorCodeForTestsResult() {
-	local color_code=${_GREEN_COLOR_CODE}
+	local color_code=${SBU_GREEN_COLOR_CODE}
 	if ! runner::_tests_are_successful; then
-		color_code=${_RED_COLOR_CODE}
+		color_code=${SBU_RED_COLOR_CODE}
 	fi
 	printf "${color_code}"
 }
@@ -221,7 +246,7 @@ function runner::_get_execution_time() {
 
 function runner::_print_with_color() {
 	local text=$1; local color_code=$2
-	system::print_with_color "${text}" "${color_code}" "${_DEFAULT_COLOR_CODE}"
+	system::print_with_color "${text}" "${color_code}" "${SBU_DEFAULT_COLOR_CODE}"
 }
 
 function runner::_tests_are_successful() {
@@ -235,29 +260,6 @@ function runner::_call_function_if_existing() {
 	fi
 }
 #End of runner.sh
-
-#Beginning of system.sh
-SUCCESS_STATUS_CODE=0
-FAILURE_STATUS_CODE=1
-
-function system::get_string_or_default_if_empty() {
-	local string=$1; local default_string=$2
-	local result=${string}
-	if [[ -z "${string}" ]]; then
-		result="${default_string}"
-	fi
-	printf "${result}"
-}
-
-function system::get_date_in_seconds() {
-	date +%s
-}
-
-function system::print_with_color() {
-	local text=$1; local color=$2; local default_color=$3
-	printf "${color}${text}${default_color}\n"
-}
-#End of system.sh
 
 # Beginning of executable code
 runner::run_all_test_files_in_directory $@

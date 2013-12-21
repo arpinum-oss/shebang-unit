@@ -2,6 +2,8 @@ _RELEASED_ARTIFACT_FILENAME='shebang_unit'
 _RELEASE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 _SOURCES_DIRECTORY="${_RELEASE_DIRECTORY}/../sources/production"
 
+_ORDERED_SOURCES=('constants.sh' 'system.sh' 'assertion.sh' 'parser.sh' 'runner.sh')
+
 function release::concatenate_sources_in_release_file() {
 	release::_initialise_release_file
 	release::_concatenate_sources_in_release_file
@@ -15,8 +17,8 @@ function release::_initialise_release_file() {
 }
 
 function release::_concatenate_sources_in_release_file() {
-	local file; for file in "${_SOURCES_DIRECTORY}"/*.sh; do
-		release::_concatenate_source_in_release_file "${file}"
+	local file; for file in "${_ORDERED_SOURCES[@]}"; do
+		release::_concatenate_source_in_release_file "${_SOURCES_DIRECTORY}/${file}"
 	done
 }
 

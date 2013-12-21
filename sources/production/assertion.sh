@@ -26,14 +26,14 @@ function assertion::_string_contains() {
 
 function assertion::status_code_is_success() {
 	local status_code=$1; local custom_message=$2
-	if (( ${status_code} != ${SUCCESS_STATUS_CODE} )); then
+	if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
 		assertion::_assertion_failed "Status code is failure instead of success." "${custom_message}"
 	fi
 }
 
 function assertion::status_code_is_failure() {
 	local status_code=$1; local custom_message=$2
-	if (( ${status_code} == ${SUCCESS_STATUS_CODE} )); then
+	if (( ${status_code} == ${SBU_SUCCESS_STATUS_CODE} )); then
 		assertion::_assertion_failed "Status code is success instead of failure." "${custom_message}"
 	fi
 }
@@ -42,7 +42,7 @@ function assertion::_assertion_failed() {
 	local message=$1; local custom_message=$2
 	local message_to_use="$(assertion::_get_assertion_message_to_use "${message}" "${custom_message}")"
 	printf "Assertion failed. ${message_to_use}\n"
-	exit ${FAILURE_STATUS_CODE}
+	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
 function assertion::_get_assertion_message_to_use() {

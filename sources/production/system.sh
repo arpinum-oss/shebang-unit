@@ -1,6 +1,3 @@
-SUCCESS_STATUS_CODE=0
-FAILURE_STATUS_CODE=1
-
 function system::get_string_or_default_if_empty() {
 	local string=$1; local default_string=$2
 	local result=${string}
