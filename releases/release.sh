@@ -1,10 +1,11 @@
-_RELEASED_ARTIFACT_FILENAME='shebang_unit.sh'
+_RELEASED_ARTIFACT_FILENAME='shebang_unit'
 _RELEASE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 _SOURCES_DIRECTORY="${_RELEASE_DIRECTORY}/../sources/production"
 
 function release::concatenate_sources_in_release_file() {
 	_initialise_release_file
 	_concatenate_sources_in_release_file
+	_append_runner_call_in_release_file
 	_make_release_file_executable
 }
 
@@ -19,6 +20,12 @@ function _concatenate_sources_in_release_file() {
 	done
 }
 
+function _append_runner_call_in_release_file() {
+	printf "\n# Beginning of executable code\n"  >> "$(release::get_released_artifact_file)"
+	printf 'runner::run_all_test_files_in_directory $@' >> "$(release::get_released_artifact_file)"
+	printf "\n#End of executable code\n" >> "$(release::get_released_artifact_file)"
+}
+
 function _delete_release_file_if_existing() {
 	echo "$(release::get_released_artifact_file)"
 	if [[ -f "$(release::get_released_artifact_file)" ]]; then
@@ -27,7 +34,8 @@ function _delete_release_file_if_existing() {
 }
 
 function _print_header_in_release_file() {
-	printf "# Shebang unit all in one source file\n" >> "$(release::get_released_artifact_file)"
+	printf "#!/bin/bash\n" >> "$(release::get_released_artifact_file)"
+	printf "\n# Shebang unit all in one source file\n" >> "$(release::get_released_artifact_file)"
 }
 
 function _concatenate_source_in_release_file() {

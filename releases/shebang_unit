@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Shebang unit all in one source file
 
 #Beginning of assertion.sh
@@ -256,3 +258,7 @@ function system::print_with_color() {
 	printf "${color}${text}${default_color}\n"
 }
 #End of system.sh
+
+# Beginning of executable code
+runner::run_all_test_files_in_directory $@
+#End of executable code

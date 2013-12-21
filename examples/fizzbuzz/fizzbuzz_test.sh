@@ -1,9 +1,6 @@
 #!/bin/bash
 
-_TEST_DIRECTORY="$(dirname ${BASH_SOURCE[0]})"
-
-source "${_TEST_DIRECTORY}/../../releases/shebang_unit.sh"
-source "${_TEST_DIRECTORY}/fizzbuzz.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/fizzbuzz.sh"
 
 _enumeration=()
 
@@ -35,5 +32,3 @@ function _get_result_for_number() {
 	local array_index=$(($1 - 1))
 	printf "${_enumeration[${array_index}]}"
 }
-
-runner::run_all_test_files_in_directory "${_TEST_DIRECTORY}" $@
