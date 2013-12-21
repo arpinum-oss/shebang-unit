@@ -2,7 +2,7 @@ _GREEN_COLOR_CODE="\\033[1;32m"
 _RED_COLOR_CODE="\\033[1;31m"
 _DEFAULT_COLOR_CODE="\\e[0m"
 
-_DEFAULT_TEST_FILE_PATTERN=*Test.sh
+_DEFAULT_TEST_FILE_PATTERN=*_test.sh
 
 function runner::runAllTestFilesInDirectory() {
 	local directory=$1; local overridenTestFilePattern=$2
