@@ -17,11 +17,10 @@ function system::print_with_color() {
 }
 
 function system::array_contains() {
-	local value=${1}
-	shift 1;
-	local array=${@}
-	local element; for element in ${array[@]}; do
-		if [[ "${element}" == "${value}" ]]; then
+	local value=${1}; shift 1;
+	local array=("${@}")
+	local i; for (( i=0; i < ${#array[@]}; i++ )); do
+		if [[ "${array[${i}]}" == "${value}" ]]; then
 			return ${SBU_SUCCESS_STATUS_CODE}
 		fi
 	done
@@ -36,4 +35,9 @@ function system::print_array() {
 	done
 	array_as_string=${array_as_string/%, /}
 	printf "[%s]" "${array_as_string}"
+}
+
+function system::string_contains() {
+	local container=$1; local contained=$2
+	[[ "${container}" == *"${contained}"* ]]
 }

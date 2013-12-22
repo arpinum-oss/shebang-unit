@@ -7,21 +7,32 @@ function assertion::equal() {
 
 function assertion::string_contains() {
 	local container=$1; local contained=$2
-	if ! assertion::_string_contains "${container}" "${contained}"; then
+	if ! system::string_contains "${container}" "${contained}"; then
 		assertion::_assertion_failed "String: <${container}> does not contain: <${contained}>."
 	fi
 }
 
 function assertion::string_does_not_contain() {
 	local container=$1; local contained=$2
-	if assertion::_string_contains "${container}" "${contained}"; then
+	if system::string_contains "${container}" "${contained}"; then
 		assertion::_assertion_failed "String: <${container}> contains: <${contained}>."
 	fi
 }
 
-function assertion::_string_contains() {
-	local container=$1; local contained=$2
-	[[ "${container}" == *"${contained}"* ]]
+function assertion::array_contains() {
+	local element=$1; shift 1; local array=("$@")
+	if ! system::array_contains "${element}" "${array[@]}"; then
+		local array_as_string="$(system::print_array "${array[@]}")"
+		assertion::_assertion_failed "Array: <${array_as_string}> does not contain: <${element}>."
+	fi
+}
+
+function assertion::array_does_not_contains() {
+	local element=$1; shift 1; local array=("$@")
+	if system::array_contains "${element}" "${array[@]}"; then
+		local array_as_string="$(system::print_array "${array[@]}")"
+		assertion::_assertion_failed "Array: <${array_as_string}> contains: <${element}>."
+	fi
 }
 
 function assertion::status_code_is_success() {

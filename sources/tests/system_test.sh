@@ -29,17 +29,17 @@ function can_print_with_color() {
 }
 
 function a_contained_value_is_contained_by_the_array() {
-	local array=("a" "b" "c")
+	local array=("a" "the element" "c")
 
-	system::array_contains "b" "${array[@]}"
+	system::array_contains "the element" "${array[@]}"
 
 	assertion::status_code_is_success $? "The array does not contain the value."
 }
 
 function a_not_contained_value_is_not_contained_by_the_array() {
-	local array=("a" "b" "c")
+	local array=("a" "the element" "c")
 
-	system::array_contains "z" "${array[@]}"
+	system::array_contains "the" "${array[@]}"
 
 	assertion::status_code_is_failure $? "The array contain the value."
 }
@@ -58,4 +58,16 @@ function can_print_array_with_spaces() {
 	local string="$(system::print_array "${array[@]}")"
 
 	assertion::equal "[un deux, 54, choco lat]" "${string}"
+}
+
+function a_substring_is_contained_by_the_string() {
+	system::string_contains "the string" "the st"
+
+	assertion::status_code_is_success $? "The string does not contain a substring."
+}
+
+function a_totally_different_string_is_not_contained_by_the_string() {
+	system::string_contains "the string" "plop"
+
+	assertion::status_code_is_failure $? "The string contains a different string."
 }

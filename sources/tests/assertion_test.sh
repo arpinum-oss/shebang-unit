@@ -69,7 +69,7 @@ function asserting_that_different_objects_are_equal_is_false() {
 }
 
 function asserting_that_string_contains_substring_is_true() {
- 	message="$( assertion::string_contains string tri)"
+ 	message="$(assertion::string_contains string tri)"
 
 	_assert_success
 	_assert_message_empty
@@ -94,6 +94,42 @@ function asserting_that_string_does_not_contain_substring_is_false() {
 
 	_assert_failure
 	_assert_message_equals "String: <string> contains: <tri>."
+}
+
+function asserting_that_array_contains_contained_element_is_true() {
+	local array=("a" "the element" "c")
+
+ 	message="$(assertion::array_contains "the element" "${array[@]}")"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function asserting_that_array_contains_not_contained_element_is_false() {
+ 	local array=("a" "the element" "c")
+
+ 	message="$(assertion::array_contains "other element" "${array[@]}")"
+
+	_assert_failure
+	_assert_message_equals "Array: <[a, the element, c]> does not contain: <other element>."
+}
+
+function asserting_that_array_does_not_contain_not_contained_element_is_true() {
+ 	local array=("a" "b" "c")
+
+ 	message="$(assertion::array_does_not_contains "z" "${array[@]}")"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function asserting_that_array_does_not_contain_contained_element_is_false() {
+ 	local array=("a" "the element" "c")
+
+ 	message="$(assertion::array_does_not_contains "the element" "${array[@]}")"
+
+	_assert_failure
+	_assert_message_equals "Array: <[a, the element, c]> contains: <the element>."
 }
 
 function _assert_success() {
