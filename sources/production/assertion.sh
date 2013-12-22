@@ -1,7 +1,7 @@
 function assertion::equal() {
 	local expected=$1; local actual=$2
 	if [[ "${expected}" != "${actual}" ]]; then
-		assertion::_assertion_failed "Actual : <${actual}>, expected : <${expected}>."
+		assertion::_assertion_failed "Actual: <${actual}>, expected: <${expected}>."
 	fi
 }
 
