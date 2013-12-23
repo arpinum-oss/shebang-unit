@@ -1,26 +1,11 @@
-function parser::find_global_setup_function_in_file() {
+function parser::get_public_functions_in_file() {
 	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${SBU_GLOBAL_SETUP_FUNCTION_NAME}"
-}
-
-function parser::find_global_teardown_function_in_file() {
-	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}"
-}
-
-function parser::find_setup_function_in_file() {
-	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${SBU_SETUP_FUNCTION_NAME}"
-}
-
-function parser::find_teardown_function_in_file() {
-	local file=$1
-	parser::_find_functions_in_file "${file}" | grep "${SBU_TEARDOWN_FUNCTION_NAME}"
-}
-
-function parser::find_test_functions_in_file() {
-	local file=$1
-	parser::_find_functions_in_file "${file}" | parser::_filter_private_functions | parser::_filter_special_functions
+	local functions=()
+	parser::_find_functions_in_file "${file}" | parser::_filter_private_functions | {
+		local name; while read name; do
+			printf "${name} "
+		done
+	}
 }
 
 function parser::_find_functions_in_file() {
@@ -30,10 +15,6 @@ function parser::_find_functions_in_file() {
 
 function parser::_filter_private_functions() {
 	grep -v "^_.*"
-}
-
-function parser::_filter_special_functions() {
-	grep -v "${SBU_SETUP_FUNCTION_NAME}\|${SBU_TEARDOWN_FUNCTION_NAME}\|${SBU_GLOBAL_SETUP_FUNCTION_NAME}\|${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}"
 }
 
 function parser::_get_function_name_from_declaration() {

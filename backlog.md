@@ -3,7 +3,8 @@
 ## todo ##
 
 * assert empty/not empty string
-* parser/runner optimisation (parse test only once)
+* fizzbuzz is slow
 
 ## done ##
 * array contains/does not contain
+* parser/runner optimisation (parse test only once)

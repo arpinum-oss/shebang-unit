@@ -26,47 +26,40 @@ function runner::_run_test_file() {
 	local file=$1
 	printf "[File] ${file}\n"
 	source "${file}"
-	runner::_call_global_setup_in_file "${file}"
-	runner::_call_all_tests_in_file "${file}"
-	runner::_call_global_teardown_in_file "${file}"
+	local public_functions=($(parser::get_public_functions_in_file "${file}"))
+	runner::_call_function_if_existing_in_array "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" "${public_functions[@]}"
+	runner::_call_all_tests "${public_functions[@]}"
+	runner::_call_function_if_existing_in_array "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" "${public_functions[@]}"
 	printf "\n"
 }
 
-function runner::_call_global_setup_in_file() {
-	local file=$1
-	runner::_call_function_if_existing "$(parser::find_global_setup_function_in_file "${file}")"
-}
-
-function runner::_call_global_teardown_in_file() {
-	local file=$1
-	runner::_call_function_if_existing "$(parser::find_global_teardown_function_in_file "${file}")"
-}
-
-function runner::_call_all_tests_in_file() {
-	local file=$1
-	local test_function; for test_function in $(parser::find_test_functions_in_file "${file}"); do
-		runner::_call_test_function_in_the_middle_of_setup_and_teardown "${test_function}" "${file}"
+function runner::_call_all_tests() {
+	local functions=("$@")
+	local i; for i in ${!functions[@]}; do
+		local function="${functions[${i}]}"
+		if runner::_function_is_a_test "${function}"; then
+			runner::_call_test_function_in_the_middle_of_setup_and_teardown "${function}" "${functions[@]}"
+		fi
 	done
 }
 
+function runner::_function_is_a_test() {
+	local special_functions=("${SBU_GLOBAL_SETUP_FUNCTION_NAME}"
+							 "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}"
+							 "${SBU_SETUP_FUNCTION_NAME}"
+							 "${SBU_TEARDOWN_FUNCTION_NAME}")
+	! system::array_contains "${1}" "${special_functions[@]}"
+}
+
 function runner::_call_test_function_in_the_middle_of_setup_and_teardown() {
-	local test_function=$1; local file=$2
+	local test_function=$1;
+	shift 1; local functions=("$@")
 
 	printf "[Test] ${test_function}\n"
-	( runner::_call_setup_in_file "${file}" &&
+	( runner::_call_function_if_existing_in_array "${SBU_SETUP_FUNCTION_NAME}" "${functions[@]}" &&
 	( ${test_function} ) &&
-	runner::_call_teardown_in_file "${file}" )
+	runner::_call_function_if_existing_in_array "${SBU_TEARDOWN_FUNCTION_NAME}" "${functions[@]}" )
 	runner::_parse_test_function_result "${test_function}" $?
-}
-
-function runner::_call_setup_in_file() {
-	local file=$1
-	runner::_call_function_if_existing "$(parser::find_setup_function_in_file "${file}")"
-}
-
-function runner::_call_teardown_in_file() {
-	local file=$1
-	runner::_call_function_if_existing "$(parser::find_teardown_function_in_file "${file}")"
 }
 
 function runner::_parse_test_function_result() {
@@ -110,9 +103,10 @@ function runner::_tests_are_successful() {
 	(( ${_RED_TESTS_COUNT} == 0 ))
 }
 
-function runner::_call_function_if_existing() {
+function runner::_call_function_if_existing_in_array() {
 	local function=$1
-	if [[ -n "${function}" ]]; then
+	shift 1; local functions=("${@}")
+	if system::array_contains "${function}" "${functions[@]}"; then
 		eval ${function}
 	fi
 }
