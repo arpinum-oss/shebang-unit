@@ -1,5 +1,6 @@
 function system::get_string_or_default_if_empty() {
-	local string=$1; local default_string=$2
+	local string=$1
+	local default_string=$2
 	local result=${string}
 	if [[ -z "${string}" ]]; then
 		result="${default_string}"
@@ -12,13 +13,12 @@ function system::get_date_in_seconds() {
 }
 
 function system::print_with_color() {
-	local text=$1; local color=$2; local default_color=$3
-	printf "${color}${text}${default_color}\n"
+	printf "$2$1$3\n"
 }
 
 function system::array_contains() {
-	local value=${1}; shift 1;
-	local array=("${@}")
+	local value=${1}
+	local array=("${@:2}")
 	local i; for (( i=0; i < ${#array[@]}; i++ )); do
 		if [[ "${array[${i}]}" == "${value}" ]]; then
 			return ${SBU_SUCCESS_STATUS_CODE}
@@ -38,6 +38,5 @@ function system::print_array() {
 }
 
 function system::string_contains() {
-	local container=$1; local contained=$2
-	[[ "${container}" == *"${contained}"* ]]
+	[[ "$1" == *"$2"* ]]
 }
