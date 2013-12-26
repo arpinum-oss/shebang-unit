@@ -2,9 +2,7 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/fizzbuzz.sh"
 
-_enumeration=()
-
-function setup() {
+function global_setup() {
 	_enumeration=($(fizzbuzz::enumerate))
 }
 
