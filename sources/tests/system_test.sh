@@ -13,9 +13,7 @@ function can_get_string_if_not_empty() {
 function the_date_in_seconds_is_a_valid_number() {
 	local number="$(system::get_date_in_seconds)"
 
-	_is_a_number ${number}
-
-	assertion::status_code_is_success $? "The actual value <${number}> is not a number."
+	assertion::successful _is_a_number ${number}
 }
 
 function _is_a_number() {
@@ -31,17 +29,13 @@ function can_print_with_color() {
 function a_contained_value_is_contained_by_the_array() {
 	local array=("a" "the element" "c")
 
-	system::array_contains "the element" "${array[@]}"
-
-	assertion::status_code_is_success $? "The array does not contain the value."
+	assertion::successful system::array_contains "the element" "${array[@]}"
 }
 
 function a_not_contained_value_is_not_contained_by_the_array() {
 	local array=("a" "the element" "c")
 
-	system::array_contains "the" "${array[@]}"
-
-	assertion::status_code_is_failure $? "The array contain the value."
+	assertion::failing system::array_contains "the" "${array[@]}"
 }
 
 function can_print_array() {
@@ -61,13 +55,9 @@ function can_print_array_with_spaces() {
 }
 
 function a_substring_is_contained_by_the_string() {
-	system::string_contains "the string" "the st"
-
-	assertion::status_code_is_success $? "The string does not contain a substring."
+	assertion::successful system::string_contains "the string" "the st"
 }
 
 function a_totally_different_string_is_not_contained_by_the_string() {
-	system::string_contains "the string" "plop"
-
-	assertion::status_code_is_failure $? "The string contains a different string."
+	assertion::failing system::string_contains "the string" "plop"
 }
