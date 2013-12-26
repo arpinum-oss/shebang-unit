@@ -2,9 +2,8 @@
 
 ## todo ##
 
-* assert empty/not empty string
-* fizzbuzz is slow
-
 ## done ##
+* assert empty/not empty string
 * array contains/does not contain
 * parser/runner optimisation (parse test only once)
+* fizzbuzz is slow

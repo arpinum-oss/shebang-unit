@@ -145,6 +145,34 @@ function asserting_that_string_does_not_contain_substring_is_false() {
 	_assert_message_equals "String: <string> contains: <tri>."
 }
 
+function asserting_that_empty_string_is_empty_is_true() {
+ 	message="$(assertion::string_empty "")"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function asserting_that_not_empty_string_is_empty_is_false() {
+ 	message="$(assertion::string_empty "not empty")"
+
+	_assert_failure
+	_assert_message_equals "String: <not empty> is not empty."
+}
+
+function asserting_that_not_empty_string_is_not_empty_is_true() {
+ 	message="$(assertion::string_not_empty "not empty")"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function asserting_that_empty_string_is_not_empty_is_false() {
+ 	message="$(assertion::string_not_empty "")"
+
+	_assert_failure
+	_assert_message_equals "The string is empty."
+}
+
 function asserting_that_array_contains_contained_element_is_true() {
 	local array=("a" "the element" "c")
 
@@ -206,7 +234,7 @@ function _failing_command() {
 }
 
 function _assert_message_empty() {
-	assertion::equal "" "${message}"
+	assertion::string_empty "${message}"
 }
 
 function _assert_message_equals() {

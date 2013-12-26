@@ -16,6 +16,18 @@ function assertion::string_does_not_contain() {
 	fi
 }
 
+function assertion::string_empty() {
+	if [[ -n "$1" ]]; then
+		assertion::_assertion_failed "String: <$1> is not empty."
+	fi
+}
+
+function assertion::string_not_empty() {
+	if [[ -z "$1" ]]; then
+		assertion::_assertion_failed "The string is empty."
+	fi
+}
+
 function assertion::array_contains() {
 	local element=$1
 	shift 1
