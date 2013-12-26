@@ -41,18 +41,28 @@ function assertion::array_does_not_contains() {
 }
 
 function assertion::status_code_is_success() {
-	local status_code=$1
-	local custom_message=$2
-	if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed "Status code is failure instead of success." "${custom_message}"
+	if (( $1 != ${SBU_SUCCESS_STATUS_CODE} )); then
+		assertion::_assertion_failed "Status code is failure instead of success." "$2"
 	fi
 }
 
 function assertion::status_code_is_failure() {
-	local status_code=$1
-	local custom_message=$2
-	if (( ${status_code} == ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed "Status code is success instead of failure." "${custom_message}"
+	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
+		assertion::_assertion_failed "Status code is success instead of failure." "$2"
+	fi
+}
+
+function assertion::successful() {
+	"$@"
+	if (( $? != ${SBU_SUCCESS_STATUS_CODE} )); then
+		assertion::_assertion_failed "Command is failing instead of successful."
+	fi
+}
+
+function assertion::failing() {
+	"$@"
+	if (( $? == ${SBU_SUCCESS_STATUS_CODE} )); then
+		assertion::_assertion_failed "Command is successful instead of failing."
 	fi
 }
 

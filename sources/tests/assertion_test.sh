@@ -54,6 +54,55 @@ function when_asserting_status_code_is_failure_a_custom_message_can_be_printed()
 	_assert_message_equals "Status code is success instead of failure. custom message"
 }
 
+function asserting_that_successful_command_is_successful_is_true() {
+	message="$(assertion::successful _succesful_command)"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function when_asserting_that_command_is_successful_the_arguments_are_provided() {
+	message="$(assertion::successful _succesful_command_if_two_arguments_are_provided "first" "second")"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function when_asserting_that_command_is_successful_the_arguments_are_provided_though_they_have_spaces() {
+	message="$(assertion::successful _succesful_command_if_two_arguments_are_provided "first argument" "second argument")"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function asserting_that_failing_command_is_successful_is_false() {
+	message="$(assertion::successful _failing_command)"
+
+	_assert_failure
+	_assert_message_equals "Command is failing instead of successful."
+}
+
+function asserting_that_failing_command_is_failing_is_true() {
+	message="$(assertion::failing _failing_command)"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function when_asserting_that_command_is_failing_the_arguments_are_provided_though_they_have_spaces() {
+	message="$(assertion::failing _failing_command_if_two_arguments_are_provided "first argument" "second argument")"
+
+	_assert_success
+	_assert_message_empty
+}
+
+function asserting_that_successful_command_is_failing_is_false() {
+	message="$(assertion::failing _succesful_command)"
+
+	_assert_failure
+	_assert_message_equals "Command is successful instead of failing."
+}
+
 function asserting_that_equal_objects_are_equal_is_true() {
 	message="$(assertion::equal equal equal)"
 
@@ -142,6 +191,14 @@ function _assert_failure() {
 
 function _succesful_command() {
 	return 0
+}
+
+function _succesful_command_if_two_arguments_are_provided() {
+	(( $# == 2 ))
+}
+
+function _failing_command_if_two_arguments_are_provided() {
+	(( $# != 2 ))
 }
 
 function _failing_command() {
