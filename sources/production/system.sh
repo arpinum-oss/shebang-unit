@@ -1,10 +1,6 @@
 function system::get_string_or_default_if_empty() {
-	local string=$1
-	local default_string=$2
-	local result=${string}
-	if [[ -z "${string}" ]]; then
-		result="${default_string}"
-	fi
+	local result=$1
+	[[ -z "$1" ]] && result="$2"
 	printf "${result}"
 }
 
@@ -17,10 +13,10 @@ function system::print_with_color() {
 }
 
 function system::array_contains() {
-	local value=${1}
-	local array=("${@:2}")
-	local i; for (( i=0; i < ${#array[@]}; i++ )); do
-		if [[ "${array[${i}]}" == "${value}" ]]; then
+	local value=$1
+	shift 1
+	local i; for (( i=1; i <= $#; i++ )); do
+		if [[ "${!i}" == "${value}" ]]; then
 			return ${SBU_SUCCESS_STATUS_CODE}
 		fi
 	done
@@ -28,10 +24,9 @@ function system::array_contains() {
 }
 
 function system::print_array() {
-	local array=("${@}")
 	local array_as_string=""
-	local i; for (( i=0; i < ${#array[@]}; i++ )); do
-		array_as_string+="${array[${i}]}, "
+	local i; for (( i=1; i <= $#; i++ )); do
+		array_as_string+="${!i}, "
 	done
 	array_as_string=${array_as_string/%, /}
 	printf "[%s]" "${array_as_string}"
