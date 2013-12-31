@@ -13,7 +13,8 @@ function runner::_initialise_tests_execution() {
 }
 
 function runner::_run_all_test_files_with_pattern_in_directory() {
-	local file; for file in $(find "$2" -name $1); do
+	local file
+	for file in $(find "$2" -name $1); do
 		runner::_run_test_file "${file}"
 	done
 }
@@ -30,7 +31,8 @@ function runner::_run_test_file() {
 }
 
 function runner::_call_all_tests() {
-	local i; for (( i=1; i <= $#; i++ )); do
+	local i
+	for (( i=1; i <= $#; i++ )); do
 		local function="${!i}"
 		if runner::_function_is_a_test "${function}"; then
 			runner::_call_test_function_in_the_middle_of_setup_and_teardown "${function}" "${@}"

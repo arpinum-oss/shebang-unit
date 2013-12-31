@@ -17,7 +17,8 @@ function release::_initialise_release_file() {
 }
 
 function release::_concatenate_sources_in_release_file() {
-	local file; for file in "${_ORDERED_SOURCES[@]}"; do
+	local file
+	for file in "${_ORDERED_SOURCES[@]}"; do
 		release::_concatenate_source_in_release_file "${_SOURCES_DIRECTORY}/${file}"
 	done
 }

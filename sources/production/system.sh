@@ -15,7 +15,8 @@ function system::print_with_color() {
 function system::array_contains() {
 	local value=$1
 	shift 1
-	local i; for (( i=1; i <= $#; i++ )); do
+	local i
+	for (( i=1; i <= $#; i++ )); do
 		if [[ "${!i}" == "${value}" ]]; then
 			return ${SBU_SUCCESS_STATUS_CODE}
 		fi
@@ -25,7 +26,8 @@ function system::array_contains() {
 
 function system::print_array() {
 	local array_as_string=""
-	local i; for (( i=1; i <= $#; i++ )); do
+	local i
+	for (( i=1; i <= $#; i++ )); do
 		array_as_string+="${!i}, "
 	done
 	array_as_string=${array_as_string/%, /}

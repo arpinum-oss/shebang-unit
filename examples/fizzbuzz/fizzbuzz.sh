@@ -1,5 +1,6 @@
 function fizzbuzz::enumerate() {
-	local i; for i in {1..100}; do
+	local i
+	for i in {1..100}; do
 		printf "%s " "$(fizzbuzz::_get_value_for_number ${i})"
 	done
 }
