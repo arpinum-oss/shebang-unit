@@ -247,7 +247,7 @@ function runner::_print_tests_results() {
 	printf "[Results]\n"
 	local color="$(runner::_getColorCodeForTestsResult)"
 	local execution_time="$(runner::_get_execution_time)"
-	runner::_print_with_color "Green tests : ${_GREEN_TESTS_COUNT}, red : ${_RED_TESTS_COUNT} in ${execution_time}s" "${color}"
+	runner::_print_with_color "Green tests: ${_GREEN_TESTS_COUNT}, red: ${_RED_TESTS_COUNT} in ${execution_time}s" "${color}"
 }
 
 function runner::_getColorCodeForTestsResult() {

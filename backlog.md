@@ -1,6 +1,8 @@
 # Backlog #
 
 ## todo ##
+* tests result output
+* readme
 
 ## done ##
 * assert empty/not empty string

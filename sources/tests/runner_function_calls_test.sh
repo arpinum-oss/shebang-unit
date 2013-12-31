@@ -5,7 +5,7 @@ _TEST_RESOURCES_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")/../../resources/tests/
 function global_setup() {
 	rm -rf "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 	touch "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
-	runner::run_all_test_files_in_directory "${_TEST_RESOURCES_DIRECTORY}" > /dev/null
+	( runner::run_all_test_files_in_directory "${_TEST_RESOURCES_DIRECTORY}" > /dev/null )
 	_called_functions=($(_get_called_functions))
 }
 
