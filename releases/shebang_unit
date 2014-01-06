@@ -3,7 +3,7 @@
 # Shebang unit all in one source file
 
 #Beginning of constants.sh
-SBU_DEFAULT_TEST_FILE_PATTERN=*_test.sh
+SBU_TEST_FILE_PATTERN=*_test.sh
 
 SBU_GREEN_COLOR_CODE="\\033[1;32m"
 SBU_RED_COLOR_CODE="\\033[1;31m"
@@ -36,7 +36,8 @@ function system::print_with_color() {
 function system::array_contains() {
 	local value=$1
 	shift 1
-	local i; for (( i=1; i <= $#; i++ )); do
+	local i
+	for (( i=1; i <= $#; i++ )); do
 		if [[ "${!i}" == "${value}" ]]; then
 			return ${SBU_SUCCESS_STATUS_CODE}
 		fi
@@ -46,7 +47,8 @@ function system::array_contains() {
 
 function system::print_array() {
 	local array_as_string=""
-	local i; for (( i=1; i <= $#; i++ )); do
+	local i
+	for (( i=1; i <= $#; i++ )); do
 		array_as_string+="${!i}, "
 	done
 	array_as_string=${array_as_string/%, /}
@@ -174,10 +176,9 @@ function parser::_get_function_name_from_declaration() {
 #End of parser.sh
 
 #Beginning of runner.sh
-function runner::run_all_test_files_in_directory() {
+function runner::run_all_test_files() {
 	runner::_initialise_tests_execution
-	local test_file_pattern="$(system::get_string_or_default_if_empty "$2" "${SBU_DEFAULT_TEST_FILE_PATTERN}")"
-	runner::_run_all_test_files_with_pattern_in_directory "${test_file_pattern}" "$1"
+	runner::_run_all_test_files_with_pattern_in_directory "$1"
 	runner::_print_tests_results
 	runner::_tests_are_successful
 }
@@ -189,7 +190,8 @@ function runner::_initialise_tests_execution() {
 }
 
 function runner::_run_all_test_files_with_pattern_in_directory() {
-	local file; for file in $(find "$2" -name $1); do
+	local file
+	for file in $(find "$1" -name "${SBU_TEST_FILE_PATTERN}"); do
 		runner::_run_test_file "${file}"
 	done
 }
@@ -206,7 +208,8 @@ function runner::_run_test_file() {
 }
 
 function runner::_call_all_tests() {
-	local i; for (( i=1; i <= $#; i++ )); do
+	local i
+	for (( i=1; i <= $#; i++ )); do
 		local function="${!i}"
 		if runner::_function_is_a_test "${function}"; then
 			runner::_call_test_function_in_the_middle_of_setup_and_teardown "${function}" "${@}"
@@ -280,6 +283,26 @@ function runner::_call_function_if_existing_in_array() {
 }
 #End of runner.sh
 
+#Beginning of main.sh
+function main::main() {
+	local i
+	for i in "$@"; do
+		case "${i}" in
+			-c=*|--colors=*)
+			SBU_USE_COLORS="${i#*=}"
+			shift
+			;;
+			-p=*|--pattern=*)
+			SBU_TEST_FILE_PATTERN="${i#*=}"
+			shift
+			;;
+		esac
+	done
+
+	runner::run_all_test_files $1
+}
+#End of main.sh
+
 # Beginning of executable code
-runner::run_all_test_files_in_directory $@
+main::main $@
 #End of executable code

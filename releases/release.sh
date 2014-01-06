@@ -2,7 +2,7 @@ _RELEASED_ARTIFACT_FILENAME='shebang_unit'
 _RELEASE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 _SOURCES_DIRECTORY="${_RELEASE_DIRECTORY}/../sources/production"
 
-_ORDERED_SOURCES=('constants.sh' 'system.sh' 'assertion.sh' 'parser.sh' 'runner.sh')
+_ORDERED_SOURCES=('configuration.sh' 'system.sh' 'assertion.sh' 'parser.sh' 'runner.sh' 'main.sh')
 
 function release::concatenate_sources_in_release_file() {
 	release::_initialise_release_file
@@ -25,7 +25,7 @@ function release::_concatenate_sources_in_release_file() {
 
 function release::_append_runner_call_in_release_file() {
 	printf "\n# Beginning of executable code\n"  >> "$(release::get_released_artifact_file)"
-	printf 'runner::run_all_test_files_in_directory $@' >> "$(release::get_released_artifact_file)"
+	printf 'main::main $@' >> "$(release::get_released_artifact_file)"
 	printf "\n#End of executable code\n" >> "$(release::get_released_artifact_file)"
 }
 

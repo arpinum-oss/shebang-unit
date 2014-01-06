@@ -1,7 +1,6 @@
-function runner::run_all_test_files_in_directory() {
+function runner::run_all_test_files() {
 	runner::_initialise_tests_execution
-	local test_file_pattern="$(system::get_string_or_default_if_empty "$2" "${SBU_DEFAULT_TEST_FILE_PATTERN}")"
-	runner::_run_all_test_files_with_pattern_in_directory "${test_file_pattern}" "$1"
+	runner::_run_all_test_files_with_pattern_in_directory "$1"
 	runner::_print_tests_results
 	runner::_tests_are_successful
 }
@@ -14,7 +13,7 @@ function runner::_initialise_tests_execution() {
 
 function runner::_run_all_test_files_with_pattern_in_directory() {
 	local file
-	for file in $(find "$2" -name $1); do
+	for file in $(find "$1" -name "${SBU_TEST_FILE_PATTERN}"); do
 		runner::_run_test_file "${file}"
 	done
 }

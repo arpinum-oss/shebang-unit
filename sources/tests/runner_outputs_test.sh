@@ -1,9 +1,9 @@
 _TEMPORARY_FILE_FOR_TESTS_OUTPUT="/tmp/sbu.txt"
 
-_TEST_RESOURCES_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")/../../resources/tests/directory_with_two_tests"
+_TEST_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")/../../resources/tests/directory_with_two_tests"
 
 function global_setup() {
-	( runner::run_all_test_files_in_directory "${_TEST_RESOURCES_DIRECTORY}" > "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}" )
+	( runner::run_all_test_files "${_TEST_DIRECTORY}" > "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}" )
 }
 
 function global_teardown() {
