@@ -21,9 +21,19 @@ function _is_a_number() {
 }
 
 function can_print_with_color() {
+	SBU_USE_COLORS="${SBU_YES}"
+
 	local message="$(system::print_with_color "text" "color" "default_color")"
 
 	assertion::equal "colortextdefault_color" "${message}"
+}
+
+function can_print_without_color_if_colors_are_turned_off() {
+	SBU_USE_COLORS="${SBU_NO}"
+
+	local message="$(system::print_with_color "text" "color" "default_color")"
+
+	assertion::equal "text" "${message}"
 }
 
 function a_contained_value_is_contained_by_the_array() {

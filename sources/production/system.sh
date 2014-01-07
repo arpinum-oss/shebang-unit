@@ -9,7 +9,11 @@ function system::get_date_in_seconds() {
 }
 
 function system::print_with_color() {
-	printf "$2$1$3\n"
+	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
+		printf "$2$1$3\n"
+	else
+		printf "$1\n"
+	fi
 }
 
 function system::array_contains() {

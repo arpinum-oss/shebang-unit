@@ -8,4 +8,4 @@ function _releaseShebangUnit() {
 }
 
 _releaseShebangUnit
-./"$(release::get_released_artifact_file)" "${_SUITE_DIRECTORY}"
+./"$(release::get_released_artifact_file)" $@ "${_SUITE_DIRECTORY}"

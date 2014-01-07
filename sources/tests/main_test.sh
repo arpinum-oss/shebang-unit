@@ -7,33 +7,33 @@ function global_setup() {
 }
 
 function can_enable_colors() {
-	SBU_USE_COLORS="no"
+	SBU_USE_COLORS="${SBU_NO}"
 
-	main::main --colors=yes "${_TEST_DIRECTORY}"
+	main::main --colors="${SBU_YES}" "${_TEST_DIRECTORY}" > /dev/null
 
-	assertion::equal "yes" "${SBU_USE_COLORS}"
+	assertion::equal "${SBU_YES}" "${SBU_USE_COLORS}"
 }
 
 function can_enable_colors_with_short_argument() {
-	SBU_USE_COLORS="no"
+	SBU_USE_COLORS="${SBU_NO}"
 
-	main::main -c=yes "${_TEST_DIRECTORY}"
+	main::main -c="${SBU_YES}" "${_TEST_DIRECTORY}" > /dev/null
 
-	assertion::equal "yes" "${SBU_USE_COLORS}"
+	assertion::equal "${SBU_YES}" "${SBU_USE_COLORS}"
 }
 
 function can_disable_colors() {
-	SBU_USE_COLORS="yes"
+	SBU_USE_COLORS="${SBU_YES}"
 
-	main::main --colors=no "${_TEST_DIRECTORY}"
+	main::main --colors="${SBU_NO}" "${_TEST_DIRECTORY}" > /dev/null
 
-	assertion::equal "no" "${SBU_USE_COLORS}"
+	assertion::equal "${SBU_NO}" "${SBU_USE_COLORS}"
 }
 
 function can_use_a_test_file_pattern() {
 	SBU_TEST_FILE_PATTERN="anything"
 
-	main::main --pattern=*my_test.sh "${_TEST_DIRECTORY}"
+	main::main --pattern=*my_test.sh "${_TEST_DIRECTORY}" > /dev/null
 
 	assertion::equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
 }
@@ -41,7 +41,7 @@ function can_use_a_test_file_pattern() {
 function can_use_a_test_file_pattern_with_short_argument() {
 	SBU_TEST_FILE_PATTERN="anything"
 
-	main::main -p=*my_test.sh "${_TEST_DIRECTORY}"
+	main::main -p=*my_test.sh "${_TEST_DIRECTORY}" > /dev/null
 
 	assertion::equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
 }
