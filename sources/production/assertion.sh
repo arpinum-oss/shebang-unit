@@ -33,7 +33,8 @@ function assertion::array_contains() {
 	shift 1
 	if ! system::array_contains "${element}" "$@"; then
 		local array_as_string="$(system::print_array "$@")"
-		assertion::_assertion_failed "Array: <${array_as_string}> does not contain: <${element}>."
+		assertion::_assertion_failed \
+			"Array: <${array_as_string}> does not contain: <${element}>."
 	fi
 }
 
@@ -42,19 +43,22 @@ function assertion::array_does_not_contains() {
 	shift 1
 	if system::array_contains "${element}" "$@"; then
 		local array_as_string="$(system::print_array "$@")"
-		assertion::_assertion_failed "Array: <${array_as_string}> contains: <${element}>."
+		assertion::_assertion_failed \
+			"Array: <${array_as_string}> contains: <${element}>."
 	fi
 }
 
 function assertion::status_code_is_success() {
 	if (( $1 != ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed "Status code is failure instead of success." "$2"
+		assertion::_assertion_failed \
+			"Status code is failure instead of success." "$2"
 	fi
 }
 
 function assertion::status_code_is_failure() {
 	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed "Status code is success instead of failure." "$2"
+		assertion::_assertion_failed \
+			"Status code is success instead of failure." "$2"
 	fi
 }
 

@@ -1,11 +1,11 @@
 function can_get_string_if_not_empty() {
-	local result="$(system::get_string_or_default_if_empty "not empty" "default")"
+	local result="$(system::get_string_or_default "not empty" "default")"
 
 	assertion::equal "not empty" "${result}"
 }
 
 function can_get_string_if_not_empty() {
-	local result="$(system::get_string_or_default_if_empty "" "default")"
+	local result="$(system::get_string_or_default "" "default")"
 
 	assertion::equal "default" "${result}"
 }

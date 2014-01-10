@@ -8,7 +8,9 @@ function parser::get_public_functions_in_file() {
 }
 
 function parser::_find_functions_in_file() {
-	grep -o "^function.*()" "$1" | parser::_get_function_name_from_declaration | tr -d " "
+	grep -o "^function.*()" "$1" \
+		| parser::_get_function_name_from_declaration \
+		| tr -d " "
 }
 
 function parser::_filter_private_functions() {

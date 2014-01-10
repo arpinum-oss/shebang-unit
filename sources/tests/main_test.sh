@@ -1,9 +1,10 @@
-_PRODUCTION_SOURCES_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")/../production"
-
-_TEST_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")/../../resources/tests/directory_with_no_test"
+_SOURCE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
+_PRODUCTION_DIRECTORY="${_SOURCE_DIRECTORY}/../production"
+_TEST_DIRECTORY="${_SOURCE_DIRECTORY}/../../resources/tests/\
+directory_with_no_test"
 
 function global_setup() {
-	source "${_PRODUCTION_SOURCES_DIRECTORY}/main.sh"
+	source "${_PRODUCTION_DIRECTORY}/main.sh"
 }
 
 function can_enable_colors() {

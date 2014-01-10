@@ -7,21 +7,21 @@ function fizzbuzz::enumerate() {
 
 function fizzbuzz::_get_value_for_number() {
 	local number=$1
-	local result="$(fizzbuzz::_print_value_if_number_is_multiple_of_divisor "Fizz" ${number} 3)"
-	result+="$(fizzbuzz::_print_value_if_number_is_multiple_of_divisor "Buzz" ${number} 5)"
+	local result="$(fizzbuzz::_print_value_if_multiple "Fizz" ${number} 3)"
+	result+="$(fizzbuzz::_print_value_if_multiple "Buzz" ${number} 5)"
 	fizzbuzz::_print_value_of_default_if_empty "${result}" ${number}
 }
 
-function fizzbuzz::_print_value_if_number_is_multiple_of_divisor() {
+function fizzbuzz::_print_value_if_multiple() {
 	local value=$1; local number=$2; local divisor=$3
-	if fizzbuzz::_number_is_multiple_of_the_other_number ${number} ${divisor}; then
+	if fizzbuzz::_number_is_multiple ${number} ${divisor}; then
 		printf "${value}"
 	else
 		printf ""
 	fi
 }
 
-function fizzbuzz::_number_is_multiple_of_the_other_number() {
+function fizzbuzz::_number_is_multiple() {
 	(( $1 % $2 == 0 ))
 }
 

@@ -23,20 +23,28 @@ function runner::_run_test_file() {
 	printf "[File] ${file}\n"
 	source "${file}"
 	local public_functions=($(parser::get_public_functions_in_file "${file}"))
-	runner::_call_function_if_existing_in_array "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" "${public_functions[@]}"
+	runner::_call_function_if_in_array "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
+		"${public_functions[@]}"
 	runner::_call_all_tests "${public_functions[@]}"
-	runner::_call_function_if_existing_in_array "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" "${public_functions[@]}"
+	runner::_call_function_if_in_array "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
+		"${public_functions[@]}"
 	printf "\n"
 }
 
 function runner::_call_all_tests() {
 	local i
 	for (( i=1; i <= $#; i++ )); do
-		local function="${!i}"
-		if runner::_function_is_a_test "${function}"; then
-			runner::_call_test_function_in_the_middle_of_setup_and_teardown "${function}" "${@}"
-		fi
+		runner::_call_if_test_function "${!i}" "${@}"
 	done
+}
+
+function runner::_call_if_test_function() {
+	local function=$1
+	shift 1
+	if runner::_function_is_a_test "${function}"; then
+		runner::_call_test_function_in_the_middle_of_setup_and_teardown \
+			"${function}" "${@}"
+	fi
 }
 
 function runner::_function_is_a_test() {
@@ -52,9 +60,9 @@ function runner::_call_test_function_in_the_middle_of_setup_and_teardown() {
 	shift 1
 
 	printf "[Test] ${test_function}\n"
-	( runner::_call_function_if_existing_in_array "${SBU_SETUP_FUNCTION_NAME}" "$@" &&
+	( runner::_call_function_if_in_array "${SBU_SETUP_FUNCTION_NAME}" "$@" &&
 	( ${test_function} ) &&
-	runner::_call_function_if_existing_in_array "${SBU_TEARDOWN_FUNCTION_NAME}" "$@" )
+	runner::_call_function_if_in_array "${SBU_TEARDOWN_FUNCTION_NAME}" "$@" )
 	runner::_parse_test_function_result $?
 }
 
@@ -72,7 +80,10 @@ function runner::_print_tests_results() {
 	printf "[Results]\n"
 	local color="$(runner::_getColorCodeForTestsResult)"
 	local execution_time="$(runner::_get_execution_time)"
-	runner::_print_with_color "Green tests: ${_GREEN_TESTS_COUNT}, red: ${_RED_TESTS_COUNT} in ${execution_time}s" "${color}"
+	local green_tests="Green tests: ${_GREEN_TESTS_COUNT}"
+	local red_tests="red: ${_RED_TESTS_COUNT}"
+	local time="in ${execution_time}s"
+	runner::_print_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
 }
 
 function runner::_getColorCodeForTestsResult() {
@@ -96,7 +107,7 @@ function runner::_tests_are_successful() {
 	(( ${_RED_TESTS_COUNT} == 0 ))
 }
 
-function runner::_call_function_if_existing_in_array() {
+function runner::_call_function_if_in_array() {
 	local function=$1
 	shift 1
 	if system::array_contains "${function}" "$@"; then

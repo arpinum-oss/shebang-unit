@@ -1,5 +1,5 @@
-# yes/no representation used with shebang_unit parameters to activate stuff like
-# colors
+# yes/no representation used with shebang_unit parameters to activate
+# stuff like colors
 SBU_YES="yes"
 SBU_NO="no"
 

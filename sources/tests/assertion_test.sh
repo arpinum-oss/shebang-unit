@@ -20,12 +20,13 @@ function asserting_that_failing_command_has_success_status_code_is_false() {
 	_assert_message_equals "Status code is failure instead of success."
 }
 
-function when_asserting_status_code_is_success_a_custom_message_can_be_printed() {
+function can_print_custom_message_for_success_status_code_assertion() {
 	_failing_command
 
 	message="$(assertion::status_code_is_success $? "custom message")"
 
-	_assert_message_equals "Status code is failure instead of success. custom message"
+  local expected="Status code is failure instead of success. custom message"
+	_assert_message_equals "${expected}"
 }
 
 function asserting_that_failing_command_has_failure_status_code_is_true() {
@@ -46,12 +47,13 @@ function asserting_that_successful_command_has_failure_status_code_is_false() {
 	_assert_message_equals "Status code is success instead of failure."
 }
 
-function when_asserting_status_code_is_failure_a_custom_message_can_be_printed() {
+function can_print_custom_message_for_failure_status_code_assertion() {
 	_succesful_command
 
 	message="$(assertion::status_code_is_failure $? "custom message")"
 
-	_assert_message_equals "Status code is success instead of failure. custom message"
+  local expected="Status code is success instead of failure. custom message"
+	_assert_message_equals "${expected}"
 }
 
 function asserting_that_successful_command_is_successful_is_true() {
@@ -61,15 +63,17 @@ function asserting_that_successful_command_is_successful_is_true() {
 	_assert_message_empty
 }
 
-function when_asserting_that_command_is_successful_the_arguments_are_provided() {
-	message="$(assertion::successful _succesful_command_if_two_arguments_are_provided "first" "second")"
+function arguments_are_provided_for_successful_assertion() {
+	message="$(assertion::successful \
+    _succesful_command_for_2_arguments "first" "second")"
 
 	_assert_success
 	_assert_message_empty
 }
 
-function when_asserting_that_command_is_successful_the_arguments_are_provided_though_they_have_spaces() {
-	message="$(assertion::successful _succesful_command_if_two_arguments_are_provided "first argument" "second argument")"
+function arguments_with_spaces_are_provided_for_successful_assertion() {
+	message="$(assertion::successful \
+	  _succesful_command_for_2_arguments "first argument" "second argument")"
 
 	_assert_success
 	_assert_message_empty
@@ -89,8 +93,9 @@ function asserting_that_failing_command_is_failing_is_true() {
 	_assert_message_empty
 }
 
-function when_asserting_that_command_is_failing_the_arguments_are_provided_though_they_have_spaces() {
-	message="$(assertion::failing _failing_command_if_two_arguments_are_provided "first argument" "second argument")"
+function arguments_with_spaces_are_provided_for_failing_assertion() {
+	message="$(assertion::failing \
+    _failing_command_for_2_arguments "first argument" "second argument")"
 
 	_assert_success
 	_assert_message_empty
@@ -124,14 +129,14 @@ function asserting_that_string_contains_substring_is_true() {
 	_assert_message_empty
 }
 
-function asserting_that_string_contains_totally_different_string_is_false() {
+function asserting_that_string_contains_different_string_is_false() {
  	message="$(assertion::string_contains string z)"
 
 	_assert_failure
 	_assert_message_equals "String: <string> does not contain: <z>."
 }
 
-function asserting_that_string_does_not_contain_totally_different_string_is_true() {
+function asserting_that_string_does_not_contain_different_string_is_true() {
  	message="$(assertion::string_does_not_contain string z)"
 
 	_assert_success
@@ -188,7 +193,9 @@ function asserting_that_array_contains_not_contained_element_is_false() {
  	message="$(assertion::array_contains "other element" "${array[@]}")"
 
 	_assert_failure
-	_assert_message_equals "Array: <[a, the element, c]> does not contain: <other element>."
+	local expected="Array: <[a, the element, c]> does not contain: \
+<other element>."
+	_assert_message_equals "${expected}"
 }
 
 function asserting_that_array_does_not_contain_not_contained_element_is_true() {
@@ -221,11 +228,11 @@ function _succesful_command() {
 	return 0
 }
 
-function _succesful_command_if_two_arguments_are_provided() {
+function _succesful_command_for_2_arguments() {
 	(( $# == 2 ))
 }
 
-function _failing_command_if_two_arguments_are_provided() {
+function _failing_command_for_2_arguments() {
 	(( $# != 2 ))
 }
 

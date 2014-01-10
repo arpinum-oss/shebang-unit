@@ -1,4 +1,4 @@
-function system::get_string_or_default_if_empty() {
+function system::get_string_or_default() {
 	local result=$1
 	[[ -z "$1" ]] && result="$2"
 	printf "${result}"

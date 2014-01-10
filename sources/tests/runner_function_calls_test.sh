@@ -1,6 +1,7 @@
 _TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
 
-_TEST_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")/../../resources/tests/directory_with_one_test"
+_TEST_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")/../../resources/tests/\
+directory_with_one_test"
 
 function global_setup() {
 	rm -rf "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
