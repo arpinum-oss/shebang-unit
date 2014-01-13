@@ -3,6 +3,7 @@
 ## todo ##
 * tests result output
 * readme
+* usage
 
 ## done ##
 * assert empty/not empty string

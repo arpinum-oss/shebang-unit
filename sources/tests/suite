@@ -3,7 +3,7 @@
 _SUITE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
 
 function _releaseShebangUnit() {
-	source ${_SUITE_DIRECTORY}/../../releases/release.sh
+	source ${_SUITE_DIRECTORY}/../../sources/production/release.sh
 	release::concatenate_sources_in_release_file
 }
 

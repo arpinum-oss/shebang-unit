@@ -1,10 +1,24 @@
 #!/bin/bash
 
+# Copyright (C) 2013, Arpinum
+#
+# Shebang Unit is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Shebang Unit is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Shebang Unit. If not, see http://www.gnu.org/licenses/lgpl.html.
+
 # Shebang unit all in one source file
 
-#Beginning of configuration.sh
 # yes/no representation used with shebang_unit parameters to activate
-#  stuff like colors
+# stuff like colors
 SBU_YES="yes"
 SBU_NO="no"
 
@@ -28,9 +42,6 @@ SBU_TEARDOWN_FUNCTION_NAME="teardown"
 SBU_TEST_FILE_PATTERN=*_test.sh
 SBU_USE_COLORS="${SBU_YES}"
 
-#End of configuration.sh
-
-#Beginning of system.sh
 function system::get_string_or_default() {
 	local result=$1
 	[[ -z "$1" ]] && result="$2"
@@ -74,9 +85,7 @@ function system::print_array() {
 function system::string_contains() {
 	[[ "$1" == *"$2"* ]]
 }
-#End of system.sh
 
-#Beginning of assertion.sh
 function assertion::equal() {
 	if [[ "$1" != "$2" ]]; then
 		assertion::_assertion_failed "Actual: <$2>, expected: <$1>."
@@ -170,9 +179,7 @@ function assertion::_get_assertion_message_to_use() {
 		printf "${message}\n"
 	fi
 }
-#End of assertion.sh
 
-#Beginning of parser.sh
 function parser::get_public_functions_in_file() {
 	local functions=()
 	parser::_find_functions_in_file "$1" | parser::_filter_private_functions | {
@@ -195,9 +202,7 @@ function parser::_filter_private_functions() {
 function parser::_get_function_name_from_declaration() {
 	sed "s/function\(.*\)()/\1/"
 }
-#End of parser.sh
 
-#Beginning of runner.sh
 function runner::run_all_test_files() {
 	runner::_initialise_tests_execution
 	runner::_run_all_test_files_with_pattern_in_directory "$1"
@@ -314,9 +319,7 @@ function runner::_call_function_if_in_array() {
 		eval ${function}
 	fi
 }
-#End of runner.sh
 
-#Beginning of main.sh
 function main::main() {
 	local i
 	for i in "$@"; do
@@ -334,8 +337,5 @@ function main::main() {
 
 	runner::run_all_test_files $1
 }
-#End of main.sh
 
-# Beginning of executable code
 main::main $@
-#End of executable code
