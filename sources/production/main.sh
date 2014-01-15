@@ -1,4 +1,4 @@
-function main::main() {
+function main__main() {
 	local i
 	for i in "$@"; do
 		case "${i}" in
@@ -13,5 +13,5 @@ function main::main() {
 		esac
 	done
 
-	runner::run_all_test_files $1
+	runner__run_all_test_files $1
 }

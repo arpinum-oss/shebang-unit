@@ -44,17 +44,17 @@ SBU_PRIVATE_FUNCTION_NAME_REGEX="^_.*"
 SBU_TEST_FILE_PATTERN="*_test.sh"
 SBU_USE_COLORS="${SBU_YES}"
 
-function system::get_string_or_default() {
+function system__get_string_or_default() {
 	local result=$1
 	[[ -z "$1" ]] && result="$2"
 	printf "${result}"
 }
 
-function system::get_date_in_seconds() {
+function system__get_date_in_seconds() {
 	date +%s
 }
 
-function system::print_with_color() {
+function system__print_with_color() {
 	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
 		printf "$2$1$3\n"
 	else
@@ -62,7 +62,7 @@ function system::print_with_color() {
 	fi
 }
 
-function system::array_contains() {
+function system__array_contains() {
 	local value=$1
 	shift 1
 	local i
@@ -74,7 +74,7 @@ function system::array_contains() {
 	return ${SBU_FAILURE_STATUS_CODE}
 }
 
-function system::print_array() {
+function system__print_array() {
 	local array_as_string=""
 	local i
 	for (( i=1; i <= $#; i++ )); do
@@ -84,95 +84,95 @@ function system::print_array() {
 	printf "[%s]" "${array_as_string}"
 }
 
-function system::string_contains() {
+function system__string_contains() {
 	[[ "$1" == *"$2"* ]]
 }
 
-function assertion::equal() {
+function assertion__equal() {
 	if [[ "$1" != "$2" ]]; then
-		assertion::_assertion_failed "Actual: <$2>, expected: <$1>."
+		_assertion__failed "Actual: <$2>, expected: <$1>."
 	fi
 }
 
-function assertion::string_contains() {
-	if ! system::string_contains "$1" "$2"; then
-		assertion::_assertion_failed "String: <$1> does not contain: <$2>."
+function assertion__string_contains() {
+	if ! system__string_contains "$1" "$2"; then
+		_assertion__failed "String: <$1> does not contain: <$2>."
 	fi
 }
 
-function assertion::string_does_not_contain() {
-	if system::string_contains "$1" "$2"; then
-		assertion::_assertion_failed "String: <$1> contains: <$2>."
+function assertion__string_does_not_contain() {
+	if system__string_contains "$1" "$2"; then
+		_assertion__failed "String: <$1> contains: <$2>."
 	fi
 }
 
-function assertion::string_empty() {
+function assertion__string_empty() {
 	if [[ -n "$1" ]]; then
-		assertion::_assertion_failed "String: <$1> is not empty."
+		_assertion__failed "String: <$1> is not empty."
 	fi
 }
 
-function assertion::string_not_empty() {
+function assertion__string_not_empty() {
 	if [[ -z "$1" ]]; then
-		assertion::_assertion_failed "The string is empty."
+		_assertion__failed "The string is empty."
 	fi
 }
 
-function assertion::array_contains() {
+function assertion__array_contains() {
 	local element=$1
 	shift 1
-	if ! system::array_contains "${element}" "$@"; then
-		local array_as_string="$(system::print_array "$@")"
-		assertion::_assertion_failed \
+	if ! system__array_contains "${element}" "$@"; then
+		local array_as_string="$(system__print_array "$@")"
+		_assertion__failed \
 			"Array: <${array_as_string}> does not contain: <${element}>."
 	fi
 }
 
-function assertion::array_does_not_contains() {
+function assertion__array_does_not_contains() {
 	local element=$1
 	shift 1
-	if system::array_contains "${element}" "$@"; then
-		local array_as_string="$(system::print_array "$@")"
-		assertion::_assertion_failed \
+	if system__array_contains "${element}" "$@"; then
+		local array_as_string="$(system__print_array "$@")"
+		_assertion__failed \
 			"Array: <${array_as_string}> contains: <${element}>."
 	fi
 }
 
-function assertion::status_code_is_success() {
+function assertion__status_code_is_success() {
 	if (( $1 != ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed \
+		_assertion__failed \
 			"Status code is failure instead of success." "$2"
 	fi
 }
 
-function assertion::status_code_is_failure() {
+function assertion__status_code_is_failure() {
 	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed \
+		_assertion__failed \
 			"Status code is success instead of failure." "$2"
 	fi
 }
 
-function assertion::successful() {
+function assertion__successful() {
 	"$@"
 	if (( $? != ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed "Command is failing instead of successful."
+		_assertion__failed "Command is failing instead of successful."
 	fi
 }
 
-function assertion::failing() {
+function assertion__failing() {
 	"$@"
 	if (( $? == ${SBU_SUCCESS_STATUS_CODE} )); then
-		assertion::_assertion_failed "Command is successful instead of failing."
+		_assertion__failed "Command is successful instead of failing."
 	fi
 }
 
-function assertion::_assertion_failed() {
-	local message_to_use="$(assertion::_get_assertion_message_to_use "$1" "$2")"
+function _assertion__failed() {
+	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
 	printf "Assertion failed. ${message_to_use}\n"
 	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
-function assertion::_get_assertion_message_to_use() {
+function _assertion__get_assertion_message_to_use() {
 	local message=$1
 	local custom_messsage=$2
 	if [[ -n "${custom_messsage}" ]]; then
@@ -182,143 +182,143 @@ function assertion::_get_assertion_message_to_use() {
 	fi
 }
 
-function parser::get_public_functions_in_file() {
-	parser::_find_functions_in_file "$1" \
-	  | parser::_filter_private_functions \
+function parser__get_public_functions_in_file() {
+	_parser__find_functions_in_file "$1" \
+	  | _parser__filter_private_functions \
 	  | awk '{ print $1 }'
 }
 
-function parser::_find_functions_in_file() {
+function _parser__find_functions_in_file() {
 	grep -o "${SBU_FUNCTION_DECLARATION_REGEX}" "$1" \
-		| parser::_get_function_name_from_declaration
+		| _parser__get_function_name_from_declaration
 }
 
-function parser::_filter_private_functions() {
+function _parser__filter_private_functions() {
 	grep -v "${SBU_PRIVATE_FUNCTION_NAME_REGEX}"
 }
 
-function parser::_get_function_name_from_declaration() {
+function _parser__get_function_name_from_declaration() {
 	sed "s/${SBU_FUNCTION_DECLARATION_REGEX}/\1/"
 }
 
-function runner::run_all_test_files() {
-	runner::_initialise_tests_execution
-	runner::_run_all_test_files_with_pattern_in_directory "$1"
-	runner::_print_tests_results
-	runner::_tests_are_successful
+function runner__run_all_test_files() {
+	_runner__initialise_tests_execution
+	_runner__run_all_test_files_with_pattern_in_directory "$1"
+	_runner__print_tests_results
+	_runner__tests_are_successful
 }
 
-function runner::_initialise_tests_execution() {
-	_GREEN_TESTS_COUNT=0
-	_RED_TESTS_COUNT=0
-	_EXECUTION_BEGINING_DATE="$(system::get_date_in_seconds)"
+function _runner__initialise_tests_execution() {
+	global_green_tests_count=0
+	global_red_tests_count=0
+	global_execution_begining_date="$(system__get_date_in_seconds)"
 }
 
-function runner::_run_all_test_files_with_pattern_in_directory() {
+function _runner__run_all_test_files_with_pattern_in_directory() {
 	local file
 	for file in $(find "$1" -name "${SBU_TEST_FILE_PATTERN}"); do
-		runner::_run_test_file "${file}"
+		_runner__run_test_file "${file}"
 	done
 }
 
-function runner::_run_test_file() {
+function _runner__run_test_file() {
 	local file=$1
 	printf "[File] ${file}\n"
 	source "${file}"
-	local public_functions=($(parser::get_public_functions_in_file "${file}"))
-	runner::_call_function_if_in_array "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
+	local public_functions=($(parser__get_public_functions_in_file "${file}"))
+	_runner__call_function_if_in_array "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
 		"${public_functions[@]}"
-	runner::_call_all_tests "${public_functions[@]}"
-	runner::_call_function_if_in_array "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
+	_runner__call_all_tests "${public_functions[@]}"
+	_runner__call_function_if_in_array "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
 		"${public_functions[@]}"
 	printf "\n"
 }
 
-function runner::_call_all_tests() {
+function _runner__call_all_tests() {
 	local i
 	for (( i=1; i <= $#; i++ )); do
-		runner::_call_if_test_function "${!i}" "${@}"
+		_runner__call_if_test_function "${!i}" "${@}"
 	done
 }
 
-function runner::_call_if_test_function() {
+function _runner__call_if_test_function() {
 	local function=$1
 	shift 1
-	if runner::_function_is_a_test "${function}"; then
-		runner::_call_test_function_in_the_middle_of_setup_and_teardown \
+	if _runner__function_is_a_test "${function}"; then
+		_runner__call_test_function_in_the_middle_of_setup_and_teardown \
 			"${function}" "${@}"
 	fi
 }
 
-function runner::_function_is_a_test() {
-	local special_functions=("${SBU_GLOBAL_SETUP_FUNCTION_NAME}"
-							 "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}"
-							 "${SBU_SETUP_FUNCTION_NAME}"
-							 "${SBU_TEARDOWN_FUNCTION_NAME}")
-	! system::array_contains "${1}" "${special_functions[@]}"
+function _runner__function_is_a_test() {
+	! system__array_contains "${1}" \
+	                    "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
+	                    "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
+	                    "${SBU_SETUP_FUNCTION_NAME}" \
+	                    "${SBU_TEARDOWN_FUNCTION_NAME}"
 }
 
-function runner::_call_test_function_in_the_middle_of_setup_and_teardown() {
+function _runner__call_test_function_in_the_middle_of_setup_and_teardown() {
 	local test_function=$1
 	shift 1
 
 	printf "[Test] ${test_function}\n"
-	( runner::_call_function_if_in_array "${SBU_SETUP_FUNCTION_NAME}" "$@" &&
+	( _runner__call_function_if_in_array "${SBU_SETUP_FUNCTION_NAME}" "$@" &&
 	( ${test_function} ) &&
-	runner::_call_function_if_in_array "${SBU_TEARDOWN_FUNCTION_NAME}" "$@" )
-	runner::_parse_test_function_result $?
+	_runner__call_function_if_in_array "${SBU_TEARDOWN_FUNCTION_NAME}" "$@" )
+	_runner__parse_test_function_result $?
 }
 
-function runner::_parse_test_function_result() {
+function _runner__parse_test_function_result() {
 	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
-		(( _GREEN_TESTS_COUNT++ ))
-		runner::_print_with_color "OK" ${SBU_GREEN_COLOR_CODE}
+		(( global_green_tests_count++ ))
+		_runner__print_with_color "OK" ${SBU_GREEN_COLOR_CODE}
 	else
-		(( _RED_TESTS_COUNT++ ))
-		runner::_print_with_color "KO" ${SBU_RED_COLOR_CODE}
+		(( global_red_tests_count++ ))
+		_runner__print_with_color "KO" ${SBU_RED_COLOR_CODE}
 	fi
 }
 
-function runner::_print_tests_results() {
+function _runner__print_tests_results() {
 	printf "[Results]\n"
-	local color="$(runner::_getColorCodeForTestsResult)"
-	local execution_time="$(runner::_get_execution_time)"
-	local green_tests="Green tests: ${_GREEN_TESTS_COUNT}"
-	local red_tests="red: ${_RED_TESTS_COUNT}"
+	local color="$(_runner__getColorCodeForTestsResult)"
+	local execution_time="$(_runner__get_execution_time)"
+	local green_tests="Green tests: ${global_green_tests_count}"
+	local red_tests="red: ${global_red_tests_count}"
 	local time="in ${execution_time}s"
-	runner::_print_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
+	_runner__print_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
 }
 
-function runner::_getColorCodeForTestsResult() {
+function _runner__getColorCodeForTestsResult() {
 	local color_code=${SBU_GREEN_COLOR_CODE}
-	if ! runner::_tests_are_successful; then
+	if ! _runner__tests_are_successful; then
 		color_code=${SBU_RED_COLOR_CODE}
 	fi
 	printf "${color_code}"
 }
 
-function runner::_get_execution_time() {
-	local ending_date="$(system::get_date_in_seconds)"
-	printf "$((${ending_date} - ${_EXECUTION_BEGINING_DATE}))"
+function _runner__get_execution_time() {
+	local ending_date="$(system__get_date_in_seconds)"
+	printf "$((${ending_date} - ${global_execution_begining_date}))"
 }
 
-function runner::_print_with_color() {
-	system::print_with_color "$1" "$2" "${SBU_DEFAULT_COLOR_CODE}"
+function _runner__print_with_color() {
+	system__print_with_color "$1" "$2" "${SBU_DEFAULT_COLOR_CODE}"
 }
 
-function runner::_tests_are_successful() {
-	(( ${_RED_TESTS_COUNT} == 0 ))
+function _runner__tests_are_successful() {
+	(( ${global_red_tests_count} == 0 ))
 }
 
-function runner::_call_function_if_in_array() {
+function _runner__call_function_if_in_array() {
 	local function=$1
 	shift 1
-	if system::array_contains "${function}" "$@"; then
-		eval ${function}
+	if system__array_contains "${function}" "$@"; then
+	  "${function}"
 	fi
 }
 
-function main::main() {
+function main__main() {
 	local i
 	for i in "$@"; do
 		case "${i}" in
@@ -333,7 +333,7 @@ function main::main() {
 		esac
 	done
 
-	runner::run_all_test_files $1
+	runner__run_all_test_files $1
 }
 
-main::main $@
+main__main $@

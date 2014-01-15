@@ -6,7 +6,7 @@ directory_with_two_tests"
 
 function global_setup() {
 	( source "${_PRODUCTION_DIRECTORY}/configuration.sh"
-	  runner::run_all_test_files "${_TEST_DIRECTORY}" \
+	  runner__run_all_test_files "${_TEST_DIRECTORY}" \
 	    > "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}" )
 }
 
@@ -17,5 +17,5 @@ function global_teardown() {
 function the_runner_print_successful_and_failing_test_number() {
 	local last_line="$(tail -n1 "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}")"
 
-	assertion::string_contains "${last_line}" "Green tests: 3, red: 1"
+	assertion__string_contains "${last_line}" "Green tests: 3, red: 1"
 }
