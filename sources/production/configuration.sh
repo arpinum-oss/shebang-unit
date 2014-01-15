@@ -17,9 +17,8 @@ SBU_GLOBAL_SETUP_FUNCTION_NAME="global_setup"
 SBU_GLOBAL_TEARDOWN_FUNCTION_NAME="global_teardown"
 SBU_SETUP_FUNCTION_NAME="setup"
 SBU_TEARDOWN_FUNCTION_NAME="teardown"
-SBU_FUNCTION_DECLARATION_REGEX="^\s*function.*()"
-SBU_FUNCTION_NAME_REGEX_WITH_GROUP="function\(.*\)()"
-SBU_FUNCTION_NAME_TO_IGNORE_REGEX="^_.*"
+SBU_FUNCTION_DECLARATION_REGEX="^[ ]*function \(.*\)()"
+SBU_PRIVATE_FUNCTION_NAME_REGEX="^_.*"
 
 # Default configuration that can be modified with shebang_unit parameters
 # For more information see shebang_unit usages
