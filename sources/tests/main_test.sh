@@ -47,7 +47,7 @@ function can_use_a_test_file_pattern_with_short_option() {
 	assertion__equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
 }
 
-function cannot_use_unknown_option() {
+function cannot_use_unknown_option_with_value() {
   local message
 
   message="$(main__main --iks=plop "${_TEST_DIRECTORY}")"
@@ -57,10 +57,26 @@ function cannot_use_unknown_option() {
   assertion__string_contains "${message}" "[usage]"
 }
 
-function cannot_use_unknown_short_option() {
+function cannot_use_unknown_option() {
+  local message
+
+  message="$(main__main --iks "${_TEST_DIRECTORY}")"
+
+  assertion__string_contains "${message}" "shebang_unit: illegal option -- iks"
+}
+
+function cannot_use_unknown_short_option_with_value() {
   local message
 
   message="$(main__main -x=plop "${_TEST_DIRECTORY}")"
+
+  assertion__string_contains "${message}" "shebang_unit: illegal option -- x"
+}
+
+function cannot_use_unknown_short_option() {
+  local message
+
+  message="$(main__main -x "${_TEST_DIRECTORY}")"
 
   assertion__string_contains "${message}" "shebang_unit: illegal option -- x"
 }
@@ -80,5 +96,16 @@ function can_print_usage_for_help_short_option() {
   message="$(main__main -h)"
 
   assertion__status_code_is_success $?
+  assertion__string_contains "${message}" "[usage]"
+}
+
+function cannot_use_more_than_one_argument_after_options() {
+  local message
+
+  message="$(main__main "${_TEST_DIRECTORY}" "an illegal second argument")"
+
+  assertion__status_code_is_failure $?
+  local expected="shebang_unit: only one path is allowed"
+  assertion__string_contains "${message}" "${expected}"
   assertion__string_contains "${message}" "[usage]"
 }
