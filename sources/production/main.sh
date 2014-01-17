@@ -11,7 +11,8 @@ function main__main() {
 			shift
 			;;
 			-h|--help)
-			_main__print_usage_and_exit_with_code ${SBU_SUCCESS_STATUS_CODE}
+			_main__print_full_usage
+			exit ${SBU_SUCCESS_STATUS_CODE}
 			;;
 			-*|--*)
 			_main_print_illegal_option "${argument}"
@@ -31,29 +32,26 @@ function _main_print_illegal_option() {
   printf "$(_main__get_script_name): illegal option -- ${option}\n"
 }
 
-_main__assert_only_one_argument_left() {
-  if (( $1 > 1)); then
+function _main__assert_only_one_argument_left() {
+  if (( $1 > 1 )); then
     printf "$(_main__get_script_name): only one path is allowed\n"
     _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
   fi
 }
 
-_main__get_script_name() {
+function _main__get_script_name() {
   basename "$0"
 }
 
-_main__print_usage_and_exit_with_code() {
+function _main__print_usage_and_exit_with_code() {
   _main_print_usage
 	exit $1
 }
 
-function _main_print_usage() {
+function _main__print_full_usage() {
+  _main_print_usage
   local script="$(_main__get_script_name)"
-  printf "\
-[usage]
-${script} [options] path
-  run all tests in path
-
+  printf "\n\
 [options]
 -c, --colors=${SBU_YES} or ${SBU_NO}
   tests output with colors or no
@@ -68,4 +66,10 @@ ${script} .
 ${script} -p=*test.sh sources/test
   run all tests files ending with test.sh in sources/test
 \n"
+}
+
+function _main_print_usage() {
+  printf "\
+usage: $(_main__get_script_name) [options] path
+       run all tests in path\n"
 }

@@ -54,7 +54,7 @@ function cannot_use_unknown_option_with_value() {
 
   assertion__status_code_is_failure $?
   assertion__string_contains "${message}" "shebang_unit: illegal option -- iks"
-  assertion__string_contains "${message}" "[usage]"
+  assertion__string_contains "${message}" "usage:"
 }
 
 function cannot_use_unknown_option() {
@@ -81,22 +81,23 @@ function cannot_use_unknown_short_option() {
   assertion__string_contains "${message}" "shebang_unit: illegal option -- x"
 }
 
-function can_print_usage_for_help_option() {
+function can_print_full_usage_for_help_option() {
   local message
 
   message="$(main__main --help)"
 
   assertion__status_code_is_success $?
-  assertion__string_contains "${message}" "[usage]"
+  assertion__string_contains "${message}" "usage:"
 }
 
-function can_print_usage_for_help_short_option() {
+function can_print_full_usage_for_help_short_option() {
   local message
 
   message="$(main__main -h)"
 
   assertion__status_code_is_success $?
-  assertion__string_contains "${message}" "[usage]"
+  assertion__string_contains "${message}" "usage:"
+  assertion__string_contains "${message}" "[options]"
 }
 
 function cannot_use_more_than_one_argument_after_options() {
@@ -107,5 +108,5 @@ function cannot_use_more_than_one_argument_after_options() {
   assertion__status_code_is_failure $?
   local expected="shebang_unit: only one path is allowed"
   assertion__string_contains "${message}" "${expected}"
-  assertion__string_contains "${message}" "[usage]"
+  assertion__string_contains "${message}" "usage:"
 }
