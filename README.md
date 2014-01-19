@@ -5,6 +5,10 @@
 
 **Shebang Unit** is an automated testing framework for Bash 4 based on [xUnit].
 
+Now you don't have any excuse for not practicing some sexy Test-Driven Development in Bash.
+
+Just download it here : *[releases/shebang_unit]*. Write a kata like *[examples/fizzbuzz]* and have fun!
+
 With **Shebang Unit** you can :
  * assert equality,
  * assert that string contains or not another string,
@@ -99,13 +103,33 @@ function can_assert_that_command_is_failing() {
 
 ## Usage ##
 
-todo
+1. Copy *[releases/shebang_unit]* wherever you want,
+2. Create a file suffixed by *_test.sh* like *math_test.sh* in *your_folder*,
+3. Write a test function like in previous examples,
+4. Run `./shebang_unit your_folder`,
+5. Write production code,
+6. Refactor. Enough said.
+
+### Use colors or no ###
+
+You can use colors in test outputs with `-c` or `--colors` options. Colors are activated by default.
+
+`./shebang_unit --colors=no your_folder`
+
+### Use another test file pattern ###
+
+Test file pattern can be changed with `-p` or `--pattern` options. It can be convenient to run only few tests or totally change the default pattern (`*_test.sh`).
+
+`./shebang_unit --pattern=this_only_test.sh your_folder`
+
+`./shebang_unit --pattern=test_*.sh your_folder`
+
 
 ## Pimp your **shebang_unit** ##
 
 If you don't like **shebang_unit** coding conventions like function names or test file names, you can hack the global variables at the top of *shebang_unit.sh*.
 
-For instance if your private functions are prefixed by *p_* for some reason :
+For instance if your private functions are prefixed by `p_` for some reason :
 
 ```bash
 SBU_PRIVATE_FUNCTION_NAME_REGEX="^p_.*"
@@ -130,4 +154,6 @@ You should have received a copy of the GNU General Public License along with **S
 
 
 [xUnit]: http://wikipedia.org/wiki/XUnit
+[releases/shebang_unit]: https://github.com/arpinum/shebang_unit/blob/master/releases/shebang_unit
+[examples/fizzbuzz]: https://github.com/arpinum/shebang_unit/tree/master/examples/fizzbuzz
 [http://www.gnu.org/licenses/lgpl.html]: http://www.gnu.org/licenses/lgpl.html
