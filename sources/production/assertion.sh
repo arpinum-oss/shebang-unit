@@ -38,7 +38,7 @@ function assertion__array_contains() {
 	fi
 }
 
-function assertion__array_does_not_contains() {
+function assertion__array_does_not_contain() {
 	local element=$1
 	shift 1
 	if system__array_contains "${element}" "$@"; then

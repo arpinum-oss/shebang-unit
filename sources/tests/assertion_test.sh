@@ -201,7 +201,7 @@ function asserting_that_array_contains_not_contained_element_is_false() {
 function asserting_that_array_does_not_contain_not_contained_element_is_true() {
  	local array=("a" "b" "c")
 
- 	message="$(assertion__array_does_not_contains "z" "${array[@]}")"
+ 	message="$(assertion__array_does_not_contain "z" "${array[@]}")"
 
 	_assert_success
 	_assert_message_empty
@@ -210,7 +210,7 @@ function asserting_that_array_does_not_contain_not_contained_element_is_true() {
 function asserting_that_array_does_not_contain_contained_element_is_false() {
  	local array=("a" "the element" "c")
 
- 	message="$(assertion__array_does_not_contains "the element" "${array[@]}")"
+ 	message="$(assertion__array_does_not_contain "the element" "${array[@]}")"
 
 	_assert_failure
 	_assert_message_equals "Array: <[a, the element, c]> contains: <the element>."
