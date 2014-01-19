@@ -101,6 +101,23 @@ function can_assert_that_command_is_failing() {
 
 todo
 
+## Pimp your **shebang_unit** ##
+
+If you don't like **shebang_unit** coding conventions like function names or test file names, you can hack the global variables at the top of *shebang_unit.sh*.
+
+For instance if your private functions are prefixed by *p_* for some reason :
+
+```bash
+SBU_PRIVATE_FUNCTION_NAME_REGEX="^p_.*"
+```
+
+Or, if you would rather live in dark and definitively turn off colors :
+
+```bash
+SBU_USE_COLORS="${SBU_NO}"
+```
+
+
 ## License ##
 
 Copyright (C) 2013, Arpinum
