@@ -5,8 +5,6 @@
 
 **Shebang Unit** is an automated testing framework for Bash 4 based on [xUnit].
 
-Now you don't have any excuse for not practicing some sexy Test-Driven Development in Bash.
-
 Just download it here : *[releases/shebang_unit]*. Write a kata like *[examples/fizzbuzz]* and have fun!
 
 With **Shebang Unit** you can :
@@ -16,6 +14,8 @@ With **Shebang Unit** you can :
  * assert that status code is success or failure,
  * assert that command is successful or failing,
  * save a baby kitten every time you use it!
+
+Now you don't have any excuse for not practicing some sexy Test-Driven Development in Bash.
 
 ## Serious examples ##
 
