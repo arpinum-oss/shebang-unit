@@ -13,6 +13,7 @@ With **Shebang Unit** you can :
  * assert that array contains or not an element,
  * assert that status code is success or failure,
  * assert that command is successful or failing,
+ * write setup or teardown functions for a test or a whole test file,
  * save a baby kitten every time you use it!
 
 Now you don't have any excuse for not practicing some sexy Test-Driven Development in Bash.
@@ -124,6 +125,43 @@ Test file pattern can be changed with `-p` or `--pattern` options. It can be con
 
 `./shebang_unit --pattern=test_*.sh your_folder`
 
+## Convention over configuration ##
+
+**sheban_unit** doesn't need any annotation to recognise a test function. Just write un *public* (see below) function like :
+
+```bash
+function one_kitten_plus_another_is_equal_to_two_kittens() {
+  ...
+}
+
+```
+
+You can also use *private* functions to make your tests more explicit. Just prefix your functions by `_` :
+
+```bash
+function my_super_explicit_test_use_private_functions() {
+  _arrange_the_mess
+  
+  _act_like_a_pro
+  
+  _assert_some_stuff
+}
+
+function _arrange_the_mess() {
+  ...
+}
+
+...
+```
+
+### Build your own cathedral with setup or teardown functions ###
+
+You can use special functions to arrange or clean the mess :
+
+* `setup` : called before each test in a file
+* `teardown` : called after each test in a file 
+* `global_setup` : called once before all tests in a file
+* `global_teardown` : called once after all tests in a file
 
 ## Pimp your **shebang_unit** ##
 
