@@ -1,4 +1,4 @@
-# Shebang unit #
+# Shebang unit [![Etat build]](https://travis-ci.org/arpinum/shebang_unit)
 
 > Bang bang, my baby shot me down.
 > <cite>(Cher)</cite>
@@ -18,9 +18,9 @@ With **Shebang Unit** you can :
 
 Now you don't have any excuse for not practicing some sexy Test-Driven Development in Bash.
 
-## Serious examples ##
+## Serious examples
 
-### Basic equality for newbies ###
+### Basic equality for newbies
 
 ```bash
 function can_assert_equality() {
@@ -28,7 +28,7 @@ function can_assert_equality() {
 }
 ```
 
-### Awesome string assertions ###
+### Awesome string assertions
 
 ```bash
 function can_assert_that_string_contains_another_one() {
@@ -54,7 +54,7 @@ function can_assert_that_string_is_not_empty() {
 }
 ```
 
-### Rocket science array assertions ###
+### Rocket science array assertions
 
 ```bash
 function can_assert_that_array_contains_element() {
@@ -72,7 +72,7 @@ function can_assert_that_array_does_not_contain_element() {
 }
 ```
 
-### Magic command assertions ###
+### Magic command assertions
 
 ```bash
 function can_assert_that_status_code_is_success() {
@@ -102,7 +102,7 @@ function can_assert_that_command_is_failing() {
 }
 ```
 
-## Usage ##
+## Usage
 
 1. Copy *[releases/shebang_unit]* wherever you want,
 2. Create a file suffixed by *_test.sh* like *math_test.sh* in *your_folder*,
@@ -111,13 +111,13 @@ function can_assert_that_command_is_failing() {
 5. Write production code,
 6. Refactor. Enough said.
 
-### Use colors or no ###
+### Use colors or no
 
 You can use colors in test outputs with `-c` or `--colors` options. Colors are activated by default.
 
 `./shebang_unit --colors=no your_folder`
 
-### Use another test file pattern ###
+### Use another test file pattern
 
 Test file pattern can be changed with `-p` or `--pattern` options. It can be convenient to run only few tests or totally change the default pattern (`*_test.sh`).
 
@@ -125,7 +125,7 @@ Test file pattern can be changed with `-p` or `--pattern` options. It can be con
 
 `./shebang_unit --pattern=test_*.sh your_folder`
 
-## Convention over configuration ##
+## Convention over configuration
 
 **sheban_unit** doesn't need any annotation to recognise a test function. Just write un *public* (see below) function like :
 
@@ -154,7 +154,7 @@ function _arrange_the_mess() {
 ...
 ```
 
-### Build your own cathedral with setup or teardown functions ###
+### Build your own cathedral with setup or teardown functions
 
 You can use special functions to arrange or clean the mess :
 
@@ -163,7 +163,7 @@ You can use special functions to arrange or clean the mess :
 * `global_setup` : called once before all tests in a file
 * `global_teardown` : called once after all tests in a file
 
-## Pimp your **shebang_unit** ##
+## Pimp your **shebang_unit**
 
 If you don't like **shebang_unit** coding conventions like function names or test file names, you can hack the global variables at the top of *shebang_unit.sh*.
 
@@ -180,7 +180,7 @@ SBU_USE_COLORS="${SBU_NO}"
 ```
 
 
-## License ##
+## License
 
 Copyright (C) 2013, Arpinum
 
@@ -191,6 +191,7 @@ Copyright (C) 2013, Arpinum
 You should have received a copy of the GNU General Public License along with **Shebang Unit**.  If not, see [http://www.gnu.org/licenses/lgpl.html].
 
 
+[Etat build]: https://travis-ci.org/arpinum/shebang_unit.png?branch=master
 [xUnit]: http://wikipedia.org/wiki/XUnit
 [releases/shebang_unit]: https://github.com/arpinum/shebang_unit/blob/master/releases/shebang_unit
 [examples/fizzbuzz]: https://github.com/arpinum/shebang_unit/tree/master/examples/fizzbuzz
