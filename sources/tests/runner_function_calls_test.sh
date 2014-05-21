@@ -7,8 +7,8 @@ directory_with_one_test"
 function global_setup() {
 	rm -rf "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 	touch "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
-	( source "${_PRODUCTION_DIRECTORY}/configuration.sh"
-	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+	source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 	_called_functions=($(_get_called_functions))
 }
 
