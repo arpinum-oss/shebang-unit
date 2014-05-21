@@ -34,7 +34,7 @@ function _runner__run_test_file() {
 function _runner__call_all_tests() {
 	local i
 	for (( i=1; i <= $#; i++ )); do
-		_runner__call_if_test_function "${!i}" "${@}"
+		_runner__call_if_test_function "${!i}" "$@"
 	done
 }
 
@@ -43,12 +43,12 @@ function _runner__call_if_test_function() {
 	shift 1
 	if _runner__function_is_a_test "${function}"; then
 		_runner__call_test_function_in_the_middle_of_setup_and_teardown \
-			"${function}" "${@}"
+			"${function}" "$@"
 	fi
 }
 
 function _runner__function_is_a_test() {
-	! system__array_contains "${1}" \
+	! system__array_contains "$1" \
 	                    "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
 	                    "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
 	                    "${SBU_SETUP_FUNCTION_NAME}" \

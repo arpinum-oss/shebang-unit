@@ -17,7 +17,7 @@ function the_date_in_seconds_is_a_valid_number() {
 }
 
 function _is_a_number() {
-	[[ "${1}" =~ ^[0-9]+$ ]]
+	[[ "$1" =~ ^[0-9]+$ ]]
 }
 
 function can_print_with_color() {

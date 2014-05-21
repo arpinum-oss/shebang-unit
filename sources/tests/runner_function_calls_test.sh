@@ -54,5 +54,5 @@ function _get_called_functions() {
 }
 
 function _function_called() {
-	printf "${1} " >> "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	printf "$1 " >> "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }

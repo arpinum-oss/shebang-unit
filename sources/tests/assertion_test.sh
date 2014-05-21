@@ -245,5 +245,5 @@ function _assert_message_empty() {
 }
 
 function _assert_message_equals() {
-	assertion__equal "Assertion failed. ${1}" "${message}"
+	assertion__equal "Assertion failed. $1" "${message}"
 }
