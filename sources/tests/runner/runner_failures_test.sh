@@ -1,7 +1,7 @@
 _TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
 _SOURCE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
-_PRODUCTION_DIRECTORY="${_SOURCE_DIRECTORY}/../production"
-_TESTS_DIRECTORY="${_SOURCE_DIRECTORY}/../../resources/tests/\
+_PRODUCTION_DIRECTORY="${_SOURCE_DIRECTORY}/../../production"
+_TESTS_DIRECTORY="${_SOURCE_DIRECTORY}/../../../resources/tests/\
 directory_for_failures_tests"
 
 function setup() {

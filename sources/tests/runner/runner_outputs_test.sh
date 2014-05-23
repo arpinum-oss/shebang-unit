@@ -1,7 +1,7 @@
 _TEMPORARY_FILE_FOR_TESTS_OUTPUT="/tmp/sbu.txt"
 _SOURCE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
-_PRODUCTION_DIRECTORY="${_SOURCE_DIRECTORY}/../production"
-_TEST_DIRECTORY="${_SOURCE_DIRECTORY}/../../resources/tests/\
+_PRODUCTION_DIRECTORY="${_SOURCE_DIRECTORY}/../../production"
+_TEST_DIRECTORY="${_SOURCE_DIRECTORY}/../../../resources/tests/\
 directory_with_two_tests"
 
 function global_setup() {
