@@ -1,10 +1,11 @@
 _SBU_RELEASED_ARTIFACT_FILENAME='shebang_unit'
 _SBU_SOURCES_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
-_SBU_RELEASE_DIRECTORY="${_SBU_SOURCES_DIRECTORY}/../../releases"
+_SBU_RELEASE_DIRECTORY="${_SBU_SOURCES_DIRECTORY}/../../../releases"
 
-_SBU_ORDERED_SOURCES=('header.sh' 'configuration.sh' 'system.sh' 'assertion.sh'
-                  'parser.sh' 'runner/runner.sh' 'runner/file_runner.sh'
-                  'runner/test_runner.sh' 'main.sh')
+_SBU_ORDERED_SOURCES=('header.sh' 'configuration.sh' 'utils/system.sh'
+                  'core/assertion.sh' 'core/parser.sh' 'core/runner/runner.sh'
+                  'core/runner/file_runner.sh' 'core/runner/test_runner.sh'
+                  'main.sh')
 
 function release__concatenate_sources_in_release_file() {
 	_release__initialise
