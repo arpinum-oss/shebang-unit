@@ -1,8 +1,7 @@
 function test_runner__run_test() {
 	local test_function=$1
 	shift 1
-
-	printf "[Test] ${test_function}\n"
+  reporter__test_starts_running "${test_function}"
 	(
 	  _test_runner__call_setup_if_exists "$@" \
 	  && ( ${test_function} )
@@ -25,15 +24,11 @@ function _test_runner__call_teardown_if_exists() {
 function _test_runner__parse_test_function_result() {
 	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
 		(( global_green_tests_count++ ))
-		_test_runner__print_with_color "OK" ${SBU_GREEN_COLOR_CODE}
+		reporter__test_has_succeeded
 	else
 		(( global_red_tests_count++ ))
-		_test_runner__print_with_color "KO" ${SBU_RED_COLOR_CODE}
+		reporter__test_has_failed
 	fi
-}
-
-function _test_runner__print_with_color() {
-	system__print_with_color "$1" "$2" "${SBU_DEFAULT_COLOR_CODE}"
 }
 
 function _test_runner__call_function_if_exits() {

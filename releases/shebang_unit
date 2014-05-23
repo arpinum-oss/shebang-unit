@@ -1,19 +1,474 @@
+#!/bin/bash
+
+# Copyright (C) 2013, Arpinum
+#
+# Shebang Unit is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# Shebang Unit is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Shebang Unit. If not, see http://www.gnu.org/licenses/lgpl.html.
+
+# Shebang unit all in one source file
+
+# yes/no representation used with shebang_unit parameters to activate
+# stuff like colors
+SBU_YES="yes"
+SBU_NO="no"
+
+# Colors for outputs
+SBU_GREEN_COLOR_CODE="\\033[1;32m"
+SBU_RED_COLOR_CODE="\\033[1;31m"
+SBU_DEFAULT_COLOR_CODE="\\e[0m"
+
+# Functions coding coventions
+SBU_GLOBAL_SETUP_FUNCTION_NAME="global_setup"
+SBU_GLOBAL_TEARDOWN_FUNCTION_NAME="global_teardown"
+SBU_SETUP_FUNCTION_NAME="setup"
+SBU_TEARDOWN_FUNCTION_NAME="teardown"
+SBU_FUNCTION_DECLARATION_REGEX="^[ ]*function \(.*\)()"
+SBU_PRIVATE_FUNCTION_NAME_REGEX="^_.*"
+
+# Default configuration that can be modified with shebang_unit parameters
+# For more information see shebang_unit usages
+SBU_TEST_FILE_PATTERN="*_test.sh"
+SBU_USE_COLORS="${SBU_YES}"
+
+# Internal constants
+SBU_SUCCESS_STATUS_CODE=0
+SBU_FAILURE_STATUS_CODE=1
 
 
+function assertion__equal() {
+	if [[ "$1" != "$2" ]]; then
+		_assertion__failed "Actual: <$2>, expected: <$1>."
+	fi
+}
+
+function assertion__string_contains() {
+	if ! system__string_contains "$1" "$2"; then
+		_assertion__failed "String: <$1> does not contain: <$2>."
+	fi
+}
+
+function assertion__string_does_not_contain() {
+	if system__string_contains "$1" "$2"; then
+		_assertion__failed "String: <$1> contains: <$2>."
+	fi
+}
+
+function assertion__string_empty() {
+	if [[ -n "$1" ]]; then
+		_assertion__failed "String: <$1> is not empty."
+	fi
+}
+
+function assertion__string_not_empty() {
+	if [[ -z "$1" ]]; then
+		_assertion__failed "The string is empty."
+	fi
+}
+
+function assertion__array_contains() {
+	local element=$1
+	shift 1
+	if ! system__array_contains "${element}" "$@"; then
+		local array_as_string="$(system__print_array "$@")"
+		_assertion__failed \
+			"Array: <${array_as_string}> does not contain: <${element}>."
+	fi
+}
+
+function assertion__array_does_not_contain() {
+	local element=$1
+	shift 1
+	if system__array_contains "${element}" "$@"; then
+		local array_as_string="$(system__print_array "$@")"
+		_assertion__failed \
+			"Array: <${array_as_string}> contains: <${element}>."
+	fi
+}
+
+function assertion__status_code_is_success() {
+	if (( $1 != ${SBU_SUCCESS_STATUS_CODE} )); then
+		_assertion__failed \
+			"Status code is failure instead of success." "$2"
+	fi
+}
+
+function assertion__status_code_is_failure() {
+	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
+		_assertion__failed \
+			"Status code is success instead of failure." "$2"
+	fi
+}
+
+function assertion__successful() {
+	"$@"
+	if (( $? != ${SBU_SUCCESS_STATUS_CODE} )); then
+		_assertion__failed "Command is failing instead of successful."
+	fi
+}
+
+function assertion__failing() {
+	"$@"
+	if (( $? == ${SBU_SUCCESS_STATUS_CODE} )); then
+		_assertion__failed "Command is successful instead of failing."
+	fi
+}
+
+function _assertion__failed() {
+	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
+	printf "Assertion failed. ${message_to_use}\n"
+	exit ${SBU_FAILURE_STATUS_CODE}
+}
+
+function _assertion__get_assertion_message_to_use() {
+	local message=$1
+	local custom_messsage=$2
+	if [[ -n "${custom_messsage}" ]]; then
+		printf "%s %s\n" "${message}" "${custom_messsage}"
+	else
+		printf "${message}\n"
+	fi
+}
+
+function runner__run_all_test_files() {
+	_runner__initialise_tests_execution
+	_runner__run_all_test_files_with_pattern_in_directory "$1"
+	reporter__tests_files_end_running "$(_runner__get_execution_time)"
+	runner__tests_are_successful
+}
+
+function _runner__run_all_test_files_with_pattern_in_directory() {
+	local file
+	for file in $(find "$1" -name "${SBU_TEST_FILE_PATTERN}"); do
+		file_runner__run_test_file "${file}"
+	done
+}
+
+function _runner__initialise_tests_execution() {
+	global_green_tests_count=0
+	global_red_tests_count=0
+	global_execution_begining_date="$(system__get_date_in_seconds)"
+}
+
+function _runner__get_execution_time() {
+	local ending_date="$(system__get_date_in_seconds)"
+	printf "$((${ending_date} - ${global_execution_begining_date}))"
+}
+
+function runner__tests_are_successful() {
+	(( ${global_red_tests_count} == 0 ))
+}
+
+function file_runner__run_test_file() {
+	local file=$1
+	reporter__test_file_starts_running "${file}"
+	source "${file}"
+	local public_functions=($(parser__get_public_functions_in_file "${file}"))
+	_file_runner__call_global_setup_if_exists "${public_functions[@]}"
+	_file_runner__call_all_tests "${public_functions[@]}"
+	_file_runner__call_global_teardown_if_exists "${public_functions[@]}"
+	reporter__test_file_ends_running
+}
+
+function _file_runner__call_global_setup_if_exists() {
+  _file_runner__call_function_if_exits "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
+    "$@"
+}
+
+function _file_runner__call_global_teardown_if_exists() {
+  _file_runner__call_function_if_exits "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
+    "$@"
+}
+
+function _file_runner__call_all_tests() {
+	local i
+	for (( i=1; i <= $#; i++ )); do
+		_file_runner__call_if_test_function "${!i}" "$@"
+	done
+}
+
+function _file_runner__call_if_test_function() {
+	local function=$1
+	shift 1
+	if _file_runner__function_is_a_test "${function}"; then
+		test_runner__run_test "${function}" "$@"
+	fi
+}
+
+function _file_runner__function_is_a_test() {
+	! system__array_contains "$1" \
+	                    "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
+	                    "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
+	                    "${SBU_SETUP_FUNCTION_NAME}" \
+	                    "${SBU_TEARDOWN_FUNCTION_NAME}"
+}
+
+function _file_runner__call_function_if_exits() {
+	local function=$1
+	shift 1
+	if system__array_contains "${function}" "$@"; then
+	  "${function}"
+	fi
+}
+
+function parser__get_public_functions_in_file() {
+	_parser__find_functions_in_file "$1" \
+	  | _parser__filter_private_functions \
+	  | awk '{ print $1 }'
+}
+
+function _parser__find_functions_in_file() {
+	grep -o "${SBU_FUNCTION_DECLARATION_REGEX}" "$1" \
+		| _parser__get_function_name_from_declaration
+}
+
+function _parser__filter_private_functions() {
+	grep -v "${SBU_PRIVATE_FUNCTION_NAME_REGEX}"
+}
+
+function _parser__get_function_name_from_declaration() {
+	sed "s/${SBU_FUNCTION_DECLARATION_REGEX}/\1/"
+}
+
+function test_runner__run_test() {
+	local test_function=$1
+	shift 1
+  reporter__test_starts_running "${test_function}"
+	(
+	  _test_runner__call_setup_if_exists "$@" \
+	  && ( ${test_function} )
+	  local setup_and_test_code=$?
+	  _test_runner__call_teardown_if_exists "$@"
+	  (( $? == ${SBU_SUCCESS_STATUS_CODE} \
+	  &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
+	)
+	_test_runner__parse_test_function_result $?
+}
+
+function _test_runner__call_setup_if_exists() {
+  _test_runner__call_function_if_exits "${SBU_SETUP_FUNCTION_NAME}" "$@"
+}
+
+function _test_runner__call_teardown_if_exists() {
+  _test_runner__call_function_if_exits "${SBU_TEARDOWN_FUNCTION_NAME}" "$@"
+}
+
+function _test_runner__parse_test_function_result() {
+	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
+		(( global_green_tests_count++ ))
+		reporter__test_has_succeeded
+	else
+		(( global_red_tests_count++ ))
+		reporter__test_has_failed
+	fi
+}
+
+function _test_runner__call_function_if_exits() {
+	local function=$1
+	shift 1
+	if system__array_contains "${function}" "$@"; then
+	  "${function}"
+	fi
+}
+
+function reporter__tests_files_end_running() {
+	"$(_reporter__get)_reporter__tests_files_end_running" "$@"
+}
+
+function reporter__test_starts_running() {
+	"$(_reporter__get)_reporter__test_starts_running" "$@"
+}
+
+function reporter__test_has_succeeded() {
+  "$(_reporter__get)_reporter__test_has_succeeded" "$@"
+}
+
+function reporter__test_has_failed() {
+  "$(_reporter__get)_reporter__test_has_failed" "$@"
+}
+
+function reporter__test_file_starts_running() {
+	"$(_reporter__get)_reporter__test_file_starts_running" "$@"
+}
+
+function reporter__test_file_ends_running() {
+	"$(_reporter__get)_reporter__test_file_ends_running" "$@"
+}
+
+function _reporter__get() {
+  printf "standard"
+}
+
+function _reporter__print_with_color() {
+	system__print_with_color "$1" "$2" "${SBU_DEFAULT_COLOR_CODE}"
+}
+
+function _reporter__get_color_code_for_tests_result() {
+	local color_code=${SBU_GREEN_COLOR_CODE}
+	if ! runner__tests_are_successful; then
+		color_code=${SBU_RED_COLOR_CODE}
+	fi
+	printf "${color_code}"
+}
 
 
+function standard_reporter__tests_files_end_running() {
+	printf "[Results]\n"
+	local color="$(_reporter__get_color_code_for_tests_result)"
+	local execution_time="$1"
+	local green_tests="Green tests: ${global_green_tests_count}"
+	local red_tests="red: ${global_red_tests_count}"
+	local time="in ${execution_time}s"
+	_reporter__print_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
+}
 
+function standard_reporter__test_file_starts_running() {
+	printf "[File] $1\n"
+}
 
+function standard_reporter__test_file_ends_running() {
+	printf "\n"
+}
 
+function standard_reporter__test_starts_running() {
+	printf "[Test] $1\n"
+}
 
+function standard_reporter__test_has_succeeded() {
+  _reporter__print_with_color "OK" ${SBU_GREEN_COLOR_CODE}
+}
 
+function standard_reporter__test_has_failed() {
+  _reporter__print_with_color "KO" ${SBU_RED_COLOR_CODE}
+}
 
+function system__get_string_or_default() {
+	local result=$1
+	[[ -z "$1" ]] && result="$2"
+	printf "${result}"
+}
 
+function system__get_date_in_seconds() {
+	date +%s
+}
 
+function system__print_with_color() {
+	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
+		printf "$2$1$3\n"
+	else
+		printf "$1\n"
+	fi
+}
 
+function system__array_contains() {
+	local value=$1
+	shift 1
+	local i
+	for (( i=1; i <= $#; i++ )); do
+		if [[ "${!i}" == "${value}" ]]; then
+			return ${SBU_SUCCESS_STATUS_CODE}
+		fi
+	done
+	return ${SBU_FAILURE_STATUS_CODE}
+}
 
+function system__print_array() {
+	local array_as_string=""
+	local i
+	for (( i=1; i <= $#; i++ )); do
+		array_as_string+="${!i}, "
+	done
+	array_as_string=${array_as_string/%, /}
+	printf "[%s]" "${array_as_string}"
+}
 
+function system__string_contains() {
+	[[ "$1" == *"$2"* ]]
+}
 
+function main__main() {
+	local argument
+	for argument in "$@"; do
+		case "${argument}" in
+			-c=*|--colors=*)
+			SBU_USE_COLORS="${argument#*=}"
+			shift
+			;;
+			-p=*|--pattern=*)
+			SBU_TEST_FILE_PATTERN="${argument#*=}"
+			shift
+			;;
+			-h|--help)
+			_main__print_full_usage
+			exit ${SBU_SUCCESS_STATUS_CODE}
+			;;
+			-*|--*)
+			_main_print_illegal_option "${argument}"
+      _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
+			;;
+		esac
+	done
 
+	_main__assert_only_one_argument_left $#
+	runner__run_all_test_files $1
+}
+
+function _main_print_illegal_option() {
+  local option="${1%=*}"
+  option="${option#-}"
+  option="${option#-}"
+  printf "$(_main__get_script_name): illegal option -- ${option}\n"
+}
+
+function _main__assert_only_one_argument_left() {
+  if (( $1 > 1 )); then
+    printf "$(_main__get_script_name): only one path is allowed\n"
+    _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
+  fi
+}
+
+function _main__get_script_name() {
+  basename "$0"
+}
+
+function _main__print_usage_and_exit_with_code() {
+  _main_print_usage
+	exit $1
+}
+
+function _main__print_full_usage() {
+  _main_print_usage
+  local script="$(_main__get_script_name)"
+  printf "\n\
+[options]
+-c, --colors=${SBU_YES} or ${SBU_NO}
+  tests output with colors or no
+-h
+  print usage
+-p, --pattern=<pattern>
+  pattern to filter test files in path
+
+[examples]
+${script} .
+  run all tests in current directory
+${script} -p=*test.sh sources/test
+  run all tests files ending with test.sh in sources/test
+\n"
+}
+
+function _main_print_usage() {
+  printf "\
+usage: $(_main__get_script_name) [options] path
+       run all tests in path\n"
+}
 
 main__main $@
