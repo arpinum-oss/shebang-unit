@@ -3,10 +3,6 @@
 SBU_YES="yes"
 SBU_NO="no"
 
-# Intern to handle ok/ko exit codes
-SBU_SUCCESS_STATUS_CODE=0
-SBU_FAILURE_STATUS_CODE=1
-
 # Colors for outputs
 SBU_GREEN_COLOR_CODE="\\033[1;32m"
 SBU_RED_COLOR_CODE="\\033[1;31m"
@@ -24,3 +20,7 @@ SBU_PRIVATE_FUNCTION_NAME_REGEX="^_.*"
 # For more information see shebang_unit usages
 SBU_TEST_FILE_PATTERN="*_test.sh"
 SBU_USE_COLORS="${SBU_YES}"
+
+# Internal constants
+SBU_SUCCESS_STATUS_CODE=0
+SBU_FAILURE_STATUS_CODE=1

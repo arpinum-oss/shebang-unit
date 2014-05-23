@@ -23,12 +23,18 @@ function _runner__run_test_file() {
 	printf "[File] ${file}\n"
 	source "${file}"
 	local public_functions=($(parser__get_public_functions_in_file "${file}"))
-	_runner__call_function_if_in_array "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
-		"${public_functions[@]}"
+	_runner__call_global_setup_if_exists "${public_functions[@]}"
 	_runner__call_all_tests "${public_functions[@]}"
-	_runner__call_function_if_in_array "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
-		"${public_functions[@]}"
+	_runner__call_global_teardown_if_exists "${public_functions[@]}"
 	printf "\n"
+}
+
+function _runner__call_global_setup_if_exists() {
+  _runner__call_function_if_in_array "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" "$@"
+}
+
+function _runner__call_global_teardown_if_exists() {
+  _runner__call_function_if_in_array "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" "$@"
 }
 
 function _runner__call_all_tests() {
@@ -61,14 +67,22 @@ function _runner__call_test_function_in_the_middle_of_setup_and_teardown() {
 
 	printf "[Test] ${test_function}\n"
 	(
-	  _runner__call_function_if_in_array "${SBU_SETUP_FUNCTION_NAME}" "$@" \
+	  _runner__call_setup_if_exists "$@" \
 	  && ( ${test_function} )
-	  local setup_and_test_result=$?
-	  _runner__call_function_if_in_array "${SBU_TEARDOWN_FUNCTION_NAME}" "$@"
-	  (( ${setup_and_test_result} == ${SBU_SUCCESS_STATUS_CODE} \
-	  && $? == ${SBU_SUCCESS_STATUS_CODE}  ))
+	  local setup_and_test_code=$?
+	  _runner__call_teardown_if_exists "$@"
+	  (( $? == ${SBU_SUCCESS_STATUS_CODE} \
+	  &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
 	)
 	_runner__parse_test_function_result $?
+}
+
+function _runner__call_setup_if_exists() {
+  _runner__call_function_if_in_array "${SBU_SETUP_FUNCTION_NAME}" "$@"
+}
+
+function _runner__call_teardown_if_exists() {
+  _runner__call_function_if_in_array "${SBU_TEARDOWN_FUNCTION_NAME}" "$@"
 }
 
 function _runner__parse_test_function_result() {
@@ -83,7 +97,7 @@ function _runner__parse_test_function_result() {
 
 function _runner__print_tests_results() {
 	printf "[Results]\n"
-	local color="$(_runner__get_color_code_for_tests_result)"
+	local color="$(_runner__getColorCodeForTestsResult)"
 	local execution_time="$(_runner__get_execution_time)"
 	local green_tests="Green tests: ${global_green_tests_count}"
 	local red_tests="red: ${global_red_tests_count}"
@@ -91,7 +105,7 @@ function _runner__print_tests_results() {
 	_runner__print_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
 }
 
-function _runner__get_color_code_for_tests_result() {
+function _runner__getColorCodeForTestsResult() {
 	local color_code=${SBU_GREEN_COLOR_CODE}
 	if ! _runner__tests_are_successful; then
 		color_code=${SBU_RED_COLOR_CODE}
