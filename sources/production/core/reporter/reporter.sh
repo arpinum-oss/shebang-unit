@@ -31,10 +31,6 @@ function _reporter__get() {
   #printf "dots"
 }
 
-function _reporter__print_with_color() {
-	system__print_with_color "$1" "$2"
-}
-
 function _reporter__get_color_code_for_tests_result() {
 	local color_code=${SBU_GREEN_COLOR_CODE}
 	if ! runner__tests_are_successful; then

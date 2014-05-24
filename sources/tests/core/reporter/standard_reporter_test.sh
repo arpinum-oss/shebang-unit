@@ -6,9 +6,13 @@ directory_with_two_tests"
 
 function global_setup() {
 	( source "${_PRODUCTION_DIRECTORY}/configuration.sh"
-	  SBU_USE_COLORS=${SBU_NO}
+	  _stub_runner_to_return_1337s_for_exection_time
 	  runner__run_all_test_files "${_TEST_DIRECTORY}" \
 	    > "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}" )
+}
+
+function _stub_runner_to_return_1337s_for_exection_time() {
+  eval "function _runner__get_execution_time() { printf "1337"; }"
 }
 
 function global_teardown() {
@@ -16,21 +20,9 @@ function global_teardown() {
 }
 
 function can_report_tests_runs() {
-  local expected="[File] ./sources/tests/core/reporter/../../../../resources/tests/directory_with_two_tests/first_test.sh
-[Test] successful_test_function
-OK
-[Test] successful_test_function_indented
-OK
-[Test] failing_test_function
-Assertion failed. Actual: <2>, expected: <3>.
-KO
+  local expected_output_file="${_SOURCE_DIRECTORY}/../../../../resources/tests/reporter/\
+standard_reporter_output.txt"
 
-[File] ./sources/tests/core/reporter/../../../../resources/tests/directory_with_two_tests/second_test.sh
-[Test] successful_test_function
-OK
-
-[Results]
-Green tests: 3, red: 1 in 0s"
-
-  assertion__string_contains "$(cat "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}")" "${expected}"
+  assertion__string_contains "$(cat "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}")" \
+                             "$(cat "${expected_output_file}")"
 }

@@ -29,6 +29,16 @@ function can_print_with_color() {
 	assertion__equal "colortextdefault_color" "${message}"
 }
 
+function can_print_line_with_color() {
+	SBU_USE_COLORS="${SBU_YES}"
+	SBU_DEFAULT_COLOR_CODE="default_color"
+
+	local message="$(system__print_line_with_color "text" "color")"
+
+  # impossible to test the trailing \n which is trimmed when $(...)
+	assertion__equal "colortextdefault_color" "${message}"
+}
+
 function can_print_without_color_if_colors_are_turned_off() {
 	SBU_USE_COLORS="${SBU_NO}"
 

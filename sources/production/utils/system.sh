@@ -8,6 +8,11 @@ function system__get_date_in_seconds() {
 	date +%s
 }
 
+function system__print_line_with_color() {
+  system__print_with_color "$@"
+  printf "\n"
+}
+
 function system__print_with_color() {
 	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
 		printf "$2$1${SBU_DEFAULT_COLOR_CODE}"
