@@ -17,7 +17,6 @@ function _release__initialise() {
 }
 
 function _release__delete_release_file_if_existing() {
-	echo "$(release__get_released_artifact_file)"
 	if [[ -f "$(release__get_released_artifact_file)" ]]; then
 		rm "$(release__get_released_artifact_file)"
 	fi

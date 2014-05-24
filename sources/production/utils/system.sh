@@ -10,9 +10,9 @@ function system__get_date_in_seconds() {
 
 function system__print_with_color() {
 	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
-		printf "$2$1$3\n"
+		printf "$2$1${SBU_DEFAULT_COLOR_CODE}"
 	else
-		printf "$1\n"
+		printf "$1"
 	fi
 }
 

@@ -22,12 +22,17 @@ function reporter__test_file_ends_running() {
 	"$(_reporter__get)_reporter__test_file_ends_running" "$@"
 }
 
+function reporter__assertion_failed() {
+  "$(_reporter__get)_reporter__assertion_failed" "$@"
+}
+
 function _reporter__get() {
   printf "standard"
+  #printf "dots"
 }
 
 function _reporter__print_with_color() {
-	system__print_with_color "$1" "$2" "${SBU_DEFAULT_COLOR_CODE}"
+	system__print_with_color "$1" "$2"
 }
 
 function _reporter__get_color_code_for_tests_result() {

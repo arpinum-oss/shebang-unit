@@ -125,7 +125,7 @@ function assertion__failing() {
 
 function _assertion__failed() {
 	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
-	printf "Assertion failed. ${message_to_use}\n"
+	reporter__assertion_failed "Assertion failed. ${message_to_use}\n"
 	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
@@ -304,12 +304,17 @@ function reporter__test_file_ends_running() {
 	"$(_reporter__get)_reporter__test_file_ends_running" "$@"
 }
 
+function reporter__assertion_failed() {
+  "$(_reporter__get)_reporter__assertion_failed" "$@"
+}
+
 function _reporter__get() {
   printf "standard"
+  #printf "dots"
 }
 
 function _reporter__print_with_color() {
-	system__print_with_color "$1" "$2" "${SBU_DEFAULT_COLOR_CODE}"
+	system__print_with_color "$1" "$2"
 }
 
 function _reporter__get_color_code_for_tests_result() {
@@ -328,7 +333,7 @@ function standard_reporter__tests_files_end_running() {
 	local green_tests="Green tests: ${global_green_tests_count}"
 	local red_tests="red: ${global_red_tests_count}"
 	local time="in ${execution_time}s"
-	_reporter__print_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
+	_reporter__print_with_color "${green_tests}, ${red_tests} ${time}\n" "${color}"
 }
 
 function standard_reporter__test_file_starts_running() {
@@ -344,11 +349,45 @@ function standard_reporter__test_starts_running() {
 }
 
 function standard_reporter__test_has_succeeded() {
-  _reporter__print_with_color "OK" ${SBU_GREEN_COLOR_CODE}
+  _reporter__print_with_color "OK\n" ${SBU_GREEN_COLOR_CODE}
 }
 
 function standard_reporter__test_has_failed() {
-  _reporter__print_with_color "KO" ${SBU_RED_COLOR_CODE}
+  _reporter__print_with_color "KO\n" ${SBU_RED_COLOR_CODE}
+}
+
+function standard_reporter__assertion_failed() {
+  printf "$@"
+}
+
+function dots_reporter__tests_files_end_running() {
+	local color="$(_reporter__get_color_code_for_tests_result)"
+	local texte="$(runner__tests_are_successful && printf "OK" || printf "KO")"
+	_reporter__print_with_color "${texte}\n" "${color}"
+}
+
+function dots_reporter__test_file_starts_running() {
+	:
+}
+
+function dots_reporter__test_file_ends_running() {
+	:
+}
+
+function dots_reporter__test_starts_running() {
+	:
+}
+
+function dots_reporter__test_has_succeeded() {
+  _reporter__print_with_color "." ${SBU_GREEN_COLOR_CODE}
+}
+
+function dots_reporter__test_has_failed() {
+  _reporter__print_with_color "F" ${SBU_RED_COLOR_CODE}
+}
+
+function dots_reporter__assertion_failed() {
+  :
 }
 
 function system__get_string_or_default() {
@@ -363,9 +402,9 @@ function system__get_date_in_seconds() {
 
 function system__print_with_color() {
 	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
-		printf "$2$1$3\n"
+		printf "$2$1${SBU_DEFAULT_COLOR_CODE}"
 	else
-		printf "$1\n"
+		printf "$1"
 	fi
 }
 
