@@ -6,7 +6,7 @@ core/runner/file_runner
 core/parser
 core/runner/test_runner
 core/reporter/reporter
-core/reporter/standard_reporter
+core/reporter/simple_reporter
 core/reporter/dots_reporter
 utils/system
 main

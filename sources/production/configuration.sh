@@ -20,6 +20,7 @@ SBU_PRIVATE_FUNCTION_NAME_REGEX="^_.*"
 # For more information see shebang_unit usages
 SBU_TEST_FILE_PATTERN="*_test.sh"
 SBU_USE_COLORS="${SBU_YES}"
+SBU_REPORTERS="simple"
 
 # Internal constants
 SBU_SUCCESS_STATUS_CODE=0

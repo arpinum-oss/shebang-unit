@@ -6,6 +6,7 @@ directory_with_two_tests"
 
 function global_setup() {
 	( source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+	  SBU_REPORTERS="dots"
 	  _stub_runner_to_return_1337s_for_exection_time
 	  runner__run_all_test_files "${_TEST_DIRECTORY}" \
 	    > "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}" )
@@ -16,13 +17,14 @@ function _stub_runner_to_return_1337s_for_exection_time() {
 }
 
 function global_teardown() {
-	rm -rf "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}"
+	#rm -rf "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}"
+	:
 }
 
 function can_report_tests_runs() {
   local expected_output_file="${_SOURCE_DIRECTORY}/../../../../resources/tests/reporter/\
-standard_reporter_output.txt"
+dots_reporter_output_with_failures.txt"
 
-  assertion__string_contains "$(cat "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}")" \
-                             "$(cat "${expected_output_file}")"
+  assertion__equal "$(cat "${_TEMPORARY_FILE_FOR_TESTS_OUTPUT}")" \
+                   "$(cat "${expected_output_file}")"
 }

@@ -27,8 +27,7 @@ function reporter__assertion_failed() {
 }
 
 function _reporter__get() {
-  printf "standard"
-  #printf "dots"
+  printf "${SBU_REPORTERS}"
 }
 
 function _reporter__get_color_code_for_tests_result() {
