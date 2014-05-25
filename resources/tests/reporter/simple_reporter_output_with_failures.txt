@@ -1,4 +1,4 @@
-[File] ${TESTS_RESOURCES_DIR}/directory_with_two_tests/first_test.sh
+[File] ${TESTS_RESOURCES_DIR}/reporter/one_successful_test_and_one_failing/failing_test.sh
 [Test] successful_test_function
 [1;32mOK[0m
 [Test] successful_test_function_indented
@@ -7,7 +7,7 @@
 Assertion failed. Actual: <2>, expected: <3>.
 [1;31mKO[0m
 
-[File] ${TESTS_RESOURCES_DIR}/directory_with_two_tests/second_test.sh
+[File] ${TESTS_RESOURCES_DIR}/reporter/one_successful_test_and_one_failing/successful_test.sh
 [Test] successful_test_function
 [1;32mOK[0m
 

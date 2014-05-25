@@ -1,0 +1,12 @@
+[File] ${TESTS_RESOURCES_DIR}/reporter/two_successful_tests/first_test.sh
+[Test] first_successful_test_function
+[1;32mOK[0m
+[Test] second_successful_test_function
+[1;32mOK[0m
+
+[File] ${TESTS_RESOURCES_DIR}/reporter/two_successful_tests/second_test.sh
+[Test] successful_test_function
+[1;32mOK[0m
+
+[Results]
+[1;32mGreen tests: 3, red: 0 in 1337s[0m

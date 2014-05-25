@@ -3,7 +3,7 @@ function setup() {
 }
 
 function asserting_that_successful_command_has_success_status_code_is_true() {
-	_succesful_command
+	_successful_command
 
 	message="$(assertion__status_code_is_success $?)"
 
@@ -39,7 +39,7 @@ function asserting_that_failing_command_has_failure_status_code_is_true() {
 }
 
 function asserting_that_successful_command_has_failure_status_code_is_false() {
-	_succesful_command
+	_successful_command
 
 	message="$(assertion__status_code_is_failure $?)"
 
@@ -48,7 +48,7 @@ function asserting_that_successful_command_has_failure_status_code_is_false() {
 }
 
 function can_print_custom_message_for_failure_status_code_assertion() {
-	_succesful_command
+	_successful_command
 
 	message="$(assertion__status_code_is_failure $? "custom message")"
 
@@ -57,7 +57,7 @@ function can_print_custom_message_for_failure_status_code_assertion() {
 }
 
 function asserting_that_successful_command_is_successful_is_true() {
-	message="$(assertion__successful _succesful_command)"
+	message="$(assertion__successful _successful_command)"
 
 	_assert_success
 	_assert_message_empty
@@ -65,7 +65,7 @@ function asserting_that_successful_command_is_successful_is_true() {
 
 function arguments_are_provided_for_successful_assertion() {
 	message="$(assertion__successful \
-    _succesful_command_for_2_arguments "first" "second")"
+    _successful_command_for_2_arguments "first" "second")"
 
 	_assert_success
 	_assert_message_empty
@@ -73,7 +73,7 @@ function arguments_are_provided_for_successful_assertion() {
 
 function arguments_with_spaces_are_provided_for_successful_assertion() {
 	message="$(assertion__successful \
-	  _succesful_command_for_2_arguments "first argument" "second argument")"
+	  _successful_command_for_2_arguments "first argument" "second argument")"
 
 	_assert_success
 	_assert_message_empty
@@ -102,7 +102,7 @@ function arguments_with_spaces_are_provided_for_failing_assertion() {
 }
 
 function asserting_that_successful_command_is_failing_is_false() {
-	message="$(assertion__failing _succesful_command)"
+	message="$(assertion__failing _successful_command)"
 
 	_assert_failure
 	_assert_message_equals "Command is successful instead of failing."
@@ -224,11 +224,11 @@ function _assert_failure() {
     return $( (( $? != 0 )) )
 }
 
-function _succesful_command() {
+function _successful_command() {
 	return 0
 }
 
-function _succesful_command_for_2_arguments() {
+function _successful_command_for_2_arguments() {
 	(( $# == 2 ))
 }
 

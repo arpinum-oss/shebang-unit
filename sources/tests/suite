@@ -2,6 +2,7 @@
 
 _ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
 export SOURCES_DIR="${_ROOT_DIR}/sources/production"
+export TEST_SOURCES_DIR="${_ROOT_DIR}/sources/tests"
 export RESOURCES_DIR="${_ROOT_DIR}/resources/production"
 export TESTS_RESOURCES_DIR="${_ROOT_DIR}/resources/tests"
 
