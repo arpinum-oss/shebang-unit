@@ -52,7 +52,7 @@ function _main__assert_only_one_argument_left() {
 }
 
 function _main__get_script_name() {
-  basename "$0"
+  basename "${BASH_SOURCE[0]}"
 }
 
 function _main__print_usage_and_exit_with_code() {

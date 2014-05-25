@@ -1,19 +1,14 @@
 function global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_with_one_test"
-  _create_temp_file_to_share_values_with_subshells
+  _FUNCTIONS_DOCUMENT_KEY="called_functions"
+	database_initialise
 	( source "${SOURCES_DIR}/configuration.sh"
 	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
-	  _called_functions=($(_get_called_functions))
-}
-
-function _create_temp_file_to_share_values_with_subshells() {
-  _TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
-	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
-	touch "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+ 	  _called_functions=($(_get_called_functions) )
 }
 
 function global_teardown() {
-	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+  database_destroy
 }
 
 function the_runner_call_the_global_setup() {
@@ -50,9 +45,9 @@ function the_runner_call_functions_in_the_right_order() {
 }
 
 function _get_called_functions() {
-	cat "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	database_get "${_FUNCTIONS_DOCUMENT_KEY}"
 }
 
 function _function_called() {
-	printf "$1 " >> "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+  database_post "${_FUNCTIONS_DOCUMENT_KEY}" "$1 "
 }

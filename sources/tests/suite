@@ -1,10 +1,10 @@
 #!/bin/bash
 
 _ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
-export SOURCES_DIR="${_ROOT_DIR}/sources/production"
-export TEST_SOURCES_DIR="${_ROOT_DIR}/sources/tests"
-export RESOURCES_DIR="${_ROOT_DIR}/resources/production"
-export TESTS_RESOURCES_DIR="${_ROOT_DIR}/resources/tests"
+SOURCES_DIR="${_ROOT_DIR}/sources/production"
+TEST_SOURCES_DIR="${_ROOT_DIR}/sources/tests"
+RESOURCES_DIR="${_ROOT_DIR}/resources/production"
+TESTS_RESOURCES_DIR="${_ROOT_DIR}/resources/tests"
 
 function _releaseShebangUnit() {
 	source "${SOURCES_DIR}/release.sh"
@@ -12,4 +12,5 @@ function _releaseShebangUnit() {
 }
 
 _releaseShebangUnit
-"$(release__get_released_artifact_file)" $@ "${_ROOT_DIR}/sources/tests"
+source "${TEST_SOURCES_DIR}/tests_utils/database.sh"
+source "$(release__get_released_artifact_file)" $@ "${_ROOT_DIR}/sources/tests"

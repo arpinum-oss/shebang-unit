@@ -1,6 +1,6 @@
-function global_setup() {
+function setup() {
   source "${TEST_SOURCES_DIR}/core/reporter/reporter_test_helper.sh"
-  helper_global_setup
+  helper_setup
 }
 
 function teardown() {

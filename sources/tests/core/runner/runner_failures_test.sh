@@ -1,27 +1,21 @@
 function global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_for_failures_tests"
+  _FUNCTIONS_DOCUMENT_KEY="called_functions"
 }
 
 function setup() {
-	_create_temp_file_to_share_values_with_subshells
-}
-
-function _create_temp_file_to_share_values_with_subshells() {
-  _TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
-	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
-	touch "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	database_initialise
 }
 
 function teardown() {
-	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+  database_destroy
 }
 
 #ignore
 function _the_runner_calls_global_teardown_if_global_setup_fails() {
-  source "${SOURCES_DIR}/configuration.sh"
-	SBU_TEST_FILE_PATTERN="*file_with_failing_global_setup.sh"
-
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+  ( source "${SOURCES_DIR}/configuration.sh"
+	  SBU_TEST_FILE_PATTERN="*file_with_failing_global_setup.sh"
+  	runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
   assertion__status_code_is_failure $?
 	local called_functions=($(_get_called_functions))
@@ -31,10 +25,9 @@ function _the_runner_calls_global_teardown_if_global_setup_fails() {
 }
 
 function the_runner_stops_file_execution_if_global_setup_exits() {
-  source "${SOURCES_DIR}/configuration.sh"
-	SBU_TEST_FILE_PATTERN="*file_with_exiting_global_setup.sh"
-
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+  ( source "${SOURCES_DIR}/configuration.sh"
+	  SBU_TEST_FILE_PATTERN="*file_with_exiting_global_setup.sh"
+	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
   assertion__status_code_is_failure $?
 	local called_functions=($(_get_called_functions))
@@ -53,10 +46,9 @@ function the_runner_calls_global_teardown_if_test_exits() {
 }
 
 function _the_runner_calls_global_teardown_if_test_fails_or_exits() {
-	source "${SOURCES_DIR}/configuration.sh"
-	SBU_TEST_FILE_PATTERN="*$1"
-
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+	( source "${SOURCES_DIR}/configuration.sh"
+	  SBU_TEST_FILE_PATTERN="*$1"
+  	runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
   assertion__status_code_is_failure $?
 	local called_functions=($(_get_called_functions))
@@ -66,10 +58,9 @@ function _the_runner_calls_global_teardown_if_test_fails_or_exits() {
 }
 
 function the_runner_calls_teardown_if_setup_fails() {
-  source "${SOURCES_DIR}/configuration.sh"
-	SBU_TEST_FILE_PATTERN="*file_with_failing_setup.sh"
-
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+  ( source "${SOURCES_DIR}/configuration.sh"
+	  SBU_TEST_FILE_PATTERN="*file_with_failing_setup.sh"
+	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
   assertion__status_code_is_failure $?
 	local called_functions=($(_get_called_functions))
@@ -79,10 +70,9 @@ function the_runner_calls_teardown_if_setup_fails() {
 }
 
 function the_runner_stops_test_execution_if_setup_exists() {
-  source "${SOURCES_DIR}/configuration.sh"
-	SBU_TEST_FILE_PATTERN="*file_with_exiting_setup.sh"
-
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+  ( source "${SOURCES_DIR}/configuration.sh"
+	  SBU_TEST_FILE_PATTERN="*file_with_exiting_setup.sh"
+  	runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
   assertion__status_code_is_failure $?
 	local called_functions=($(_get_called_functions))
@@ -91,10 +81,9 @@ function the_runner_stops_test_execution_if_setup_exists() {
 }
 
 function _the_runner_calls_teardown_if_setup_fails_or_exits() {
-	source "${SOURCES_DIR}/configuration.sh"
-	SBU_TEST_FILE_PATTERN="*$1"
-
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+	( source "${SOURCES_DIR}/configuration.sh"
+	  SBU_TEST_FILE_PATTERN="*$1"
+	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
   assertion__status_code_is_failure $?
 	local called_functions=($(_get_called_functions))
@@ -114,10 +103,9 @@ function the_runner_call_teardown_if_test_exits() {
 }
 
 function _the_runner_call_teardown_if_test_fails_or_exits() {
-	source "${SOURCES_DIR}/configuration.sh"
-	SBU_TEST_FILE_PATTERN="*$1"
-
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+	( source "${SOURCES_DIR}/configuration.sh"
+	  SBU_TEST_FILE_PATTERN="*$1"
+	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
   assertion__status_code_is_failure $?
 	local called_functions=($(_get_called_functions))
@@ -127,9 +115,9 @@ function _the_runner_call_teardown_if_test_fails_or_exits() {
 }
 
 function _get_called_functions() {
-	cat "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	database_get "${_FUNCTIONS_DOCUMENT_KEY}"
 }
 
 function _function_called() {
-	printf "$1 " >> "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+  database_post "${_FUNCTIONS_DOCUMENT_KEY}" "$1 "
 }
