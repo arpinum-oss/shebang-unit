@@ -1,9 +1,9 @@
 function global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_with_one_test"
   _create_temp_file_to_share_values_with_subshells
-	source "${SOURCES_DIR}/configuration.sh"
-	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
-	_called_functions=($(_get_called_functions))
+	( source "${SOURCES_DIR}/configuration.sh"
+	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+	  _called_functions=($(_get_called_functions))
 }
 
 function _create_temp_file_to_share_values_with_subshells() {

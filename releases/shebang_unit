@@ -447,6 +447,10 @@ function main__main() {
 			SBU_TEST_FILE_PATTERN="${argument#*=}"
 			shift
 			;;
+			-r=*|--reporters=*)
+			SBU_REPORTERS="${argument#*=}"
+			shift
+			;;
 			-h|--help)
 			_main__print_full_usage
 			exit ${SBU_SUCCESS_STATUS_CODE}
@@ -459,7 +463,15 @@ function main__main() {
 	done
 
 	_main__assert_only_one_argument_left $#
+	_main__assert_reporters_are_known
 	runner__run_all_test_files $1
+}
+
+function 	_main__assert_reporters_are_known() {
+  if [[ "${SBU_REPORTERS}" != "simple" && "${SBU_REPORTERS}" != "dots" ]]; then
+    printf "$(_main__get_script_name): unknown reporter <${SBU_REPORTERS}>\n"
+    exit ${SBU_FAILURE_STATUS_CODE}
+  fi
 }
 
 function _main_print_illegal_option() {
@@ -496,6 +508,8 @@ function _main__print_full_usage() {
   print usage
 -p, --pattern=<pattern>
   pattern to filter test files in path
+-r, --reporters=<reporter1,reporter2>
+  comma-separated reporters
 
 [examples]
 ${script} .
