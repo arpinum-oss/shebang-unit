@@ -1,21 +1,24 @@
-_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
-_SOURCE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
-_PRODUCTION_DIRECTORY="${_SOURCE_DIRECTORY}/../../../production"
-_TESTS_DIRECTORY="${_SOURCE_DIRECTORY}/../../../../resources/tests/\
-directory_for_failures_tests"
+function global_setup() {
+  _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_for_failures_tests"
+}
 
 function setup() {
-	rm -rf "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
-	touch "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	_create_temp_file_to_share_values_with_subshells
+}
+
+function _create_temp_file_to_share_values_with_subshells() {
+  _TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
+	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	touch "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }
 
 function teardown() {
-	rm -rf "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }
 
 #ignore
 function _the_runner_calls_global_teardown_if_global_setup_fails() {
-  source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+  source "${SOURCES_DIR}/configuration.sh"
 	SBU_TEST_FILE_PATTERN="*file_with_failing_global_setup.sh"
 
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
@@ -28,7 +31,7 @@ function _the_runner_calls_global_teardown_if_global_setup_fails() {
 }
 
 function the_runner_stops_file_execution_if_global_setup_exits() {
-  source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+  source "${SOURCES_DIR}/configuration.sh"
 	SBU_TEST_FILE_PATTERN="*file_with_exiting_global_setup.sh"
 
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
@@ -50,7 +53,7 @@ function the_runner_calls_global_teardown_if_test_exits() {
 }
 
 function _the_runner_calls_global_teardown_if_test_fails_or_exits() {
-	source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+	source "${SOURCES_DIR}/configuration.sh"
 	SBU_TEST_FILE_PATTERN="*$1"
 
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
@@ -63,7 +66,7 @@ function _the_runner_calls_global_teardown_if_test_fails_or_exits() {
 }
 
 function the_runner_calls_teardown_if_setup_fails() {
-  source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+  source "${SOURCES_DIR}/configuration.sh"
 	SBU_TEST_FILE_PATTERN="*file_with_failing_setup.sh"
 
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
@@ -76,7 +79,7 @@ function the_runner_calls_teardown_if_setup_fails() {
 }
 
 function the_runner_stops_test_execution_if_setup_exists() {
-  source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+  source "${SOURCES_DIR}/configuration.sh"
 	SBU_TEST_FILE_PATTERN="*file_with_exiting_setup.sh"
 
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
@@ -88,7 +91,7 @@ function the_runner_stops_test_execution_if_setup_exists() {
 }
 
 function _the_runner_calls_teardown_if_setup_fails_or_exits() {
-	source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+	source "${SOURCES_DIR}/configuration.sh"
 	SBU_TEST_FILE_PATTERN="*$1"
 
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
@@ -111,7 +114,7 @@ function the_runner_call_teardown_if_test_exits() {
 }
 
 function _the_runner_call_teardown_if_test_fails_or_exits() {
-	source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+	source "${SOURCES_DIR}/configuration.sh"
 	SBU_TEST_FILE_PATTERN="*$1"
 
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
@@ -124,9 +127,9 @@ function _the_runner_call_teardown_if_test_fails_or_exits() {
 }
 
 function _get_called_functions() {
-	cat "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	cat "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }
 
 function _function_called() {
-	printf "$1 " >> "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	printf "$1 " >> "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }

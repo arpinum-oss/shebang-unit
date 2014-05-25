@@ -1,11 +1,14 @@
 #!/bin/bash
 
-_SUITE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
+_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
+export SOURCES_DIR="${_ROOT_DIR}/sources/production"
+export RESOURCES_DIR="${_ROOT_DIR}/resources/production"
+export TESTS_RESOURCES_DIR="${_ROOT_DIR}/resources/tests"
 
 function _releaseShebangUnit() {
-	source ${_SUITE_DIRECTORY}/../../sources/production/release.sh
+	source "${SOURCES_DIR}/release.sh"
 	release__concatenate_sources_in_release_file
 }
 
 _releaseShebangUnit
-./"$(release__get_released_artifact_file)" $@ "${_SUITE_DIRECTORY}"
+"$(release__get_released_artifact_file)" $@ "${_ROOT_DIR}/sources/tests"

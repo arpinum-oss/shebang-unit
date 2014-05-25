@@ -1,19 +1,19 @@
-_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
-_SOURCE_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
-_PRODUCTION_DIRECTORY="${_SOURCE_DIRECTORY}/../../../production"
-_TESTS_DIRECTORY="${_SOURCE_DIRECTORY}/../../../../resources/tests/\
-directory_with_one_test"
-
 function global_setup() {
-	rm -rf "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
-	touch "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
-	source "${_PRODUCTION_DIRECTORY}/configuration.sh"
+  _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_with_one_test"
+  _create_temp_file_to_share_values_with_subshells
+	source "${SOURCES_DIR}/configuration.sh"
 	( runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 	_called_functions=($(_get_called_functions))
 }
 
+function _create_temp_file_to_share_values_with_subshells() {
+  _TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS="/tmp/sbu.txt"
+	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	touch "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+}
+
 function global_teardown() {
-	rm -rf "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	rm -rf "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }
 
 function the_runner_call_the_global_setup() {
@@ -50,9 +50,9 @@ function the_runner_call_functions_in_the_right_order() {
 }
 
 function _get_called_functions() {
-	cat "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	cat "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }
 
 function _function_called() {
-	printf "$1 " >> "${_TEMPORARY_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
+	printf "$1 " >> "${_TEMP_FILE_TO_SHARE_VALUES_WITH_SUBSHELLS}"
 }

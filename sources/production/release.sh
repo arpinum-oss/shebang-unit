@@ -1,8 +1,8 @@
-_SBU_RELEASED_ARTIFACT_FILENAME='shebang_unit'
-_SBU_SOURCES_DIRECTORY="$(dirname "${BASH_SOURCE[0]}")"
-_SBU_RELEASE_DIRECTORY="${_SBU_SOURCES_DIRECTORY}/../../releases"
-_SBU_ORDERED_SOURCES_FILE="${_SBU_SOURCES_DIRECTORY}/../../resources/\
-production/ordered_sources.txt"
+_RELEASED_ARTIFACT_FILENAME='shebang_unit'
+_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
+_SOURCES_DIR="${_ROOT_DIR}/sources/production"
+_RELEASE_DIR="${_ROOT_DIR}/releases"
+_ORDERED_SOURCES_FILE="${_ROOT_DIR}/resources/production/ordered_sources.txt"
 
 function release__concatenate_sources_in_release_file() {
 	_release__initialise
@@ -13,7 +13,7 @@ function release__concatenate_sources_in_release_file() {
 
 function _release__initialise() {
 	_release__delete_release_file_if_existing
-	mkdir -p "${_SBU_RELEASE_DIRECTORY}"
+	mkdir -p "${_RELEASE_DIR}"
 }
 
 function _release__delete_release_file_if_existing() {
@@ -25,8 +25,8 @@ function _release__delete_release_file_if_existing() {
 function _release__concatenate_sources_in_release_file() {
 	local file
 	while read file; do
-		_release__append_file_to_release_file "${_SBU_SOURCES_DIRECTORY}/${file}.sh"
-	done < "${_SBU_ORDERED_SOURCES_FILE}"
+		_release__append_file_to_release_file "${_SOURCES_DIR}/${file}.sh"
+	done < "${_ORDERED_SOURCES_FILE}"
 }
 
 function _release__append_runner_call_in_release_file() {
@@ -47,5 +47,5 @@ function _release__append_to_release_file() {
 }
 
 function release__get_released_artifact_file() {
-	printf "${_SBU_RELEASE_DIRECTORY}/${_SBU_RELEASED_ARTIFACT_FILENAME}"
+	printf "${_RELEASE_DIR}/${_RELEASED_ARTIFACT_FILENAME}"
 }
