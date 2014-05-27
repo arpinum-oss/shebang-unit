@@ -64,8 +64,7 @@ function can_define_one_reporter() {
 	assertion__equal "dots" "${variable}"
 }
 
-#ignore
-function _can_define_multiple_reporters() {
+function can_define_multiple_reporters() {
 	( SBU_REPORTERS="to_change"
 	  main__main --reporters="simple,dots" "${_TEST_DIR}" > /dev/null
 	  database_put_variable "SBU_REPORTERS" )
@@ -88,6 +87,16 @@ function cannot_define_unkown_reporter() {
 	local message
 
 	message="$(main__main --reporters="unknown" "${_TEST_DIR}")"
+
+  assertion__status_code_is_failure $?
+  local expected="shebang_unit: unknown reporter <unknown>"
+  assertion__equal "${expected}" "${message}"
+}
+
+function cannot_define_known_and_unkown_reporter() {
+	local message
+
+	message="$(main__main --reporters="simple,unknown" "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
   local expected="shebang_unit: unknown reporter <unknown>"

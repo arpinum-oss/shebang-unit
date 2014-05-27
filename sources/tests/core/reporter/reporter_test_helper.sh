@@ -27,7 +27,7 @@ one_successful_test_and_one_failing"
 
 function _run_all_tests_files() {
   local directory=$1
-	( source "${SOURCES_DIR}/configuration.sh"
+	( configuration_load
 	  SBU_REPORTERS="$(_reporter_to_test)"
 	  _stub_runner_to_return_1337s_for_exection_time
 	  database_put "${_OUTPUT_DOCUMENT_KEY}" \

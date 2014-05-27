@@ -31,8 +31,12 @@ function main__main() {
 }
 
 function 	_main__assert_reporters_are_known() {
-  if [[ "${SBU_REPORTERS}" != "simple" && "${SBU_REPORTERS}" != "dots" ]]; then
-    printf "$(_main__get_script_name): unknown reporter <${SBU_REPORTERS}>\n"
+  reporter__for_each_reporter _fail_if_reporter_unknown
+}
+
+function _fail_if_reporter_unknown() {
+  if [[ "${reporter}" != "simple" && "${reporter}" != "dots" ]]; then
+    printf "$(_main__get_script_name): unknown reporter <${reporter}>\n"
     exit ${SBU_FAILURE_STATUS_CODE}
   fi
 }

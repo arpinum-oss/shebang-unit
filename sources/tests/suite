@@ -1,16 +1,23 @@
 #!/bin/bash
 
-_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
-SOURCES_DIR="${_ROOT_DIR}/sources/production"
-TEST_SOURCES_DIR="${_ROOT_DIR}/sources/tests"
-RESOURCES_DIR="${_ROOT_DIR}/resources/production"
-TESTS_RESOURCES_DIR="${_ROOT_DIR}/resources/tests"
+function _run_tests() {
+  _configure_global_variables
+  _releaseShebangUnit
+  source "${TEST_SOURCES_DIR}/tests_utils/database.sh"
+  source "$(release__get_released_artifact_file)" "$@" "${TEST_SOURCES_DIR}"
+}
+
+function _configure_global_variables() {
+  _ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
+  SOURCES_DIR="${_ROOT_DIR}/sources/production"
+  TEST_SOURCES_DIR="${_ROOT_DIR}/sources/tests"
+  RESOURCES_DIR="${_ROOT_DIR}/resources/production"
+  TESTS_RESOURCES_DIR="${_ROOT_DIR}/resources/tests"
+}
 
 function _releaseShebangUnit() {
 	source "${SOURCES_DIR}/release.sh"
 	release__concatenate_sources_in_release_file
 }
 
-_releaseShebangUnit
-source "${TEST_SOURCES_DIR}/tests_utils/database.sh"
-source "$(release__get_released_artifact_file)" $@ "${_ROOT_DIR}/sources/tests"
+_run_tests "$@"
