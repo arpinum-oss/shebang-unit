@@ -130,7 +130,7 @@ function assertion__failing() {
 
 function _assertion__failed() {
 	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
-	reporter__assertion_failed "Assertion failed. ${message_to_use}\n"
+	printf "Assertion failed. ${message_to_use}"
 	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
@@ -250,7 +250,7 @@ function test_runner__run_test() {
   reporter__test_starts_running "${test_function}"
 	(
 	  _test_runner__call_setup_if_exists "$@" \
-	  && ( ${test_function} )
+	  && ( _test_runner__call_test_fonction "${test_function}" )
 	  local setup_and_test_code=$?
 	  _test_runner__call_teardown_if_exists "$@"
 	  (( $? == ${SBU_SUCCESS_STATUS_CODE} \
@@ -259,6 +259,15 @@ function test_runner__run_test() {
 	_test_runner__parse_test_function_result $?
 }
 
+function _test_runner__call_test_fonction() {
+  local message
+  message="$("$1")"
+  local status_code=$?
+  if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
+    reporter__assertion_failed "${message}\n"
+  fi
+  return ${status_code}
+}
 function _test_runner__call_setup_if_exists() {
   _test_runner__call_function_if_exits "${SBU_SETUP_FUNCTION_NAME}" "$@"
 }

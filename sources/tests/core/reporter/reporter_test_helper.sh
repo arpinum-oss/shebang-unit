@@ -11,24 +11,24 @@ function helper_can_report_tests_runs_without_failures() {
   _run_all_tests_files "${TESTS_RESOURCES_DIR}/reporter/\
 two_successful_tests"
 
-  assertion__equal "$(database_get "${_OUTPUT_DOCUMENT_KEY}")" \
-                   "$(_get_expected_content \
-                        "$(_reporter_to_test)_reporter_output")"
+  local content="$(_reporter)_reporter_output"
+  assertion__equal "$(_get_expected_content "${content}")" \
+                   "$(database_get "${_OUTPUT_DOCUMENT_KEY}")"
 }
 
 function helper_can_report_tests_runs_with_failures() {
   _run_all_tests_files "${TESTS_RESOURCES_DIR}/reporter/\
 one_successful_test_and_one_failing"
 
-  assertion__equal "$(database_get "${_OUTPUT_DOCUMENT_KEY}")" \
-                   "$(_get_expected_content \
-                          "$(_reporter_to_test)_reporter_output_with_failures")"
+  local content="$(_reporter)_reporter_output_with_failures"
+  assertion__equal "$(_get_expected_content "${content}")" \
+                   "$(database_get "${_OUTPUT_DOCUMENT_KEY}")"
 }
 
 function _run_all_tests_files() {
   local directory=$1
 	( configuration_load
-	  SBU_REPORTERS="$(_reporter_to_test)"
+	  SBU_REPORTERS="$(_reporter)"
 	  _stub_runner_to_return_1337s_for_exection_time
 	  database_put "${_OUTPUT_DOCUMENT_KEY}" \
 	    "$(runner__run_all_test_files "${directory}")" )

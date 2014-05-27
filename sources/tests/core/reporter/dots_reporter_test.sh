@@ -15,6 +15,6 @@ function can_report_tests_runs_with_failures() {
   helper_can_report_tests_runs_with_failures
 }
 
-function _reporter_to_test() {
+function _reporter() {
   printf "dots"
 }
