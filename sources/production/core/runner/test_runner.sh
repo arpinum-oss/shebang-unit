@@ -4,7 +4,7 @@ function test_runner__run_test() {
   reporter__test_starts_running "${test_function}"
 	(
 	  _test_runner__call_setup_if_exists "$@" \
-	  && ( _test_runner__call_test_fonction "${test_function}" )
+	  && _test_runner__call_test_fonction "${test_function}"
 	  local setup_and_test_code=$?
 	  _test_runner__call_teardown_if_exists "$@"
 	  (( $? == ${SBU_SUCCESS_STATUS_CODE} \
@@ -14,14 +14,15 @@ function test_runner__run_test() {
 }
 
 function _test_runner__call_test_fonction() {
-  local message
-  message="$("$1")"
+  ( "$1" &> /dev/null )
   local status_code=$?
   if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
+    local message="$(database__get "${SBU_LAST_ASSERTION_MSG_KEY}")"
     reporter__assertion_failed "${message}\n"
   fi
   return ${status_code}
 }
+
 function _test_runner__call_setup_if_exists() {
   _test_runner__call_function_if_exits "${SBU_SETUP_FUNCTION_NAME}" "$@"
 }

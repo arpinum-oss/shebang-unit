@@ -27,6 +27,8 @@ function configuration_load() {
   SBU_SUCCESS_STATUS_CODE=0
   SBU_FAILURE_STATUS_CODE=1
   SBU_VALUE_SEPARATOR=","
+  SBU_DB_DIR="/tmp/.sbu/database"
+  SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
 }
 
 configuration_load

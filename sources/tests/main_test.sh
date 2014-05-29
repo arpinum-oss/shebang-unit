@@ -3,73 +3,73 @@ function global_setup() {
 }
 
 function setup() {
-  database_initialise
+  database__initialise
 }
 
 function teardown() {
-	database_destroy
+	database__destroy
 }
 
 function can_enable_colors() {
 	( SBU_USE_COLORS="${SBU_NO}"
 	  main__main --colors="${SBU_YES}" "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_USE_COLORS" )
+	  database__put_variable "SBU_USE_COLORS" )
 
-  local variable="$(database_get "SBU_USE_COLORS")"
+  local variable="$(database__get "SBU_USE_COLORS")"
 	assertion__equal "${SBU_YES}" "${variable}"
 }
 
 function can_enable_colors_with_short_option() {
 	(	SBU_USE_COLORS="${SBU_NO}"
 	  main__main -c="${SBU_YES}" "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_USE_COLORS" )
+	  database__put_variable "SBU_USE_COLORS" )
 
-  local variable="$(database_get "SBU_USE_COLORS")"
+  local variable="$(database__get "SBU_USE_COLORS")"
 	assertion__equal "${SBU_YES}" "${variable}"
 }
 
 function can_disable_colors() {
 	( SBU_USE_COLORS="${SBU_YES}"
 	  main__main --colors="${SBU_NO}" "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_USE_COLORS" )
+	  database__put_variable "SBU_USE_COLORS" )
 
-  local variable="$(database_get "SBU_USE_COLORS")"
+  local variable="$(database__get "SBU_USE_COLORS")"
 	assertion__equal "${SBU_NO}" "${variable}"
 }
 
 function can_use_a_test_file_pattern() {
 	( SBU_TEST_FILE_PATTERN="anything"
 	  main__main --pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_TEST_FILE_PATTERN" )
+	  database__put_variable "SBU_TEST_FILE_PATTERN" )
 
-  local variable="$(database_get "SBU_TEST_FILE_PATTERN")"
+  local variable="$(database__get "SBU_TEST_FILE_PATTERN")"
 	assertion__equal "*my_test.sh" "${variable}"
 }
 
 function can_use_a_test_file_pattern_with_short_option() {
 	( SBU_TEST_FILE_PATTERN="anything"
 	  main__main -p=*my_test.sh "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_TEST_FILE_PATTERN" )
+	  database__put_variable "SBU_TEST_FILE_PATTERN" )
 
-  local variable="$(database_get "SBU_TEST_FILE_PATTERN")"
+  local variable="$(database__get "SBU_TEST_FILE_PATTERN")"
 	assertion__equal "*my_test.sh" "${variable}"
 }
 
 function can_define_one_reporter() {
 	( SBU_REPORTERS="to_change"
 	  main__main --reporters="dots" "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_REPORTERS" )
+	  database__put_variable "SBU_REPORTERS" )
 
-  local variable="$(database_get "SBU_REPORTERS")"
+  local variable="$(database__get "SBU_REPORTERS")"
 	assertion__equal "dots" "${variable}"
 }
 
 function can_define_multiple_reporters() {
 	( SBU_REPORTERS="to_change"
 	  main__main --reporters="simple,dots" "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_REPORTERS" )
+	  database__put_variable "SBU_REPORTERS" )
 
-  local variable="$(database_get "SBU_REPORTERS")"
+  local variable="$(database__get "SBU_REPORTERS")"
 	assertion__equal "simple,dots" "${variable}"
 }
 
@@ -77,9 +77,9 @@ function can_define_reporters_with_short_option() {
 	SBU_REPORTERS="to_change"
 
 	( main__main -r="dots" "${_TEST_DIR}" > /dev/null
-	  database_put_variable "SBU_REPORTERS" )
+	  database__put_variable "SBU_REPORTERS" )
 
-  local variable="$(database_get "SBU_REPORTERS")"
+  local variable="$(database__get "SBU_REPORTERS")"
 	assertion__equal "dots" "${variable}"
 }
 

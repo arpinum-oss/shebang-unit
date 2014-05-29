@@ -1,14 +1,14 @@
 function global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_with_one_test"
   _FUNCTIONS_DOCUMENT_KEY="called_functions"
-	database_initialise
+	database__initialise
 	( configuration_load
 	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
  	  _called_functions=($(_get_called_functions) )
 }
 
 function global_teardown() {
-  database_destroy
+  database__destroy
 }
 
 function the_runner_call_the_global_setup() {
@@ -45,9 +45,9 @@ function the_runner_call_functions_in_the_right_order() {
 }
 
 function _get_called_functions() {
-	database_get "${_FUNCTIONS_DOCUMENT_KEY}"
+	database__get "${_FUNCTIONS_DOCUMENT_KEY}"
 }
 
 function _function_called() {
-  database_post "${_FUNCTIONS_DOCUMENT_KEY}" "$1 "
+  database__post "${_FUNCTIONS_DOCUMENT_KEY}" "$1 "
 }

@@ -4,11 +4,11 @@ function global_setup() {
 }
 
 function setup() {
-	database_initialise
+	database__initialise
 }
 
 function teardown() {
-  database_destroy
+  database__destroy
 }
 
 #ignore
@@ -115,9 +115,9 @@ function _the_runner_call_teardown_if_test_fails_or_exits() {
 }
 
 function _get_called_functions() {
-	database_get "${_FUNCTIONS_DOCUMENT_KEY}"
+	database__get "${_FUNCTIONS_DOCUMENT_KEY}"
 }
 
 function _function_called() {
-  database_post "${_FUNCTIONS_DOCUMENT_KEY}" "$1 "
+  database__post "${_FUNCTIONS_DOCUMENT_KEY}" "$1 "
 }

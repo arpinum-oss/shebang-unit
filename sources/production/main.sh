@@ -27,7 +27,9 @@ function main__main() {
 
 	_main__assert_only_one_argument_left $#
 	_main__assert_reporters_are_known
+	database__initialise
 	runner__run_all_test_files $1
+	database__destroy
 }
 
 function 	_main__assert_reporters_are_known() {

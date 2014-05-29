@@ -3,7 +3,6 @@
 function _run_tests() {
   _configure_global_variables
   _releaseShebangUnit
-  source "${TEST_SOURCES_DIR}/tests_utils/database.sh"
   source "$(release__get_released_artifact_file)" "$@" "${TEST_SOURCES_DIR}"
 }
 

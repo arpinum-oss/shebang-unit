@@ -1,10 +1,10 @@
 function helper_setup() {
   _OUTPUT_DOCUMENT_KEY="reporter_output"
-  database_initialise
+  database__initialise
 }
 
 function helper_teardown() {
-	database_destroy
+	database__destroy
 }
 
 function helper_can_report_tests_runs_without_failures() {
@@ -13,7 +13,7 @@ two_successful_tests"
 
   local content="$(_reporter)_reporter_output"
   assertion__equal "$(_get_expected_content "${content}")" \
-                   "$(database_get "${_OUTPUT_DOCUMENT_KEY}")"
+                   "$(database__get "${_OUTPUT_DOCUMENT_KEY}")"
 }
 
 function helper_can_report_tests_runs_with_failures() {
@@ -22,7 +22,7 @@ one_successful_test_and_one_failing"
 
   local content="$(_reporter)_reporter_output_with_failures"
   assertion__equal "$(_get_expected_content "${content}")" \
-                   "$(database_get "${_OUTPUT_DOCUMENT_KEY}")"
+                   "$(database__get "${_OUTPUT_DOCUMENT_KEY}")"
 }
 
 function _run_all_tests_files() {
@@ -30,7 +30,7 @@ function _run_all_tests_files() {
 	( configuration_load
 	  SBU_REPORTERS="$(_reporter)"
 	  _stub_runner_to_return_1337s_for_exection_time
-	  database_put "${_OUTPUT_DOCUMENT_KEY}" \
+	  database__put "${_OUTPUT_DOCUMENT_KEY}" \
 	    "$(runner__run_all_test_files "${directory}")" )
 }
 
