@@ -27,9 +27,7 @@ function main__main() {
 
 	_main__assert_only_one_argument_left $#
 	_main__assert_reporters_are_known
-	database__initialise
-	runner__run_all_test_files $1
-	database__destroy
+	_main__run_all_test_files $1
 }
 
 function 	_main__assert_reporters_are_known() {
@@ -92,4 +90,10 @@ function _main_print_usage() {
   printf "\
 usage: $(_main__get_script_name) [options] path
        run all tests in path\n"
+}
+
+function _main__run_all_test_files() {
+	database__initialise
+	runner__run_all_test_files $1
+	database__destroy
 }

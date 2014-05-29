@@ -1,20 +1,24 @@
 function database__initialise() {
-  database__destroy
+  _database__create_token
   _database__ensure_directory_exists
 }
 
+function _database__create_token() {
+  _SBU_DB_TOKEN="$(uuidgen)"
+}
+
 function database__destroy() {
-  rm -rf "${SBU_DB_DIR}"
+  rm -rf "$(_database__get_dir)"
 }
 
 function database__put() {
   _database__ensure_directory_exists
-  printf "%s" "$2" > "${SBU_DB_DIR}/$1"
+  printf "%s" "$2" > "$(_database__get_dir)/$1"
 }
 
 function database__post() {
   _database__ensure_directory_exists
-  printf "%s" "$2" >> "${SBU_DB_DIR}/$1"
+  printf "%s" "$2" >> "$(_database__get_dir)/$1"
 }
 
 function database__put_variable() {
@@ -23,9 +27,13 @@ function database__put_variable() {
 }
 
 function database__get() {
-  [[ -e "${SBU_DB_DIR}/$1" ]] && cat "${SBU_DB_DIR}/$1"
+  [[ -e "$(_database__get_dir)/$1" ]] && cat "$(_database__get_dir)/$1"
 }
 
 function _database__ensure_directory_exists() {
-  mkdir -p "${SBU_DB_DIR}"
+  mkdir -p "$(_database__get_dir)"
+}
+
+function _database__get_dir() {
+  printf "${SBU_DB_DIR}/${_SBU_DB_TOKEN}"
 }

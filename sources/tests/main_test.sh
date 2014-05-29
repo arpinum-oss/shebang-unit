@@ -4,6 +4,11 @@ function global_setup() {
 
 function setup() {
   database__initialise
+  _prevent_main_from_running_tests
+}
+
+function _prevent_main_from_running_tests() {
+  eval "function _main__run_all_test_files() { :; };"
 }
 
 function teardown() {
