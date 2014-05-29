@@ -4,7 +4,7 @@ function global_setup() {
 	database__initialise
 	( configuration_load
 	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
- 	  _called_functions=($(_get_called_functions) )
+  _called_functions=($(_get_called_functions) )
 }
 
 function global_teardown() {
