@@ -263,7 +263,7 @@ function test_runner__run_test() {
 }
 
 function _test_runner__call_test_fonction() {
-  ( "$1" &> /dev/null )
+  ( "$1" 2>&1 | reporter__redirect_test_output )
   local status_code=$?
   if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
     local message="$(database__get "${SBU_LAST_ASSERTION_MSG_KEY}")"
@@ -333,6 +333,11 @@ function reporter__assertion_failed() {
 	  _reporter__call_function assertion_failed "$@"
 }
 
+function reporter__redirect_test_output() {
+	reporter__for_each_reporter \
+	  _reporter__call_function redirect_test_output "$@"
+}
+
 function _reporter__call_function() {
   local function=$1
   shift 1
@@ -389,6 +394,13 @@ function simple_reporter__assertion_failed() {
   printf "$@"
 }
 
+function simple_reporter__redirect_test_output() {
+  local text
+  while read text; do
+    printf "${text}\n"
+  done
+}
+
 function dots_reporter__tests_files_end_running() {
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local texte="$(runner__tests_are_successful && printf "OK" || printf "KO")"
@@ -416,6 +428,10 @@ function dots_reporter__test_has_failed() {
 }
 
 function dots_reporter__assertion_failed() {
+  :
+}
+
+function dots_reporter__redirect_test_output() {
   :
 }
 

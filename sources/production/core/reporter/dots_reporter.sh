@@ -27,3 +27,7 @@ function dots_reporter__test_has_failed() {
 function dots_reporter__assertion_failed() {
   :
 }
+
+function dots_reporter__redirect_test_output() {
+  :
+}

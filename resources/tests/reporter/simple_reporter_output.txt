@@ -1,5 +1,7 @@
 [File] ${TESTS_RESOURCES_DIR}/reporter/two_successful_tests/first_test.sh
 [Test] first_successful_test_function
+some log
+some error log
 [1;32mOK[0m
 [Test] second_successful_test_function
 [1;32mOK[0m

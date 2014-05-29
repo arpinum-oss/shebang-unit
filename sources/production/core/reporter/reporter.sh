@@ -33,6 +33,11 @@ function reporter__assertion_failed() {
 	  _reporter__call_function assertion_failed "$@"
 }
 
+function reporter__redirect_test_output() {
+	reporter__for_each_reporter \
+	  _reporter__call_function redirect_test_output "$@"
+}
+
 function _reporter__call_function() {
   local function=$1
   shift 1

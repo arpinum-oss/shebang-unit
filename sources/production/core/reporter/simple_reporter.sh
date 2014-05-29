@@ -31,3 +31,10 @@ function simple_reporter__test_has_failed() {
 function simple_reporter__assertion_failed() {
   printf "$@"
 }
+
+function simple_reporter__redirect_test_output() {
+  local text
+  while read text; do
+    printf "${text}\n"
+  done
+}
