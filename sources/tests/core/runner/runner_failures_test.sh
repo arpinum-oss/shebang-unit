@@ -1,5 +1,5 @@
 function global_setup() {
-  _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_for_failures_tests"
+  _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/runner/directory_for_failures_tests"
   _FUNCTIONS_DOCUMENT_KEY="called_functions"
 }
 

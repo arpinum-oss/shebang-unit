@@ -1,5 +1,5 @@
 function global_setup() {
-  _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/directory_with_one_test"
+  _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/runner/directory_with_one_test"
   _FUNCTIONS_DOCUMENT_KEY="called_functions"
 	database__initialise
 	( configuration_load
