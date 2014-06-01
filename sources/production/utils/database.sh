@@ -1,5 +1,5 @@
 function database__initialise() {
-  _SBU_DB_TOKEN="${RANDOM}"
+  _SBU_DB_TOKEN="$(system__random)"
   _database__ensure_directory_exists
 }
 

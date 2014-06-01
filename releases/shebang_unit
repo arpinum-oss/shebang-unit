@@ -59,6 +59,12 @@ function assertion__equal() {
 	fi
 }
 
+function assertion__different() {
+	if [[ "$1" == "$2" ]]; then
+		_assertion__failed "Both values are: <$1>."
+	fi
+}
+
 function assertion__string_contains() {
 	if ! system__string_contains "$1" "$2"; then
 		_assertion__failed "String: <$1> does not contain: <$2>."
@@ -312,7 +318,7 @@ function _test_runner__call_function_if_exits() {
 function reporter__initialise() {
   local reporter_dir="${SBU_TEMP_DIR}/reporter"
   mkdir -p "${reporter_dir}"
-  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/${RANDOM}"
+  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/$(system__random)"
 }
 
 function reporter__release() {
@@ -460,7 +466,7 @@ function dots_reporter__redirect_test_output() {
 }
 
 function database__initialise() {
-  _SBU_DB_TOKEN="${RANDOM}"
+  _SBU_DB_TOKEN="$(system__random)"
   _database__ensure_directory_exists
 }
 
@@ -542,6 +548,10 @@ function system__print_array() {
 
 function system__string_contains() {
 	[[ "$1" == *"$2"* ]]
+}
+
+function system__random() {
+  printf "${RANDOM}"
 }
 
 function main__main() {

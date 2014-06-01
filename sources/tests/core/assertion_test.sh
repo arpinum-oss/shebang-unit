@@ -110,6 +110,20 @@ function asserting_that_different_objects_are_equal_is_false() {
 	_assert_message_equals "Actual: <different>, expected: <equal>."
 }
 
+function asserting_that_different_objects_are_different_is_true() {
+	( assertion__different equal different )
+
+	_assert_success
+	_assert_message_empty
+}
+
+function asserting_that_equal_objects_are_different_is_false() {
+	( assertion__different equal equal )
+
+	_assert_failure
+	_assert_message_equals "Both values are: <equal>."
+}
+
 function asserting_that_string_contains_substring_is_true() {
  	( assertion__string_contains string tri )
 

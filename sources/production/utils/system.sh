@@ -46,3 +46,7 @@ function system__print_array() {
 function system__string_contains() {
 	[[ "$1" == *"$2"* ]]
 }
+
+function system__random() {
+  printf "${RANDOM}"
+}

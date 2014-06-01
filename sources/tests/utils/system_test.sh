@@ -82,3 +82,10 @@ function a_substring_is_contained_by_the_string() {
 function a_totally_different_string_is_not_contained_by_the_string() {
 	assertion__failing system__string_contains "the string" "plop"
 }
+
+function can_get_random_number() {
+  local first_number="$(system__random)"
+  local second_number="$(system__random)"
+
+  assertion__different "${first_number}" "${second_number}"
+}

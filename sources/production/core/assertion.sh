@@ -4,6 +4,12 @@ function assertion__equal() {
 	fi
 }
 
+function assertion__different() {
+	if [[ "$1" == "$2" ]]; then
+		_assertion__failed "Both values are: <$1>."
+	fi
+}
+
 function assertion__string_contains() {
 	if ! system__string_contains "$1" "$2"; then
 		_assertion__failed "String: <$1> does not contain: <$2>."
