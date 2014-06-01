@@ -16,8 +16,7 @@ function teardown() {
 }
 
 function can_enable_colors() {
-	( SBU_USE_COLORS="${SBU_NO}"
-	  main__main --colors="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+	( main__main --colors="${SBU_YES}" "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_USE_COLORS" )
 
   local variable="$(database__get "SBU_USE_COLORS")"
@@ -25,8 +24,7 @@ function can_enable_colors() {
 }
 
 function can_enable_colors_with_short_option() {
-	(	SBU_USE_COLORS="${SBU_NO}"
-	  main__main -c="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+	(	main__main -c="${SBU_YES}" "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_USE_COLORS" )
 
   local variable="$(database__get "SBU_USE_COLORS")"
@@ -34,8 +32,7 @@ function can_enable_colors_with_short_option() {
 }
 
 function can_disable_colors() {
-	( SBU_USE_COLORS="${SBU_YES}"
-	  main__main --colors="${SBU_NO}" "${_TEST_DIR}" > /dev/null
+	( main__main --colors="${SBU_NO}" "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_USE_COLORS" )
 
   local variable="$(database__get "SBU_USE_COLORS")"
@@ -43,8 +40,7 @@ function can_disable_colors() {
 }
 
 function can_use_a_test_file_pattern() {
-	( SBU_TEST_FILE_PATTERN="anything"
-	  main__main --pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
+	( main__main --pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_TEST_FILE_PATTERN" )
 
   local variable="$(database__get "SBU_TEST_FILE_PATTERN")"
@@ -52,8 +48,7 @@ function can_use_a_test_file_pattern() {
 }
 
 function can_use_a_test_file_pattern_with_short_option() {
-	( SBU_TEST_FILE_PATTERN="anything"
-	  main__main -p=*my_test.sh "${_TEST_DIR}" > /dev/null
+	( main__main -p=*my_test.sh "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_TEST_FILE_PATTERN" )
 
   local variable="$(database__get "SBU_TEST_FILE_PATTERN")"
@@ -61,8 +56,7 @@ function can_use_a_test_file_pattern_with_short_option() {
 }
 
 function can_define_one_reporter() {
-	( SBU_REPORTERS="to_change"
-	  main__main --reporters="dots" "${_TEST_DIR}" > /dev/null
+	( main__main --reporters="dots" "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_REPORTERS" )
 
   local variable="$(database__get "SBU_REPORTERS")"
@@ -70,8 +64,7 @@ function can_define_one_reporter() {
 }
 
 function can_define_multiple_reporters() {
-	( SBU_REPORTERS="to_change"
-	  main__main --reporters="simple,dots" "${_TEST_DIR}" > /dev/null
+	( main__main --reporters="simple,dots" "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_REPORTERS" )
 
   local variable="$(database__get "SBU_REPORTERS")"
@@ -79,8 +72,6 @@ function can_define_multiple_reporters() {
 }
 
 function can_define_reporters_with_short_option() {
-	SBU_REPORTERS="to_change"
-
 	( main__main -r="dots" "${_TEST_DIR}" > /dev/null
 	  database__put_variable "SBU_REPORTERS" )
 

@@ -1,18 +1,28 @@
 function main__main() {
+	configuration__load
+  local parsed_arguments=0
+  _main__parse_arguments "$@"
+  shift ${parsed_arguments}
+  _main__assert_only_one_argument_left $#
+	_main__assert_reporters_are_known
+	_main__run_all_test_files $1
+}
+
+function _main__parse_arguments() {
 	local argument
 	for argument in "$@"; do
 		case "${argument}" in
 			-c=*|--colors=*)
 			SBU_USE_COLORS="${argument#*=}"
-			shift
+			(( parsed_arguments++ ))
 			;;
 			-p=*|--pattern=*)
 			SBU_TEST_FILE_PATTERN="${argument#*=}"
-			shift
+			(( parsed_arguments++ ))
 			;;
 			-r=*|--reporters=*)
 			SBU_REPORTERS="${argument#*=}"
-			shift
+			(( parsed_arguments++ ))
 			;;
 			-h|--help)
 			_main__print_full_usage
@@ -24,10 +34,6 @@ function main__main() {
 			;;
 		esac
 	done
-
-	_main__assert_only_one_argument_left $#
-	_main__assert_reporters_are_known
-	_main__run_all_test_files $1
 }
 
 function 	_main__assert_reporters_are_known() {

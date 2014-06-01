@@ -31,5 +31,3 @@ function configuration__load() {
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
   SBU_REPORTERS_FD=3
 }
-
-configuration__load
