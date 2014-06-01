@@ -46,8 +46,9 @@ function configuration_load() {
   SBU_SUCCESS_STATUS_CODE=0
   SBU_FAILURE_STATUS_CODE=1
   SBU_VALUE_SEPARATOR=","
-  SBU_DB_DIR="/tmp/.sbu/database"
+  SBU_TEMP_DIR="/tmp/.shebang_unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
+  SBU_REPORTERS_FD=3
 }
 
 configuration_load
@@ -148,6 +149,16 @@ function _assertion__get_assertion_message_to_use() {
 }
 
 function runner__run_all_test_files() {
+   eval "_runner__do_run_all_test_files_and_redirect_test_outputs "$@" \
+            ${SBU_REPORTERS_FD}>&1"
+}
+
+function _runner__do_run_all_test_files_and_redirect_test_outputs() {
+  _runner__run_all_test_files "$@" 2>&1 | reporter__redirect_tests_outputs;
+  return "${PIPESTATUS[0]}"
+}
+
+function _runner__run_all_test_files() {
 	_runner__initialise_tests_execution
 	_runner__run_all_test_files_with_pattern_in_directory "$1"
 	reporter__tests_files_end_running "$(_runner__get_execution_time)"
@@ -263,7 +274,7 @@ function test_runner__run_test() {
 }
 
 function _test_runner__call_test_fonction() {
-  ( "$1" 2>&1 | reporter__redirect_test_output )
+  ( "$1" )
   local status_code=$?
   if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
     local message="$(database__get "${SBU_LAST_ASSERTION_MSG_KEY}")"
@@ -296,6 +307,16 @@ function _test_runner__call_function_if_exits() {
 	if system__array_contains "${function}" "$@"; then
 	  "${function}"
 	fi
+}
+
+function reporter__initialise() {
+  local reporter_dir="${SBU_TEMP_DIR}/reporter"
+  mkdir -p "${reporter_dir}"
+  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/$(uuidgen)"
+}
+
+function reporter__release() {
+  eval "exec ${SBU_REPORTERS_FD}>&-"
 }
 
 function reporter__tests_files_end_running() {
@@ -333,7 +354,7 @@ function reporter__assertion_failed() {
 	  _reporter__call_function assertion_failed "$@"
 }
 
-function reporter__redirect_test_output() {
+function reporter__redirect_tests_outputs() {
 	reporter__for_each_reporter \
 	  _reporter__call_function redirect_test_output "$@"
 }
@@ -341,7 +362,7 @@ function reporter__redirect_test_output() {
 function _reporter__call_function() {
   local function=$1
   shift 1
-  "${reporter}_reporter__${function}" "$@"
+  "${reporter}_reporter__${function}" "$@" >&${SBU_REPORTERS_FD}
 }
 
 function reporter__for_each_reporter() {
@@ -432,19 +453,18 @@ function dots_reporter__assertion_failed() {
 }
 
 function dots_reporter__redirect_test_output() {
-  :
+  local text
+  while read text; do
+   :
+  done
 }
 
 function database__initialise() {
-  _database__create_token
+  _SBU_DB_TOKEN="$(uuidgen)"
   _database__ensure_directory_exists
 }
 
-function _database__create_token() {
-  _SBU_DB_TOKEN="$(uuidgen)"
-}
-
-function database__destroy() {
+function database__release() {
   rm -rf "$(_database__get_dir)"
 }
 
@@ -472,7 +492,7 @@ function _database__ensure_directory_exists() {
 }
 
 function _database__get_dir() {
-  printf "${SBU_DB_DIR}/${_SBU_DB_TOKEN}"
+  printf "${SBU_TEMP_DIR}/database/${_SBU_DB_TOKEN}"
 }
 
 function system__get_string_or_default() {
@@ -619,9 +639,21 @@ usage: $(_main__get_script_name) [options] path
 }
 
 function _main__run_all_test_files() {
-	database__initialise
-	runner__run_all_test_files $1
-	database__destroy
+  _main__initialise
+	runner__run_all_test_files "$1"
+	local status=$?
+	_main__release
+	return ${status}
+}
+
+function _main__initialise() {
+  database__initialise
+  reporter__initialise
+}
+
+function _main__release() {
+  reporter__release
+  database__release
 }
 
 main__main $@

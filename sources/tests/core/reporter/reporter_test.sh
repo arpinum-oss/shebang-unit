@@ -1,6 +1,8 @@
 function setup() {
   source "${TEST_SOURCES_DIR}/core/reporter/mock/cool_reporter.sh"
   source "${TEST_SOURCES_DIR}/core/reporter/mock/lazy_reporter.sh"
+  SBU_REPORTERS_FD=1
+  SBU_REPORTERS=cool,lazy
 }
 
 function can_execute_for_each_reporters() {
@@ -14,8 +16,6 @@ function can_execute_for_each_reporters() {
 }
 
 function can_call_for_each_reporter__tests_files_end_running() {
-  SBU_REPORTERS=cool,lazy
-
   local messages="$(reporter__tests_files_end_running a b)"
 
   configuration_load
@@ -25,8 +25,6 @@ function can_call_for_each_reporter__tests_files_end_running() {
 }
 
 function can_call_for_each_reporter__test_starts_running() {
-  SBU_REPORTERS=cool,lazy
-
   local messages="$(reporter__test_starts_running a b)"
 
   configuration_load
@@ -36,8 +34,6 @@ function can_call_for_each_reporter__test_starts_running() {
 }
 
 function can_call_for_each_reporter__test_has_succeeded() {
-  SBU_REPORTERS=cool,lazy
-
   local messages="$(reporter__test_has_succeeded a b)"
 
   configuration_load
@@ -47,8 +43,6 @@ function can_call_for_each_reporter__test_has_succeeded() {
 }
 
 function can_call_for_each_reporter__test_has_failed() {
-  SBU_REPORTERS=cool,lazy
-
   local messages="$(reporter__test_has_failed a b)"
 
   configuration_load
@@ -58,8 +52,6 @@ function can_call_for_each_reporter__test_has_failed() {
 }
 
 function can_call_for_each_reporter__test_file_starts_running() {
-  SBU_REPORTERS=cool,lazy
-
   local messages="$(reporter__test_file_starts_running a b)"
 
   configuration_load
@@ -69,8 +61,6 @@ function can_call_for_each_reporter__test_file_starts_running() {
 }
 
 function can_call_for_each_reporter__test_file_ends_running() {
-  SBU_REPORTERS=cool,lazy
-
   local messages="$(reporter__test_file_ends_running a b)"
 
   configuration_load
@@ -80,8 +70,6 @@ function can_call_for_each_reporter__test_file_ends_running() {
 }
 
 function can_call_for_each_reporter__assertion_failed() {
-  SBU_REPORTERS=cool,lazy
-
   local messages="$(reporter__assertion_failed a b)"
 
   configuration_load

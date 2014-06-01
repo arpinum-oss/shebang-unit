@@ -14,7 +14,7 @@ function test_runner__run_test() {
 }
 
 function _test_runner__call_test_fonction() {
-  ( "$1" 2>&1 | reporter__redirect_test_output )
+  ( "$1" )
   local status_code=$?
   if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
     local message="$(database__get "${SBU_LAST_ASSERTION_MSG_KEY}")"

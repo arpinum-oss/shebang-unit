@@ -8,7 +8,7 @@ function setup() {
 }
 
 function teardown() {
-  database__destroy
+  database__release
 }
 
 #ignore

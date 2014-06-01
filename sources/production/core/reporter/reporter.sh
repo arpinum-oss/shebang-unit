@@ -1,3 +1,13 @@
+function reporter__initialise() {
+  local reporter_dir="${SBU_TEMP_DIR}/reporter"
+  mkdir -p "${reporter_dir}"
+  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/$(uuidgen)"
+}
+
+function reporter__release() {
+  eval "exec ${SBU_REPORTERS_FD}>&-"
+}
+
 function reporter__tests_files_end_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function tests_files_end_running "$@"
@@ -33,7 +43,7 @@ function reporter__assertion_failed() {
 	  _reporter__call_function assertion_failed "$@"
 }
 
-function reporter__redirect_test_output() {
+function reporter__redirect_tests_outputs() {
 	reporter__for_each_reporter \
 	  _reporter__call_function redirect_test_output "$@"
 }
@@ -41,7 +51,7 @@ function reporter__redirect_test_output() {
 function _reporter__call_function() {
   local function=$1
   shift 1
-  "${reporter}_reporter__${function}" "$@"
+  "${reporter}_reporter__${function}" "$@" >&${SBU_REPORTERS_FD}
 }
 
 function reporter__for_each_reporter() {

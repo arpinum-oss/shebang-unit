@@ -93,7 +93,19 @@ usage: $(_main__get_script_name) [options] path
 }
 
 function _main__run_all_test_files() {
-	database__initialise
-	runner__run_all_test_files $1
-	database__destroy
+  _main__initialise
+	runner__run_all_test_files "$1"
+	local status=$?
+	_main__release
+	return ${status}
+}
+
+function _main__initialise() {
+  database__initialise
+  reporter__initialise
+}
+
+function _main__release() {
+  reporter__release
+  database__release
 }

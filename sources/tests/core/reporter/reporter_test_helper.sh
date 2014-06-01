@@ -1,10 +1,12 @@
 function helper_setup() {
   _OUTPUT_DOCUMENT_KEY="reporter_output"
   database__initialise
+  reporter__initialise
 }
 
 function helper_teardown() {
-	database__destroy
+  reporter__release
+	database__release
 }
 
 function helper_can_report_tests_runs_without_failures() {

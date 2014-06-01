@@ -1,13 +1,9 @@
 function database__initialise() {
-  _database__create_token
+  _SBU_DB_TOKEN="$(uuidgen)"
   _database__ensure_directory_exists
 }
 
-function _database__create_token() {
-  _SBU_DB_TOKEN="$(uuidgen)"
-}
-
-function database__destroy() {
+function database__release() {
   rm -rf "$(_database__get_dir)"
 }
 
@@ -35,5 +31,5 @@ function _database__ensure_directory_exists() {
 }
 
 function _database__get_dir() {
-  printf "${SBU_DB_DIR}/${_SBU_DB_TOKEN}"
+  printf "${SBU_TEMP_DIR}/database/${_SBU_DB_TOKEN}"
 }

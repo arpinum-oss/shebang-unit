@@ -1,10 +1,17 @@
 [File] ${TESTS_RESOURCES_DIR}/reporter/two_successful_tests/first_test.sh
+some log in the file
+some log in global setup
 [Test] first_successful_test_function
-some log
-some error log
+some log in setup
+some log in test
+some error log in test
+some log in teardown
 [1;32mOK[0m
 [Test] second_successful_test_function
+some log in setup
+some log in teardown
 [1;32mOK[0m
+some log in global teardown
 
 [File] ${TESTS_RESOURCES_DIR}/reporter/two_successful_tests/second_test.sh
 [Test] successful_test_function

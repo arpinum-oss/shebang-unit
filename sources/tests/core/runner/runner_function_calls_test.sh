@@ -8,7 +8,7 @@ function global_setup() {
 }
 
 function global_teardown() {
-  database__destroy
+  database__release
 }
 
 function the_runner_call_the_global_setup() {

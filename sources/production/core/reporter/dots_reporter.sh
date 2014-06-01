@@ -29,5 +29,8 @@ function dots_reporter__assertion_failed() {
 }
 
 function dots_reporter__redirect_test_output() {
-  :
+  local text
+  while read text; do
+   :
+  done
 }
