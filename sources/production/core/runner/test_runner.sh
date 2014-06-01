@@ -4,7 +4,7 @@ function test_runner__run_test() {
   reporter__test_starts_running "${test_function}"
 	(
 	  _test_runner__call_setup_if_exists "$@" \
-	  && _test_runner__call_test_fonction "${test_function}"
+	    && _test_runner__call_test_fonction "${test_function}"
 	  local setup_and_test_code=$?
 	  _test_runner__call_teardown_if_exists "$@"
 	  (( $? == ${SBU_SUCCESS_STATUS_CODE} \
@@ -27,10 +27,10 @@ function _test_runner__call_teardown_if_exists() {
 
 function _test_runner__parse_test_function_result() {
 	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
-		(( global_green_tests_count++ ))
+		results__increment_successful_tests
 		reporter__test_has_succeeded
 	else
-		(( global_red_tests_count++ ))
+		results__increment_failing_tests
 		reporter__test_has_failed
 	fi
 }

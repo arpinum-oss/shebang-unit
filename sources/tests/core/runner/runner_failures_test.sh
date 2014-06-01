@@ -13,7 +13,7 @@ function teardown() {
 
 #ignore
 function _the_runner_calls_global_teardown_if_global_setup_fails() {
-  ( configuration_load
+  ( configuration__load
 	  SBU_TEST_FILE_PATTERN="*file_with_failing_global_setup.sh"
   	runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
@@ -24,8 +24,8 @@ function _the_runner_calls_global_teardown_if_global_setup_fails() {
 	assertion__equal "global_teardown" "${called_functions[1]}"
 }
 
-function the_runner_stops_file_execution_if_global_setup_exits() {
-  ( configuration_load
+function the_runner_stops_file_run_if_global_setup_exits() {
+  ( configuration__load
 	  SBU_TEST_FILE_PATTERN="*file_with_exiting_global_setup.sh"
 	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
@@ -46,7 +46,7 @@ function the_runner_calls_global_teardown_if_test_exits() {
 }
 
 function _the_runner_calls_global_teardown_if_test_fails_or_exits() {
-	( configuration_load
+	( configuration__load
 	  SBU_TEST_FILE_PATTERN="*$1"
   	runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
@@ -58,7 +58,7 @@ function _the_runner_calls_global_teardown_if_test_fails_or_exits() {
 }
 
 function the_runner_calls_teardown_if_setup_fails() {
-  ( configuration_load
+  ( configuration__load
 	  SBU_TEST_FILE_PATTERN="*file_with_failing_setup.sh"
 	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
@@ -69,8 +69,8 @@ function the_runner_calls_teardown_if_setup_fails() {
 	assertion__equal "teardown" "${called_functions[1]}"
 }
 
-function the_runner_stops_test_execution_if_setup_exists() {
-  ( configuration_load
+function the_runner_stops_test_run_if_setup_exists() {
+  ( configuration__load
 	  SBU_TEST_FILE_PATTERN="*file_with_exiting_setup.sh"
   	runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
@@ -81,7 +81,7 @@ function the_runner_stops_test_execution_if_setup_exists() {
 }
 
 function _the_runner_calls_teardown_if_setup_fails_or_exits() {
-	( configuration_load
+	( configuration__load
 	  SBU_TEST_FILE_PATTERN="*$1"
 	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 
@@ -103,7 +103,7 @@ function the_runner_call_teardown_if_test_exits() {
 }
 
 function _the_runner_call_teardown_if_test_fails_or_exits() {
-	( configuration_load
+	( configuration__load
 	  SBU_TEST_FILE_PATTERN="*$1"
 	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
 

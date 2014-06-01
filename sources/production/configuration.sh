@@ -1,4 +1,4 @@
-function configuration_load() {
+function configuration__load() {
   # yes/no representation used with shebang_unit parameters to activate
   # stuff like colors
   SBU_YES="yes"
@@ -32,4 +32,4 @@ function configuration_load() {
   SBU_REPORTERS_FD=3
 }
 
-configuration_load
+configuration__load

@@ -27,15 +27,15 @@ one_successful_test_and_one_failing"
 
 function _run_all_tests_files() {
   local directory=$1
-	( configuration_load
+	( configuration__load
 	  SBU_REPORTERS="$(_reporter)"
-	  _stub_runner_to_return_1337s_for_exection_time
+	  _stub_results_to_return_1337s_for_run_time
 	  database__put "${_OUTPUT_DOCUMENT_KEY}" \
 	    "$(runner__run_all_test_files "${directory}")" )
 }
 
-function _stub_runner_to_return_1337s_for_exection_time() {
-  eval "function _runner__get_execution_time() { printf "1337"; }"
+function _stub_results_to_return_1337s_for_run_time() {
+  eval "function results__get_run_time() { printf "1337"; }"
 }
 
 function _get_expected_content() {

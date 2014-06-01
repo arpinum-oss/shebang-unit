@@ -4,6 +4,7 @@ core/assertion
 core/runner/runner
 core/runner/file_runner
 core/parser
+core/results
 core/runner/test_runner
 core/reporter/reporter
 core/reporter/simple_reporter

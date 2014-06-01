@@ -1,10 +1,9 @@
 function simple_reporter__tests_files_end_running() {
 	printf "[Results]\n"
 	local color="$(_reporter__get_color_code_for_tests_result)"
-	local execution_time="$1"
-	local green_tests="Green tests: ${global_green_tests_count}"
-	local red_tests="red: ${global_red_tests_count}"
-	local time="in ${execution_time}s"
+	local green_tests="Green tests: $(results__get_successful_tests_count)"
+	local red_tests="red: $(results__get_failing_tests_count)"
+	local time="in $(results__get_run_time)s"
 	system__print_line_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
 }
 

@@ -11,14 +11,14 @@ function can_execute_for_each_reporters() {
 
   reporter__for_each_reporter _put_read_reporter
 
-  configuration_load
+  configuration__load
   assertion__equal "toto#tutu" "${read_reporters}"
 }
 
 function can_call_for_each_reporter__tests_files_end_running() {
   local messages="$(reporter__tests_files_end_running a b)"
 
-  configuration_load
+  configuration__load
   local first="cool_reporter__tests_files_end_running with [a, b]"
   local second="lazy_reporter__tests_files_end_running with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
@@ -27,7 +27,7 @@ function can_call_for_each_reporter__tests_files_end_running() {
 function can_call_for_each_reporter__test_starts_running() {
   local messages="$(reporter__test_starts_running a b)"
 
-  configuration_load
+  configuration__load
   local first="cool_reporter__test_starts_running with [a, b]"
   local second="lazy_reporter__test_starts_running with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
@@ -36,7 +36,7 @@ function can_call_for_each_reporter__test_starts_running() {
 function can_call_for_each_reporter__test_has_succeeded() {
   local messages="$(reporter__test_has_succeeded a b)"
 
-  configuration_load
+  configuration__load
   local first="cool_reporter__test_has_succeeded with [a, b]"
   local second="lazy_reporter__test_has_succeeded with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
@@ -45,7 +45,7 @@ function can_call_for_each_reporter__test_has_succeeded() {
 function can_call_for_each_reporter__test_has_failed() {
   local messages="$(reporter__test_has_failed a b)"
 
-  configuration_load
+  configuration__load
   local first="cool_reporter__test_has_failed with [a, b]"
   local second="lazy_reporter__test_has_failed with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
@@ -54,7 +54,7 @@ function can_call_for_each_reporter__test_has_failed() {
 function can_call_for_each_reporter__test_file_starts_running() {
   local messages="$(reporter__test_file_starts_running a b)"
 
-  configuration_load
+  configuration__load
   local first="cool_reporter__test_file_starts_running with [a, b]"
   local second="lazy_reporter__test_file_starts_running with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
@@ -63,7 +63,7 @@ function can_call_for_each_reporter__test_file_starts_running() {
 function can_call_for_each_reporter__test_file_ends_running() {
   local messages="$(reporter__test_file_ends_running a b)"
 
-  configuration_load
+  configuration__load
   local first="cool_reporter__test_file_ends_running with [a, b]"
   local second="lazy_reporter__test_file_ends_running with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
