@@ -312,7 +312,7 @@ function _test_runner__call_function_if_exits() {
 function reporter__initialise() {
   local reporter_dir="${SBU_TEMP_DIR}/reporter"
   mkdir -p "${reporter_dir}"
-  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/$(uuidgen)"
+  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/${RANDOM}"
 }
 
 function reporter__release() {
@@ -460,7 +460,7 @@ function dots_reporter__redirect_test_output() {
 }
 
 function database__initialise() {
-  _SBU_DB_TOKEN="$(uuidgen)"
+  _SBU_DB_TOKEN="${RANDOM}"
   _database__ensure_directory_exists
 }
 

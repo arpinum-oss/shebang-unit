@@ -1,7 +1,7 @@
 function reporter__initialise() {
   local reporter_dir="${SBU_TEMP_DIR}/reporter"
   mkdir -p "${reporter_dir}"
-  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/$(uuidgen)"
+  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/${RANDOM}"
 }
 
 function reporter__release() {
