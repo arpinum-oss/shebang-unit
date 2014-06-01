@@ -139,8 +139,7 @@ function assertion__failing() {
 
 function _assertion__failed() {
 	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
-	local complete_message="Assertion failed. ${message_to_use}"
-	database__put "${SBU_LAST_ASSERTION_MSG_KEY}" "${complete_message}"
+	printf "Assertion failed. ${message_to_use}\n"
 	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
@@ -281,12 +280,6 @@ function test_runner__run_test() {
 
 function _test_runner__call_test_fonction() {
   ( "$1" )
-  local status_code=$?
-  if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
-    local message="$(database__get "${SBU_LAST_ASSERTION_MSG_KEY}")"
-    reporter__assertion_failed "${message}\n"
-  fi
-  return ${status_code}
 }
 
 function _test_runner__call_setup_if_exists() {
@@ -355,11 +348,6 @@ function reporter__test_file_ends_running() {
 	  _reporter__call_function test_file_ends_running "$@"
 }
 
-function reporter__assertion_failed() {
-	reporter__for_each_reporter \
-	  _reporter__call_function assertion_failed "$@"
-}
-
 function reporter__redirect_tests_outputs() {
 	reporter__for_each_reporter \
 	  _reporter__call_function redirect_test_output "$@"
@@ -417,10 +405,6 @@ function simple_reporter__test_has_failed() {
   system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
 }
 
-function simple_reporter__assertion_failed() {
-  printf "$@"
-}
-
 function simple_reporter__redirect_test_output() {
   local text
   while read text; do
@@ -452,10 +436,6 @@ function dots_reporter__test_has_succeeded() {
 
 function dots_reporter__test_has_failed() {
   system__print_with_color "F" ${SBU_RED_COLOR_CODE}
-}
-
-function dots_reporter__assertion_failed() {
-  :
 }
 
 function dots_reporter__redirect_test_output() {

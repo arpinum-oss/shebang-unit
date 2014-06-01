@@ -15,12 +15,6 @@ function test_runner__run_test() {
 
 function _test_runner__call_test_fonction() {
   ( "$1" )
-  local status_code=$?
-  if (( ${status_code} != ${SBU_SUCCESS_STATUS_CODE} )); then
-    local message="$(database__get "${SBU_LAST_ASSERTION_MSG_KEY}")"
-    reporter__assertion_failed "${message}\n"
-  fi
-  return ${status_code}
 }
 
 function _test_runner__call_setup_if_exists() {

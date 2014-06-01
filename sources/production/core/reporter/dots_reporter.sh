@@ -24,10 +24,6 @@ function dots_reporter__test_has_failed() {
   system__print_with_color "F" ${SBU_RED_COLOR_CODE}
 }
 
-function dots_reporter__assertion_failed() {
-  :
-}
-
 function dots_reporter__redirect_test_output() {
   local text
   while read text; do

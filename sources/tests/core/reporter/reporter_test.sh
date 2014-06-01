@@ -69,15 +69,6 @@ function can_call_for_each_reporter__test_file_ends_running() {
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 
-function can_call_for_each_reporter__assertion_failed() {
-  local messages="$(reporter__assertion_failed a b)"
-
-  configuration_load
-  local first="cool_reporter__assertion_failed with [a, b]"
-  local second="lazy_reporter__assertion_failed with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
-}
-
 function _put_read_reporter() {
   [[ -z "${read_reporters}" ]] \
     && read_reporters="${reporter}" \

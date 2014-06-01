@@ -38,11 +38,6 @@ function reporter__test_file_ends_running() {
 	  _reporter__call_function test_file_ends_running "$@"
 }
 
-function reporter__assertion_failed() {
-	reporter__for_each_reporter \
-	  _reporter__call_function assertion_failed "$@"
-}
-
 function reporter__redirect_tests_outputs() {
 	reporter__for_each_reporter \
 	  _reporter__call_function redirect_test_output "$@"

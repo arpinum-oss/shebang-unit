@@ -28,10 +28,6 @@ function simple_reporter__test_has_failed() {
   system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
 }
 
-function simple_reporter__assertion_failed() {
-  printf "$@"
-}
-
 function simple_reporter__redirect_test_output() {
   local text
   while read text; do

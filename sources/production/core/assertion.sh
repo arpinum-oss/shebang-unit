@@ -84,8 +84,7 @@ function assertion__failing() {
 
 function _assertion__failed() {
 	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
-	local complete_message="Assertion failed. ${message_to_use}"
-	database__put "${SBU_LAST_ASSERTION_MSG_KEY}" "${complete_message}"
+	printf "Assertion failed. ${message_to_use}\n"
 	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
