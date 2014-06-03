@@ -5,7 +5,9 @@ function main__main() {
   shift ${parsed_arguments}
   _main__assert_only_one_argument_left $#
 	_main__assert_reporters_are_known
-	_main__run_all_test_files $1
+
+	[[ "${SBU_NO_RUN}" != "${SBU_YES}" ]] \
+	  && _main__run_all_test_files $1
 }
 
 function _main__parse_arguments() {
@@ -24,12 +26,16 @@ function _main__parse_arguments() {
 			SBU_REPORTERS="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
+			--no-run)
+			SBU_NO_RUN="${SBU_YES}"
+			(( parsed_arguments++ ))
+			;;
 			-h|--help)
 			_main__print_full_usage
 			exit ${SBU_SUCCESS_STATUS_CODE}
 			;;
 			-*|--*)
-			_main_print_illegal_option "${argument}"
+			_main__print_illegal_option "${argument}"
       _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
 			;;
 		esac
@@ -37,17 +43,17 @@ function _main__parse_arguments() {
 }
 
 function 	_main__assert_reporters_are_known() {
-  reporter__for_each_reporter _fail_if_reporter_unknown
+  reporter__for_each_reporter _main__fail_if_reporter_unknown
 }
 
-function _fail_if_reporter_unknown() {
+function _main__fail_if_reporter_unknown() {
   if [[ "${reporter}" != "simple" && "${reporter}" != "dots" ]]; then
     printf "$(_main__get_script_name): unknown reporter <${reporter}>\n"
     exit ${SBU_FAILURE_STATUS_CODE}
   fi
 }
 
-function _main_print_illegal_option() {
+function _main__print_illegal_option() {
   local option="${1%=*}"
   option="${option#-}"
   option="${option#-}"
@@ -66,12 +72,12 @@ function _main__get_script_name() {
 }
 
 function _main__print_usage_and_exit_with_code() {
-  _main_print_usage
+  _main__print_usage
 	exit $1
 }
 
 function _main__print_full_usage() {
-  _main_print_usage
+  _main__print_usage
   local script="$(_main__get_script_name)"
   printf "\n\
 [options]
@@ -92,7 +98,7 @@ ${script} -p=*test.sh sources/test
 \n"
 }
 
-function _main_print_usage() {
+function _main__print_usage() {
   printf "\
 usage: $(_main__get_script_name) [options] path
        run all tests in path\n"

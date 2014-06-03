@@ -252,33 +252,33 @@ function _parser__get_function_name_from_declaration() {
 }
 
 function results__tests_files_start_running() {
-  global_successful_tests_count=0
-	global_failing_tests_count=0
-	global_run_beginning_date="$(system__get_date_in_seconds)"
+  sbu_global_successful_tests_count=0
+	sbu_global_failing_tests_count=0
+	sbu_global_run_beginning_date="$(system__get_date_in_seconds)"
 }
 
 function results__tests_files_end_running() {
-  global_run_ending_date="$(system__get_date_in_seconds)"
+  sbu_global_run_ending_date="$(system__get_date_in_seconds)"
 }
 
 function results__get_run_time() {
-  printf "$((${global_run_ending_date} - ${global_run_beginning_date}))"
+  printf "$((${sbu_global_run_ending_date} - ${sbu_global_run_beginning_date}))"
 }
 
 function results__get_successful_tests_count() {
-  printf "${global_successful_tests_count}"
+  printf "${sbu_global_successful_tests_count}"
 }
 
 function results__increment_successful_tests() {
-  (( global_successful_tests_count++ ))
+  (( sbu_global_successful_tests_count++ ))
 }
 
 function results__get_failing_tests_count() {
-  printf "${global_failing_tests_count}"
+  printf "${sbu_global_failing_tests_count}"
 }
 
 function results__increment_failing_tests() {
-  (( global_failing_tests_count++ ))
+  (( sbu_global_failing_tests_count++ ))
 }
 
 
@@ -400,7 +400,8 @@ function simple_reporter__tests_files_end_running() {
 	local green_tests="Green tests: $(results__get_successful_tests_count)"
 	local red_tests="red: $(results__get_failing_tests_count)"
 	local time="in $(results__get_run_time)s"
-	system__print_line_with_color "${green_tests}, ${red_tests} ${time}" "${color}"
+	local message="${green_tests}, ${red_tests} ${time}"
+	system__print_line_with_color "${message}" "${color}"
 }
 
 function simple_reporter__test_file_starts_running() {
@@ -559,7 +560,9 @@ function main__main() {
   shift ${parsed_arguments}
   _main__assert_only_one_argument_left $#
 	_main__assert_reporters_are_known
-	_main__run_all_test_files $1
+
+	[[ "${SBU_NO_RUN}" != "${SBU_YES}" ]] \
+	  && _main__run_all_test_files $1
 }
 
 function _main__parse_arguments() {
@@ -578,12 +581,16 @@ function _main__parse_arguments() {
 			SBU_REPORTERS="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
+			--no-run)
+			SBU_NO_RUN="${SBU_YES}"
+			(( parsed_arguments++ ))
+			;;
 			-h|--help)
 			_main__print_full_usage
 			exit ${SBU_SUCCESS_STATUS_CODE}
 			;;
 			-*|--*)
-			_main_print_illegal_option "${argument}"
+			_main__print_illegal_option "${argument}"
       _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
 			;;
 		esac
@@ -591,17 +598,17 @@ function _main__parse_arguments() {
 }
 
 function 	_main__assert_reporters_are_known() {
-  reporter__for_each_reporter _fail_if_reporter_unknown
+  reporter__for_each_reporter _main__fail_if_reporter_unknown
 }
 
-function _fail_if_reporter_unknown() {
+function _main__fail_if_reporter_unknown() {
   if [[ "${reporter}" != "simple" && "${reporter}" != "dots" ]]; then
     printf "$(_main__get_script_name): unknown reporter <${reporter}>\n"
     exit ${SBU_FAILURE_STATUS_CODE}
   fi
 }
 
-function _main_print_illegal_option() {
+function _main__print_illegal_option() {
   local option="${1%=*}"
   option="${option#-}"
   option="${option#-}"
@@ -620,12 +627,12 @@ function _main__get_script_name() {
 }
 
 function _main__print_usage_and_exit_with_code() {
-  _main_print_usage
+  _main__print_usage
 	exit $1
 }
 
 function _main__print_full_usage() {
-  _main_print_usage
+  _main__print_usage
   local script="$(_main__get_script_name)"
   printf "\n\
 [options]
@@ -646,7 +653,7 @@ ${script} -p=*test.sh sources/test
 \n"
 }
 
-function _main_print_usage() {
+function _main__print_usage() {
   printf "\
 usage: $(_main__get_script_name) [options] path
        run all tests in path\n"

@@ -2,21 +2,41 @@
 
 function _run_tests() {
   _configure_global_variables
-  _releaseShebangUnit
-  source "$(release__get_released_artifact_file)" "$@" "${TEST_SOURCES_DIR}"
+  _source_required_modules
+  release__concatenate_sources_in_release_file
+  _source_shebang_unit_for_tests
+  _run_protected_copy_of_shebang_unit_for_tests "$@"
+}
+
+function _source_required_modules() {
+	source "${SOURCES_DIR}/release.sh"
+  source "${TEST_SOURCES_DIR}/tests_utils/protector.sh"
 }
 
 function _configure_global_variables() {
-  _ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
-  SOURCES_DIR="${_ROOT_DIR}/sources/production"
-  TEST_SOURCES_DIR="${_ROOT_DIR}/sources/tests"
-  RESOURCES_DIR="${_ROOT_DIR}/resources/production"
-  TESTS_RESOURCES_DIR="${_ROOT_DIR}/resources/tests"
+  local root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
+  SOURCES_DIR="${root_dir}/sources/production"
+  TEST_SOURCES_DIR="${root_dir}/sources/tests"
+  RESOURCES_DIR="${root_dir}/resources/production"
+  TESTS_RESOURCES_DIR="${root_dir}/resources/tests"
 }
 
-function _releaseShebangUnit() {
-	source "${SOURCES_DIR}/release.sh"
-	release__concatenate_sources_in_release_file
+function _source_shebang_unit_for_tests() {
+  source "$(release__get_released_artifact_file)" --no-run
+}
+
+function _run_protected_copy_of_shebang_unit_for_tests() {
+  local copy="$(_create_copy_of_shebang_unit)"
+  protector__protect_symbols "${copy}"
+  source "${copy}" "$@" "${TEST_SOURCES_DIR}"
+}
+
+function _create_copy_of_shebang_unit() {
+  local temp_dir="/tmp/${RANDOM}"
+  mkdir -p "${temp_dir}"
+  local protected_file="${temp_dir}/shebang_unit"
+  cp -f "$(release__get_released_artifact_file)" "${protected_file}"
+  printf "${protected_file}"
 }
 
 _run_tests "$@"

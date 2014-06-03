@@ -2,7 +2,7 @@ _RELEASED_ARTIFACT_FILENAME='shebang_unit'
 _ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
 _SOURCES_DIR="${_ROOT_DIR}/sources/production"
 _RELEASE_DIR="${_ROOT_DIR}/releases"
-_ORDERED_SOURCES_FILE="${_ROOT_DIR}/resources/production/ordered_sources.txt"
+_ORDERED_MODULES_FILE="${_ROOT_DIR}/resources/production/ordered_modules.txt"
 
 function release__concatenate_sources_in_release_file() {
 	_release__initialise
@@ -23,14 +23,22 @@ function _release__delete_release_file_if_existing() {
 }
 
 function _release__concatenate_sources_in_release_file() {
-	local file
-	while read file; do
-		_release__append_file_to_release_file "${_SOURCES_DIR}/${file}.sh"
-	done < "${_ORDERED_SOURCES_FILE}"
+  release__execute_for_each_module _release__append_module_to_release_file
+}
+
+function release__execute_for_each_module() {
+	local module_path
+	while read module_path; do
+		"$@"
+	done < "${_ORDERED_MODULES_FILE}"
 }
 
 function _release__append_runner_call_in_release_file() {
 	_release__append_to_release_file 'main__main $@'
+}
+
+function _release__append_module_to_release_file() {
+  _release__append_file_to_release_file "${_SOURCES_DIR}/${module_path}.sh"
 }
 
 function _release__append_file_to_release_file() {
