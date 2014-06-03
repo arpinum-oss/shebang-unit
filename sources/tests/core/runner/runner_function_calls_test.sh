@@ -2,8 +2,7 @@ function global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/runner/directory_with_one_test"
   _FUNCTIONS_DOCUMENT_KEY="called_functions"
 	database__initialise
-	( configuration__load
-	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
+  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null
   _called_functions=($(_get_called_functions) )
 }
 

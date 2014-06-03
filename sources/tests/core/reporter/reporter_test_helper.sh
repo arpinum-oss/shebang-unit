@@ -27,11 +27,10 @@ one_successful_test_and_one_failing"
 
 function _run_all_tests_files() {
   local directory=$1
-	( configuration__load
-	  SBU_REPORTERS="$(_reporter)"
-	  _stub_results_to_return_1337s_for_run_time
-	  database__put "${_OUTPUT_DOCUMENT_KEY}" \
-	    "$(runner__run_all_test_files "${directory}")" )
+  SBU_REPORTERS="$(_reporter)"
+  _stub_results_to_return_1337s_for_run_time
+  database__put "${_OUTPUT_DOCUMENT_KEY}" \
+    "$(runner__run_all_test_files "${directory}")"
 }
 
 function _stub_results_to_return_1337s_for_run_time() {

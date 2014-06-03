@@ -12,10 +12,9 @@ function teardown() {
 }
 
 function the_runner_call_the_test_functions() {
-	( configuration__load
-	  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null )
-  local called_functions=($(_get_called_functions))
+  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null
 
+  local called_functions=($(_get_called_functions))
 	assertion__equal 3 "${#called_functions[@]}"
 	assertion__equal "well_formated_test_function" "${called_functions[0]}"
 	assertion__equal "indented_test_function" "${called_functions[1]}"
