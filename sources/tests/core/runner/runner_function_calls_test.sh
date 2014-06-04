@@ -1,9 +1,9 @@
 function global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/runner/directory_with_one_test"
-  _FUNCTIONS_DOCUMENT_KEY="called_functions"
+  helper__use_silent_reporter
 	database__initialise
-  runner__run_all_test_files "${_TESTS_DIRECTORY}" > /dev/null
-  _called_functions=($(_get_called_functions) )
+  runner__run_all_test_files "${_TESTS_DIRECTORY}"
+  _called_functions=($(helper__get_called_functions) )
 }
 
 function global_teardown() {
@@ -41,12 +41,4 @@ function the_runner_call_functions_in_the_right_order() {
 	assertion__equal "teardown" "${_called_functions[6]}"
 	assertion__equal "global_teardown" "${_called_functions[7]}"
 	assertion__equal 8 "${#_called_functions[@]}"
-}
-
-function _get_called_functions() {
-	database__get "${_FUNCTIONS_DOCUMENT_KEY}"
-}
-
-function _function_called() {
-  database__post "${_FUNCTIONS_DOCUMENT_KEY}" "$1 "
 }

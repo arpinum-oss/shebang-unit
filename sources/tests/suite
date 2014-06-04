@@ -11,6 +11,7 @@ function _run_tests() {
 function _source_required_modules() {
 	source "${SOURCES_DIR}/release.sh"
   source "${TEST_SOURCES_DIR}/tests_utils/protector.sh"
+  source "${TEST_SOURCES_DIR}/tests_utils/helper.sh"
 }
 
 function _configure_global_variables() {
