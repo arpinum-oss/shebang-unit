@@ -10,4 +10,4 @@ Assertion failed. Actual: <2>, expected: <3>.
 [1;32mOK[0m
 
 [Results]
-[1;31mGreen tests: 2, red: 1 in 1337s[0m
+[1;31m3 tests, 1 failure, 0 not run in 1337s[0m

@@ -438,11 +438,26 @@ function _reporter__get_color_code_for_tests_result() {
 function simple_reporter__tests_files_end_running() {
 	printf "[Results]\n"
 	local color="$(_reporter__get_color_code_for_tests_result)"
-	local green_tests="Green tests: $(results__get_successful_tests_count)"
-	local red_tests="red: $(results__get_failing_tests_count)"
+	local total_count="$(_simple_reporter__get_total_count_message)"
+	local failures_count="$(_simple_reporter__get_failures_count_message)"
+	local not_run_count="$(results__get_not_run_tests_count) not run"
 	local time="in $(results__get_run_time)s"
-	local message="${green_tests}, ${red_tests} ${time}"
+	local message="${total_count}, ${failures_count}, ${not_run_count} ${time}"
 	system__print_line_with_color "${message}" "${color}"
+}
+
+function _simple_reporter__get_total_count_message() {
+  local count="$(results__get_total_tests_count)"
+  printf "${count} test$(_simple_reporter__get_agreement ${count})"
+}
+
+function _simple_reporter__get_failures_count_message() {
+  local count="$(results__get_failing_tests_count)"
+  printf "${count} failure$(_simple_reporter__get_agreement ${count})"
+}
+
+function _simple_reporter__get_agreement() {
+  (( $1 > 1 )) && printf "s"
 }
 
 function simple_reporter__test_file_starts_running() {

@@ -18,4 +18,4 @@ some log in global teardown
 [1;32mOK[0m
 
 [Results]
-[1;32mGreen tests: 3, red: 0 in 1337s[0m
+[1;32m3 tests, 0 failure, 0 not run in 1337s[0m
