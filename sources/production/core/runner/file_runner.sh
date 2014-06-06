@@ -3,8 +3,10 @@ function file_runner__run_test_file() {
 	reporter__test_file_starts_running "${file}"
 	source "${file}"
 	local public_functions=($(parser__get_public_functions_in_file "${file}"))
-	_file_runner__call_global_setup_if_exists "${public_functions[@]}"
-	_file_runner__call_all_tests "${public_functions[@]}"
+  results__increment_by_n_total_tests_count \
+    "$(_file_runner__get_test_count "${public_functions[@]}")"
+	_file_runner__call_global_setup_if_exists "${public_functions[@]}" \
+	  && _file_runner__call_all_tests "${public_functions[@]}"
 	_file_runner__call_global_teardown_if_exists "${public_functions[@]}"
 	reporter__test_file_ends_running
 }
@@ -32,6 +34,15 @@ function _file_runner__call_if_test_function() {
 	if _file_runner__function_is_a_test "${function}"; then
 		test_runner__run_test "${function}" "$@"
 	fi
+}
+
+function _file_runner__get_test_count() {
+  local count=0
+  local i
+	for (( i=1; i <= $#; i++ )); do
+		_file_runner__function_is_a_test "${!i}" && (( count++ ))
+	done
+	printf "${count}"
 }
 
 function _file_runner__function_is_a_test() {

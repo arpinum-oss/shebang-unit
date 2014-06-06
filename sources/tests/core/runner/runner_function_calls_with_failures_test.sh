@@ -11,7 +11,6 @@ function teardown() {
   database__release
 }
 
-#ignore
 function _the_runner_calls_global_teardown_if_global_setup_fails() {
   SBU_TEST_FILE_PATTERN="*file_with_failing_global_setup.sh"
 

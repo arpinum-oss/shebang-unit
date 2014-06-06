@@ -185,8 +185,10 @@ function file_runner__run_test_file() {
 	reporter__test_file_starts_running "${file}"
 	source "${file}"
 	local public_functions=($(parser__get_public_functions_in_file "${file}"))
-	_file_runner__call_global_setup_if_exists "${public_functions[@]}"
-	_file_runner__call_all_tests "${public_functions[@]}"
+  results__increment_by_n_total_tests_count \
+    "$(_file_runner__get_test_count "${public_functions[@]}")"
+	_file_runner__call_global_setup_if_exists "${public_functions[@]}" \
+	  && _file_runner__call_all_tests "${public_functions[@]}"
 	_file_runner__call_global_teardown_if_exists "${public_functions[@]}"
 	reporter__test_file_ends_running
 }
@@ -214,6 +216,15 @@ function _file_runner__call_if_test_function() {
 	if _file_runner__function_is_a_test "${function}"; then
 		test_runner__run_test "${function}" "$@"
 	fi
+}
+
+function _file_runner__get_test_count() {
+  local count=0
+  local i
+	for (( i=1; i <= $#; i++ )); do
+		_file_runner__function_is_a_test "${!i}" && (( count++ ))
+	done
+	printf "${count}"
 }
 
 function _file_runner__function_is_a_test() {
@@ -254,6 +265,7 @@ function _parser__get_function_name_from_declaration() {
 function results__tests_files_start_running() {
   database__put "sbu_successful_tests_count" "0"
   database__put "sbu_failing_tests_count" "0"
+  database__put "sbu_total_tests_count" "0"
   database__put "sbu_run_beginning_date" "$(system__get_date_in_seconds)"
 }
 
@@ -268,21 +280,46 @@ function results__get_run_time() {
 }
 
 function results__get_successful_tests_count() {
-  database__get "sbu_successful_tests_count"
+  _results__get_tests_count_of_type "successful"
 }
 
 function results__increment_successful_tests() {
-  local count="$(results__get_successful_tests_count)"
-  database__put "sbu_successful_tests_count" "$(( count + 1 ))"
+  _results__increment_by_n_tests_of_type 1 "successful"
 }
 
 function results__get_failing_tests_count() {
-  database__get "sbu_failing_tests_count"
+  _results__get_tests_count_of_type "failing"
 }
 
 function results__increment_failing_tests() {
-  local count="$(results__get_failing_tests_count)"
-  database__put "sbu_failing_tests_count" "$(( count + 1 ))"
+  _results__increment_by_n_tests_of_type 1 "failing"
+}
+
+function results__get_total_tests_count() {
+  _results__get_tests_count_of_type "total"
+}
+
+function results__increment_by_n_total_tests_count() {
+  _results__increment_by_n_tests_of_type "$1" "total"
+}
+
+function results__get_not_run_tests_count() {
+  local total="$(results__get_total_tests_count)"
+  local successes="$(results__get_successful_tests_count)"
+  local failures="$(results__get_failing_tests_count)"
+  printf "$(( total - (successes + failures) ))"
+}
+
+function _results__get_tests_count_of_type() {
+  local type=$1
+  database__get "sbu_${type}_tests_count"
+}
+
+function _results__increment_by_n_tests_of_type() {
+  local value=$1
+  local type=$2
+  local count="$(results__get_${type}_tests_count)"
+  database__put "sbu_${type}_tests_count" "$(( count + value ))"
 }
 
 
