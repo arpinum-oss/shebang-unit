@@ -20,7 +20,9 @@ function _simple_reporter__get_failures_count_message() {
 }
 
 function _simple_reporter__get_agreement() {
-  (( $1 > 1 )) && system__print "s" || system__print ""
+  (( $1 > 1 )) \
+    && system__print "s" \
+    || system__print ""
 }
 
 function simple_reporter__test_file_starts_running() {
@@ -32,7 +34,8 @@ function simple_reporter__test_file_ends_running() {
 }
 
 function simple_reporter__global_setup_has_failed() {
-  system__print_line_with_color "Global setup has failed" ${SBU_YELLOW_COLOR_CODE}
+  system__print_line_with_color \
+    "Global setup has failed" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__test_starts_running() {

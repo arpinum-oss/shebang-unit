@@ -3,15 +3,22 @@ function file_runner__run_test_file() {
 	reporter__test_file_starts_running "${file}"
 	source "${file}"
 	local public_functions=($(parser__get_public_functions_in_file "${file}"))
-	_file_runner__call_global_setup_if_exists "${public_functions[@]}"
-	if (( $? == ${SBU_SUCCESS_STATUS_CODE} )); then
-	  _file_runner__call_all_tests "${public_functions[@]}"
+	_file_runner__run_global_setup_if_exists "${public_functions[@]}"
+	_file_runner__run_all_tests_if_global_setup_is_successful \
+	  $? "${public_functions[@]}"
+	_file_runner__run_global_teardown_if_exists "${public_functions[@]}"
+	reporter__test_file_ends_running
+}
+
+function _file_runner__run_all_tests_if_global_setup_is_successful() {
+  local global_setup_status_code=$1
+  shift 1
+	if (( ${global_setup_status_code} == ${SBU_SUCCESS_STATUS_CODE} )); then
+	  _file_runner__call_all_tests "$@"
 	else
 	  reporter__global_setup_has_failed
-	  _file_runner__report_all_tests_as_not_run "${public_functions[@]}"
+	  _file_runner__report_all_tests_as_not_run "$@"
 	fi
-	_file_runner__call_global_teardown_if_exists "${public_functions[@]}"
-	reporter__test_file_ends_running
 }
 
 function _file_runner__call_all_tests() {
@@ -34,12 +41,12 @@ function _file_runner__report_all_tests_as_not_run() {
 	done
 }
 
-function _file_runner__call_global_setup_if_exists() {
+function _file_runner__run_global_setup_if_exists() {
   _file_runner__call_function_if_exits "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
     "$@"
 }
 
-function _file_runner__call_global_teardown_if_exists() {
+function _file_runner__run_global_teardown_if_exists() {
   _file_runner__call_function_if_exits "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
     "$@"
 }
