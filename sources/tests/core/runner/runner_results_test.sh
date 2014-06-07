@@ -16,8 +16,8 @@ function if_no_test_results_are_0() {
 
 	assertion__equal 0 "$(results__get_successful_tests_count)"
 	assertion__equal 0 "$(results__get_failing_tests_count)"
-	assertion__equal 0 "$(results__get_total_tests_count)"
 	assertion__equal 0 "$(results__get_not_run_tests_count)"
+	assertion__equal 0 "$(results__get_total_tests_count)"
 }
 
 function results_count_both_successful_and_failing_tests() {
@@ -26,8 +26,8 @@ function results_count_both_successful_and_failing_tests() {
 
 	assertion__equal 3 "$(results__get_successful_tests_count)"
 	assertion__equal 2 "$(results__get_failing_tests_count)"
-  assertion__equal 5 "$(results__get_total_tests_count)"
 	assertion__equal 0 "$(results__get_not_run_tests_count)"
+  assertion__equal 5 "$(results__get_total_tests_count)"
 }
 
 function a_test_with_a_failing_setup_is_failing() {
@@ -37,8 +37,8 @@ function a_test_with_a_failing_setup_is_failing() {
 
 	assertion__equal 0 "$(results__get_successful_tests_count)"
 	assertion__equal 2 "$(results__get_failing_tests_count)"
-  assertion__equal 2 "$(results__get_total_tests_count)"
 	assertion__equal 0 "$(results__get_not_run_tests_count)"
+  assertion__equal 2 "$(results__get_total_tests_count)"
 }
 
 function a_test_with_a_failing_global_setup_is_not_run() {
@@ -48,6 +48,6 @@ function a_test_with_a_failing_global_setup_is_not_run() {
 
 	assertion__equal 0 "$(results__get_successful_tests_count)"
 	assertion__equal 0 "$(results__get_failing_tests_count)"
-	assertion__equal 2 "$(results__get_total_tests_count)"
 	assertion__equal 2 "$(results__get_not_run_tests_count)"
+	assertion__equal 2 "$(results__get_total_tests_count)"
 }

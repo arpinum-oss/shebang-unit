@@ -6,8 +6,10 @@ function main__main() {
   _main__assert_only_one_argument_left $#
 	_main__assert_reporters_are_known
 
-	[[ "${SBU_NO_RUN}" != "${SBU_YES}" ]] \
-	  && _main__run_all_test_files $1
+	if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
+	  _main__run_all_test_files "$1"
+	  return $?
+	fi
 }
 
 function _main__parse_arguments() {

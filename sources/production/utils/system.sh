@@ -1,7 +1,7 @@
 function system__get_string_or_default() {
-	local result=$1
-	[[ -z "$1" ]] && result="$2"
-	system__print "${result}"
+	[[ -n "$1" ]] \
+	  && system__print "$1" \
+	  || system__print "$2"
 }
 
 function system__get_date_in_seconds() {

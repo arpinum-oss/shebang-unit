@@ -1,7 +1,7 @@
 function results__tests_files_start_running() {
   database__put "sbu_successful_tests_count" "0"
   database__put "sbu_failing_tests_count" "0"
-  database__put "sbu_total_tests_count" "0"
+  database__put "sbu_not_run_tests_count" "0"
   database__put "sbu_run_beginning_date" "$(system__get_date_in_seconds)"
 }
 
@@ -20,7 +20,7 @@ function results__get_successful_tests_count() {
 }
 
 function results__increment_successful_tests() {
-  _results__increment_by_n_tests_of_type 1 "successful"
+  _results__increment_tests_of_type "successful"
 }
 
 function results__get_failing_tests_count() {
@@ -28,22 +28,22 @@ function results__get_failing_tests_count() {
 }
 
 function results__increment_failing_tests() {
-  _results__increment_by_n_tests_of_type 1 "failing"
-}
-
-function results__get_total_tests_count() {
-  _results__get_tests_count_of_type "total"
-}
-
-function results__increment_by_n_total_tests_count() {
-  _results__increment_by_n_tests_of_type "$1" "total"
+  _results__increment_tests_of_type "failing"
 }
 
 function results__get_not_run_tests_count() {
-  local total="$(results__get_total_tests_count)"
+  _results__get_tests_count_of_type "not_run"
+}
+
+function results__increment_not_run_tests() {
+  _results__increment_tests_of_type "not_run"
+}
+
+function results__get_total_tests_count() {
   local successes="$(results__get_successful_tests_count)"
   local failures="$(results__get_failing_tests_count)"
-  system__print "$(( total - (successes + failures) ))"
+  local not_run="$(results__get_not_run_tests_count)"
+  system__print "$(( successes + failures + not_run ))"
 }
 
 function _results__get_tests_count_of_type() {
@@ -51,9 +51,8 @@ function _results__get_tests_count_of_type() {
   database__get "sbu_${type}_tests_count"
 }
 
-function _results__increment_by_n_tests_of_type() {
-  local value=$1
-  local type=$2
+function _results__increment_tests_of_type() {
+  local type=$1
   local count="$(results__get_${type}_tests_count)"
-  database__put "sbu_${type}_tests_count" "$(( count + value ))"
+  database__put "sbu_${type}_tests_count" "$(( count + 1 ))"
 }

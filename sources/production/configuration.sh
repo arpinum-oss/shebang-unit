@@ -7,6 +7,7 @@ function configuration__load() {
   # Colors for outputs
   SBU_GREEN_COLOR_CODE="\\033[1;32m"
   SBU_RED_COLOR_CODE="\\033[1;31m"
+  SBU_YELLOW_COLOR_CODE="\\033[1;33m"
   SBU_DEFAULT_COLOR_CODE="\\e[0m"
 
   # Functions coding coventions
@@ -30,4 +31,5 @@ function configuration__load() {
   SBU_TEMP_DIR="/tmp/.shebang_unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
   SBU_REPORTERS_FD=3
+  SBU_NO_RUN="${SBU_NO}"
 }

@@ -22,6 +22,14 @@ function can_call_for_each_reporter__tests_files_end_running() {
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 
+function can_call_for_each_reporter__global_setup_has_failed() {
+  local messages="$(reporter__global_setup_has_failed a b)"
+
+  local first="first_reporter__global_setup_has_failed with [a, b]"
+  local second="second_reporter__global_setup_has_failed with [a, b]"
+  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+}
+
 function can_call_for_each_reporter__test_starts_running() {
   local messages="$(reporter__test_starts_running a b)"
 
@@ -43,6 +51,14 @@ function can_call_for_each_reporter__test_has_failed() {
 
   local first="first_reporter__test_has_failed with [a, b]"
   local second="second_reporter__test_has_failed with [a, b]"
+  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+}
+
+function can_call_for_each_reporter__test_cannot_run() {
+  local messages="$(reporter__test_cannot_run a b)"
+
+  local first="first_reporter__test_cannot_run with [a, b]"
+  local second="second_reporter__test_cannot_run with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 

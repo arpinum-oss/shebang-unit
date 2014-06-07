@@ -42,3 +42,9 @@ function _test_runner__call_function_if_exits() {
 	  "${function}"
 	fi
 }
+
+function test_runner__test_cannot_run() {
+  local function=$1
+  results__increment_not_run_tests
+  reporter__test_cannot_run "${function}"
+}

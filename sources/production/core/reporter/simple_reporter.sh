@@ -20,7 +20,7 @@ function _simple_reporter__get_failures_count_message() {
 }
 
 function _simple_reporter__get_agreement() {
-  (( $1 > 1 )) && system__print "s"
+  (( $1 > 1 )) && system__print "s" || system__print ""
 }
 
 function simple_reporter__test_file_starts_running() {
@@ -29,6 +29,10 @@ function simple_reporter__test_file_starts_running() {
 
 function simple_reporter__test_file_ends_running() {
 	system__print_new_line
+}
+
+function simple_reporter__global_setup_has_failed() {
+  system__print_line_with_color "Global setup has failed" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__test_starts_running() {
@@ -41,6 +45,11 @@ function simple_reporter__test_has_succeeded() {
 
 function simple_reporter__test_has_failed() {
   system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
+}
+
+function simple_reporter__test_cannot_run() {
+  simple_reporter__test_starts_running "$1"
+  system__print_line_with_color "Not run" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__redirect_test_output() {

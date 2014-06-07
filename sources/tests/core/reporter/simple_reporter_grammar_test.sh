@@ -21,7 +21,6 @@ function prints_summary_with_singular_nouns_for_1_test() {
 }
 
 function prints_summary_with_plural_nouns_for_several_tests() {
-  results__increment_by_n_total_tests_count 10
   results__increment_successful_tests
   results__increment_successful_tests
   results__increment_successful_tests
@@ -29,6 +28,9 @@ function prints_summary_with_plural_nouns_for_several_tests() {
   results__increment_failing_tests
   results__increment_failing_tests
   results__increment_failing_tests
+  results__increment_not_run_tests
+  results__increment_not_run_tests
+  results__increment_not_run_tests
 
   local summary="$(simple_reporter__tests_files_end_running)"
 

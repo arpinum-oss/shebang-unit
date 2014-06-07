@@ -26,6 +26,10 @@ function dots_reporter__test_has_failed() {
   system__print_with_color "F" ${SBU_RED_COLOR_CODE}
 }
 
+function dots_reporter__test_cannot_run() {
+  system__print_with_color "E" ${SBU_YELLOW_COLOR_CODE}
+}
+
 function dots_reporter__redirect_test_output() {
   local text
   while read text; do

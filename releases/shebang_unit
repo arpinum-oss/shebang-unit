@@ -26,6 +26,7 @@ function configuration__load() {
   # Colors for outputs
   SBU_GREEN_COLOR_CODE="\\033[1;32m"
   SBU_RED_COLOR_CODE="\\033[1;31m"
+  SBU_YELLOW_COLOR_CODE="\\033[1;33m"
   SBU_DEFAULT_COLOR_CODE="\\e[0m"
 
   # Functions coding coventions
@@ -49,6 +50,7 @@ function configuration__load() {
   SBU_TEMP_DIR="/tmp/.shebang_unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
   SBU_REPORTERS_FD=3
+  SBU_NO_RUN="${SBU_NO}"
 }
 
 function assertion__equal() {
@@ -177,7 +179,8 @@ function _runner__run_all_test_files_with_pattern_in_directory() {
 }
 
 function runner__tests_are_successful() {
-	(( $(results__get_failing_tests_count) == 0 ))
+	(( $(results__get_failing_tests_count) == 0 \
+	    && $(results__get_not_run_tests_count) == 0 ))
 }
 
 function file_runner__run_test_file() {
@@ -185,12 +188,35 @@ function file_runner__run_test_file() {
 	reporter__test_file_starts_running "${file}"
 	source "${file}"
 	local public_functions=($(parser__get_public_functions_in_file "${file}"))
-  results__increment_by_n_total_tests_count \
-    "$(_file_runner__get_test_count "${public_functions[@]}")"
-	_file_runner__call_global_setup_if_exists "${public_functions[@]}" \
-	  && _file_runner__call_all_tests "${public_functions[@]}"
+	_file_runner__call_global_setup_if_exists "${public_functions[@]}"
+	if (( $? == ${SBU_SUCCESS_STATUS_CODE} )); then
+	  _file_runner__call_all_tests "${public_functions[@]}"
+	else
+	  reporter__global_setup_has_failed
+	  _file_runner__report_all_tests_as_not_run "${public_functions[@]}"
+	fi
 	_file_runner__call_global_teardown_if_exists "${public_functions[@]}"
 	reporter__test_file_ends_running
+}
+
+function _file_runner__call_all_tests() {
+	local i
+	for (( i=1; i <= $#; i++ )); do
+	  local function=${!i}
+		if _file_runner__function_is_a_test "${function}"; then
+		  test_runner__run_test "${function}" "$@"
+		fi
+	done
+}
+
+function _file_runner__report_all_tests_as_not_run() {
+	local i
+	for (( i=1; i <= $#; i++ )); do
+	  local function=${!i}
+	  if _file_runner__function_is_a_test "${function}"; then
+		  test_runner__test_cannot_run "${function}"
+		fi
+	done
 }
 
 function _file_runner__call_global_setup_if_exists() {
@@ -201,30 +227,6 @@ function _file_runner__call_global_setup_if_exists() {
 function _file_runner__call_global_teardown_if_exists() {
   _file_runner__call_function_if_exits "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
     "$@"
-}
-
-function _file_runner__call_all_tests() {
-	local i
-	for (( i=1; i <= $#; i++ )); do
-		_file_runner__call_if_test_function "${!i}" "$@"
-	done
-}
-
-function _file_runner__call_if_test_function() {
-	local function=$1
-	shift 1
-	if _file_runner__function_is_a_test "${function}"; then
-		test_runner__run_test "${function}" "$@"
-	fi
-}
-
-function _file_runner__get_test_count() {
-  local count=0
-  local i
-	for (( i=1; i <= $#; i++ )); do
-		_file_runner__function_is_a_test "${!i}" && (( count++ ))
-	done
-	system__print "${count}"
 }
 
 function _file_runner__function_is_a_test() {
@@ -265,7 +267,7 @@ function _parser__get_function_name_from_declaration() {
 function results__tests_files_start_running() {
   database__put "sbu_successful_tests_count" "0"
   database__put "sbu_failing_tests_count" "0"
-  database__put "sbu_total_tests_count" "0"
+  database__put "sbu_not_run_tests_count" "0"
   database__put "sbu_run_beginning_date" "$(system__get_date_in_seconds)"
 }
 
@@ -284,7 +286,7 @@ function results__get_successful_tests_count() {
 }
 
 function results__increment_successful_tests() {
-  _results__increment_by_n_tests_of_type 1 "successful"
+  _results__increment_tests_of_type "successful"
 }
 
 function results__get_failing_tests_count() {
@@ -292,22 +294,22 @@ function results__get_failing_tests_count() {
 }
 
 function results__increment_failing_tests() {
-  _results__increment_by_n_tests_of_type 1 "failing"
-}
-
-function results__get_total_tests_count() {
-  _results__get_tests_count_of_type "total"
-}
-
-function results__increment_by_n_total_tests_count() {
-  _results__increment_by_n_tests_of_type "$1" "total"
+  _results__increment_tests_of_type "failing"
 }
 
 function results__get_not_run_tests_count() {
-  local total="$(results__get_total_tests_count)"
+  _results__get_tests_count_of_type "not_run"
+}
+
+function results__increment_not_run_tests() {
+  _results__increment_tests_of_type "not_run"
+}
+
+function results__get_total_tests_count() {
   local successes="$(results__get_successful_tests_count)"
   local failures="$(results__get_failing_tests_count)"
-  system__print "$(( total - (successes + failures) ))"
+  local not_run="$(results__get_not_run_tests_count)"
+  system__print "$(( successes + failures + not_run ))"
 }
 
 function _results__get_tests_count_of_type() {
@@ -315,11 +317,10 @@ function _results__get_tests_count_of_type() {
   database__get "sbu_${type}_tests_count"
 }
 
-function _results__increment_by_n_tests_of_type() {
-  local value=$1
-  local type=$2
+function _results__increment_tests_of_type() {
+  local type=$1
   local count="$(results__get_${type}_tests_count)"
-  database__put "sbu_${type}_tests_count" "$(( count + value ))"
+  database__put "sbu_${type}_tests_count" "$(( count + 1 ))"
 }
 
 
@@ -368,6 +369,12 @@ function _test_runner__call_function_if_exits() {
 	fi
 }
 
+function test_runner__test_cannot_run() {
+  local function=$1
+  results__increment_not_run_tests
+  reporter__test_cannot_run "${function}"
+}
+
 function reporter__initialise() {
   local reporter_dir="${SBU_TEMP_DIR}/reporter"
   mkdir -p "${reporter_dir}"
@@ -380,37 +387,47 @@ function reporter__release() {
 
 function reporter__tests_files_end_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function tests_files_end_running "$@"
+	  _reporter__call_function "tests_files_end_running" "$@"
+}
+
+function reporter__global_setup_has_failed() {
+	reporter__for_each_reporter \
+	  _reporter__call_function "global_setup_has_failed" "$@"
 }
 
 function reporter__test_starts_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_starts_running "$@"
+	  _reporter__call_function "test_starts_running" "$@"
 }
 
 function reporter__test_has_succeeded() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_has_succeeded "$@"
+	  _reporter__call_function "test_has_succeeded" "$@"
+}
+
+function reporter__test_cannot_run() {
+	reporter__for_each_reporter \
+	  _reporter__call_function "test_cannot_run" "$@"
 }
 
 function reporter__test_has_failed() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_has_failed "$@"
+	  _reporter__call_function "test_has_failed" "$@"
 }
 
 function reporter__test_file_starts_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_file_starts_running "$@"
+	  _reporter__call_function "test_file_starts_running" "$@"
 }
 
 function reporter__test_file_ends_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_file_ends_running "$@"
+	  _reporter__call_function "test_file_ends_running" "$@"
 }
 
 function reporter__redirect_tests_outputs() {
 	reporter__for_each_reporter \
-	  _reporter__call_function redirect_test_output "$@"
+	  _reporter__call_function "redirect_test_output" "$@"
 }
 
 function _reporter__call_function() {
@@ -457,7 +474,7 @@ function _simple_reporter__get_failures_count_message() {
 }
 
 function _simple_reporter__get_agreement() {
-  (( $1 > 1 )) && system__print "s"
+  (( $1 > 1 )) && system__print "s" || system__print ""
 }
 
 function simple_reporter__test_file_starts_running() {
@@ -466,6 +483,10 @@ function simple_reporter__test_file_starts_running() {
 
 function simple_reporter__test_file_ends_running() {
 	system__print_new_line
+}
+
+function simple_reporter__global_setup_has_failed() {
+  system__print_line_with_color "Global setup has failed" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__test_starts_running() {
@@ -478,6 +499,11 @@ function simple_reporter__test_has_succeeded() {
 
 function simple_reporter__test_has_failed() {
   system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
+}
+
+function simple_reporter__test_cannot_run() {
+  simple_reporter__test_starts_running "$1"
+  system__print_line_with_color "Not run" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__redirect_test_output() {
@@ -513,6 +539,10 @@ function dots_reporter__test_has_succeeded() {
 
 function dots_reporter__test_has_failed() {
   system__print_with_color "F" ${SBU_RED_COLOR_CODE}
+}
+
+function dots_reporter__test_cannot_run() {
+  system__print_with_color "E" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function dots_reporter__redirect_test_output() {
@@ -559,9 +589,9 @@ function _database__get_dir() {
 }
 
 function system__get_string_or_default() {
-	local result=$1
-	[[ -z "$1" ]] && result="$2"
-	system__print "${result}"
+	[[ -n "$1" ]] \
+	  && system__print "$1" \
+	  || system__print "$2"
 }
 
 function system__get_date_in_seconds() {
@@ -633,8 +663,10 @@ function main__main() {
   _main__assert_only_one_argument_left $#
 	_main__assert_reporters_are_known
 
-	[[ "${SBU_NO_RUN}" != "${SBU_YES}" ]] \
-	  && _main__run_all_test_files $1
+	if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
+	  _main__run_all_test_files "$1"
+	  return $?
+	fi
 }
 
 function _main__parse_arguments() {

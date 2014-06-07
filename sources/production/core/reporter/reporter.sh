@@ -10,37 +10,47 @@ function reporter__release() {
 
 function reporter__tests_files_end_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function tests_files_end_running "$@"
+	  _reporter__call_function "tests_files_end_running" "$@"
+}
+
+function reporter__global_setup_has_failed() {
+	reporter__for_each_reporter \
+	  _reporter__call_function "global_setup_has_failed" "$@"
 }
 
 function reporter__test_starts_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_starts_running "$@"
+	  _reporter__call_function "test_starts_running" "$@"
 }
 
 function reporter__test_has_succeeded() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_has_succeeded "$@"
+	  _reporter__call_function "test_has_succeeded" "$@"
+}
+
+function reporter__test_cannot_run() {
+	reporter__for_each_reporter \
+	  _reporter__call_function "test_cannot_run" "$@"
 }
 
 function reporter__test_has_failed() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_has_failed "$@"
+	  _reporter__call_function "test_has_failed" "$@"
 }
 
 function reporter__test_file_starts_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_file_starts_running "$@"
+	  _reporter__call_function "test_file_starts_running" "$@"
 }
 
 function reporter__test_file_ends_running() {
 	reporter__for_each_reporter \
-	  _reporter__call_function test_file_ends_running "$@"
+	  _reporter__call_function "test_file_ends_running" "$@"
 }
 
 function reporter__redirect_tests_outputs() {
 	reporter__for_each_reporter \
-	  _reporter__call_function redirect_test_output "$@"
+	  _reporter__call_function "redirect_test_output" "$@"
 }
 
 function _reporter__call_function() {
