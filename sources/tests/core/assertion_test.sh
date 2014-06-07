@@ -110,6 +110,13 @@ function asserting_that_different_objects_are_equal_is_false() {
 	_assert_message_equals "Actual: <different>, expected: <equal>."
 }
 
+function assertion_messages_are_printed_with_special_characters() {
+  message="$(assertion__equal "%stoto" "%s")"
+
+	_assert_failure
+	_assert_message_equals "Actual: <%s>, expected: <%stoto>."
+}
+
 function asserting_that_different_objects_are_different_is_true() {
 	message="$(assertion__different equal different)"
 

@@ -42,7 +42,7 @@ function _file_runner__get_test_count() {
 	for (( i=1; i <= $#; i++ )); do
 		_file_runner__function_is_a_test "${!i}" && (( count++ ))
 	done
-	printf "${count}"
+	system__print "${count}"
 }
 
 function _file_runner__function_is_a_test() {

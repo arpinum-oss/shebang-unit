@@ -62,6 +62,16 @@ function cannot_define_unkown_reporter() {
   assertion__equal "${expected}" "${message}"
 }
 
+function unkown_reporter_is_printed_without_characters_evaluation() {
+	local message
+
+	message="$(${_MAIN} --reporters="%s" "${_TEST_DIR}")"
+
+  assertion__status_code_is_failure $?
+  local expected="shebang_unit: unknown reporter <%s>"
+  assertion__equal "${expected}" "${message}"
+}
+
 function cannot_define_known_and_unkown_reporter() {
 	local message
 
@@ -79,6 +89,16 @@ function cannot_use_unknown_option_with_value() {
 
   assertion__status_code_is_failure $?
   assertion__string_contains "${message}" "shebang_unit: illegal option -- iks"
+  assertion__string_contains "${message}" "usage:"
+}
+
+function unkown_option_is_printed_without_characters_evaluation() {
+  local message
+
+  message="$(${_MAIN} --%s=plop "${_TEST_DIR}")"
+
+  assertion__status_code_is_failure $?
+  assertion__string_contains "${message}" "shebang_unit: illegal option -- %s"
   assertion__string_contains "${message}" "usage:"
 }
 

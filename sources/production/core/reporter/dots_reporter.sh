@@ -1,6 +1,8 @@
 function dots_reporter__tests_files_end_running() {
 	local color="$(_reporter__get_color_code_for_tests_result)"
-	local texte="$(runner__tests_are_successful && printf "OK" || printf "KO")"
+	local texte="$(runner__tests_are_successful \
+	                && system__print "OK" \
+	                || system__print "KO")"
 	system__print_line_with_color "${texte}" "${color}"
 }
 

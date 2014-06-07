@@ -1,7 +1,7 @@
 function system__get_string_or_default() {
 	local result=$1
 	[[ -z "$1" ]] && result="$2"
-	printf "${result}"
+	system__print "${result}"
 }
 
 function system__get_date_in_seconds() {
@@ -10,15 +10,29 @@ function system__get_date_in_seconds() {
 
 function system__print_line_with_color() {
   system__print_with_color "$@"
-  printf "\n"
+  system__print_new_line
 }
 
 function system__print_with_color() {
 	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
 		printf "$2$1${SBU_DEFAULT_COLOR_CODE}"
 	else
-		printf "$1"
+		system__print "$1"
 	fi
+}
+
+function system__print_line() {
+  system__print "$1"
+  system__print_new_line
+}
+
+
+function system__print() {
+  printf "%s" "$1"
+}
+
+function system__print_new_line() {
+  printf "\n"
 }
 
 function system__array_contains() {
@@ -48,5 +62,5 @@ function system__string_contains() {
 }
 
 function system__random() {
-  printf "${RANDOM}"
+  system__print "${RANDOM}"
 }

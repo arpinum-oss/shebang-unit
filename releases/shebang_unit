@@ -137,7 +137,7 @@ function assertion__failing() {
 
 function _assertion__failed() {
 	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
-	printf "Assertion failed. ${message_to_use}\n"
+	system__print_line "Assertion failed. ${message_to_use}"
 	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
@@ -145,9 +145,9 @@ function _assertion__get_assertion_message_to_use() {
 	local message=$1
 	local custom_messsage=$2
 	if [[ -n "${custom_messsage}" ]]; then
-		printf "%s %s\n" "${message}" "${custom_messsage}"
+	  system__print "${message} ${custom_messsage}"
 	else
-		printf "${message}\n"
+		system__print "${message}"
 	fi
 }
 
@@ -224,7 +224,7 @@ function _file_runner__get_test_count() {
 	for (( i=1; i <= $#; i++ )); do
 		_file_runner__function_is_a_test "${!i}" && (( count++ ))
 	done
-	printf "${count}"
+	system__print "${count}"
 }
 
 function _file_runner__function_is_a_test() {
@@ -276,7 +276,7 @@ function results__tests_files_end_running() {
 function results__get_run_time() {
   local beginning_date="$(database__get "sbu_run_beginning_date")"
   local ending_date="$(database__get "sbu_run_ending_date")"
-  printf "$(( ending_date - beginning_date ))"
+  system__print "$(( ending_date - beginning_date ))"
 }
 
 function results__get_successful_tests_count() {
@@ -307,7 +307,7 @@ function results__get_not_run_tests_count() {
   local total="$(results__get_total_tests_count)"
   local successes="$(results__get_successful_tests_count)"
   local failures="$(results__get_failing_tests_count)"
-  printf "$(( total - (successes + failures) ))"
+  system__print "$(( total - (successes + failures) ))"
 }
 
 function _results__get_tests_count_of_type() {
@@ -431,12 +431,12 @@ function _reporter__get_color_code_for_tests_result() {
 	if ! runner__tests_are_successful; then
 		color_code=${SBU_RED_COLOR_CODE}
 	fi
-	printf "${color_code}"
+	system__print "${color_code}"
 }
 
 
 function simple_reporter__tests_files_end_running() {
-	printf "[Results]\n"
+	system__print_line "[Results]"
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
@@ -448,28 +448,28 @@ function simple_reporter__tests_files_end_running() {
 
 function _simple_reporter__get_total_count_message() {
   local count="$(results__get_total_tests_count)"
-  printf "${count} test$(_simple_reporter__get_agreement ${count})"
+  system__print "${count} test$(_simple_reporter__get_agreement ${count})"
 }
 
 function _simple_reporter__get_failures_count_message() {
   local count="$(results__get_failing_tests_count)"
-  printf "${count} failure$(_simple_reporter__get_agreement ${count})"
+  system__print "${count} failure$(_simple_reporter__get_agreement ${count})"
 }
 
 function _simple_reporter__get_agreement() {
-  (( $1 > 1 )) && printf "s"
+  (( $1 > 1 )) && system__print "s"
 }
 
 function simple_reporter__test_file_starts_running() {
-	printf "[File] $1\n"
+	system__print_line "[File] $1"
 }
 
 function simple_reporter__test_file_ends_running() {
-	printf "\n"
+	system__print_new_line
 }
 
 function simple_reporter__test_starts_running() {
-	printf "[Test] $1\n"
+	system__print_line "[Test] $1"
 }
 
 function simple_reporter__test_has_succeeded() {
@@ -483,13 +483,15 @@ function simple_reporter__test_has_failed() {
 function simple_reporter__redirect_test_output() {
   local text
   while read text; do
-    printf "${text}\n"
+    system__print_line "${text}"
   done
 }
 
 function dots_reporter__tests_files_end_running() {
 	local color="$(_reporter__get_color_code_for_tests_result)"
-	local texte="$(runner__tests_are_successful && printf "OK" || printf "KO")"
+	local texte="$(runner__tests_are_successful \
+	                && system__print "OK" \
+	                || system__print "KO")"
 	system__print_line_with_color "${texte}" "${color}"
 }
 
@@ -531,12 +533,12 @@ function database__release() {
 
 function database__put() {
   _database__ensure_directory_exists
-  printf "%s" "$2" > "$(_database__get_dir)/$1"
+  system__print "$2" > "$(_database__get_dir)/$1"
 }
 
 function database__post() {
   _database__ensure_directory_exists
-  printf "%s" "$2" >> "$(_database__get_dir)/$1"
+  system__print "$2" >> "$(_database__get_dir)/$1"
 }
 
 function database__put_variable() {
@@ -553,13 +555,13 @@ function _database__ensure_directory_exists() {
 }
 
 function _database__get_dir() {
-  printf "${SBU_TEMP_DIR}/database/${_SBU_DB_TOKEN}"
+  system__print "${SBU_TEMP_DIR}/database/${_SBU_DB_TOKEN}"
 }
 
 function system__get_string_or_default() {
 	local result=$1
 	[[ -z "$1" ]] && result="$2"
-	printf "${result}"
+	system__print "${result}"
 }
 
 function system__get_date_in_seconds() {
@@ -568,15 +570,29 @@ function system__get_date_in_seconds() {
 
 function system__print_line_with_color() {
   system__print_with_color "$@"
-  printf "\n"
+  system__print_new_line
 }
 
 function system__print_with_color() {
 	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
 		printf "$2$1${SBU_DEFAULT_COLOR_CODE}"
 	else
-		printf "$1"
+		system__print "$1"
 	fi
+}
+
+function system__print_line() {
+  system__print "$1"
+  system__print_new_line
+}
+
+
+function system__print() {
+  printf "%s" "$1"
+}
+
+function system__print_new_line() {
+  printf "\n"
 }
 
 function system__array_contains() {
@@ -606,7 +622,7 @@ function system__string_contains() {
 }
 
 function system__random() {
-  printf "${RANDOM}"
+  system__print "${RANDOM}"
 }
 
 function main__main() {
@@ -659,7 +675,8 @@ function 	_main__assert_reporters_are_known() {
 
 function _main__fail_if_reporter_unknown() {
   if [[ "${reporter}" != "simple" && "${reporter}" != "dots" ]]; then
-    printf "$(_main__get_script_name): unknown reporter <${reporter}>\n"
+    system__print_line \
+      "$(_main__get_script_name): unknown reporter <${reporter}>"
     exit ${SBU_FAILURE_STATUS_CODE}
   fi
 }
@@ -668,12 +685,12 @@ function _main__print_illegal_option() {
   local option="${1%=*}"
   option="${option#-}"
   option="${option#-}"
-  printf "$(_main__get_script_name): illegal option -- ${option}\n"
+  system__print_line "$(_main__get_script_name): illegal option -- ${option}"
 }
 
 function _main__assert_only_one_argument_left() {
   if (( $1 > 1 )); then
-    printf "$(_main__get_script_name): only one path is allowed\n"
+    system__print_line "$(_main__get_script_name): only one path is allowed"
     _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
   fi
 }
@@ -690,7 +707,8 @@ function _main__print_usage_and_exit_with_code() {
 function _main__print_full_usage() {
   _main__print_usage
   local script="$(_main__get_script_name)"
-  printf "\n\
+  system__print_new_line
+  system__print_line "\
 [options]
 -c, --colors=${SBU_YES} or ${SBU_NO}
   tests output with colors or no
@@ -705,14 +723,13 @@ function _main__print_full_usage() {
 ${script} .
   run all tests in current directory
 ${script} -p=*test.sh sources/test
-  run all tests files ending with test.sh in sources/test
-\n"
+  run all tests files ending with test.sh in sources/test"
 }
 
 function _main__print_usage() {
-  printf "\
+  system__print_line "\
 usage: $(_main__get_script_name) [options] path
-       run all tests in path\n"
+       run all tests in path"
 }
 
 function _main__run_all_test_files() {

@@ -84,7 +84,7 @@ function assertion__failing() {
 
 function _assertion__failed() {
 	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
-	printf "Assertion failed. ${message_to_use}\n"
+	system__print_line "Assertion failed. ${message_to_use}"
 	exit ${SBU_FAILURE_STATUS_CODE}
 }
 
@@ -92,8 +92,8 @@ function _assertion__get_assertion_message_to_use() {
 	local message=$1
 	local custom_messsage=$2
 	if [[ -n "${custom_messsage}" ]]; then
-		printf "%s %s\n" "${message}" "${custom_messsage}"
+	  system__print "${message} ${custom_messsage}"
 	else
-		printf "${message}\n"
+		system__print "${message}"
 	fi
 }

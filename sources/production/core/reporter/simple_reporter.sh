@@ -1,5 +1,5 @@
 function simple_reporter__tests_files_end_running() {
-	printf "[Results]\n"
+	system__print_line "[Results]"
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
@@ -11,28 +11,28 @@ function simple_reporter__tests_files_end_running() {
 
 function _simple_reporter__get_total_count_message() {
   local count="$(results__get_total_tests_count)"
-  printf "${count} test$(_simple_reporter__get_agreement ${count})"
+  system__print "${count} test$(_simple_reporter__get_agreement ${count})"
 }
 
 function _simple_reporter__get_failures_count_message() {
   local count="$(results__get_failing_tests_count)"
-  printf "${count} failure$(_simple_reporter__get_agreement ${count})"
+  system__print "${count} failure$(_simple_reporter__get_agreement ${count})"
 }
 
 function _simple_reporter__get_agreement() {
-  (( $1 > 1 )) && printf "s"
+  (( $1 > 1 )) && system__print "s"
 }
 
 function simple_reporter__test_file_starts_running() {
-	printf "[File] $1\n"
+	system__print_line "[File] $1"
 }
 
 function simple_reporter__test_file_ends_running() {
-	printf "\n"
+	system__print_new_line
 }
 
 function simple_reporter__test_starts_running() {
-	printf "[Test] $1\n"
+	system__print_line "[Test] $1"
 }
 
 function simple_reporter__test_has_succeeded() {
@@ -46,6 +46,6 @@ function simple_reporter__test_has_failed() {
 function simple_reporter__redirect_test_output() {
   local text
   while read text; do
-    printf "${text}\n"
+    system__print_line "${text}"
   done
 }

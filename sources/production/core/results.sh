@@ -12,7 +12,7 @@ function results__tests_files_end_running() {
 function results__get_run_time() {
   local beginning_date="$(database__get "sbu_run_beginning_date")"
   local ending_date="$(database__get "sbu_run_ending_date")"
-  printf "$(( ending_date - beginning_date ))"
+  system__print "$(( ending_date - beginning_date ))"
 }
 
 function results__get_successful_tests_count() {
@@ -43,7 +43,7 @@ function results__get_not_run_tests_count() {
   local total="$(results__get_total_tests_count)"
   local successes="$(results__get_successful_tests_count)"
   local failures="$(results__get_failing_tests_count)"
-  printf "$(( total - (successes + failures) ))"
+  system__print "$(( total - (successes + failures) ))"
 }
 
 function _results__get_tests_count_of_type() {

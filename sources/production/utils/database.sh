@@ -9,12 +9,12 @@ function database__release() {
 
 function database__put() {
   _database__ensure_directory_exists
-  printf "%s" "$2" > "$(_database__get_dir)/$1"
+  system__print "$2" > "$(_database__get_dir)/$1"
 }
 
 function database__post() {
   _database__ensure_directory_exists
-  printf "%s" "$2" >> "$(_database__get_dir)/$1"
+  system__print "$2" >> "$(_database__get_dir)/$1"
 }
 
 function database__put_variable() {
@@ -31,5 +31,5 @@ function _database__ensure_directory_exists() {
 }
 
 function _database__get_dir() {
-  printf "${SBU_TEMP_DIR}/database/${_SBU_DB_TOKEN}"
+  system__print "${SBU_TEMP_DIR}/database/${_SBU_DB_TOKEN}"
 }

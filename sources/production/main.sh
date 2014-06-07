@@ -48,7 +48,8 @@ function 	_main__assert_reporters_are_known() {
 
 function _main__fail_if_reporter_unknown() {
   if [[ "${reporter}" != "simple" && "${reporter}" != "dots" ]]; then
-    printf "$(_main__get_script_name): unknown reporter <${reporter}>\n"
+    system__print_line \
+      "$(_main__get_script_name): unknown reporter <${reporter}>"
     exit ${SBU_FAILURE_STATUS_CODE}
   fi
 }
@@ -57,12 +58,12 @@ function _main__print_illegal_option() {
   local option="${1%=*}"
   option="${option#-}"
   option="${option#-}"
-  printf "$(_main__get_script_name): illegal option -- ${option}\n"
+  system__print_line "$(_main__get_script_name): illegal option -- ${option}"
 }
 
 function _main__assert_only_one_argument_left() {
   if (( $1 > 1 )); then
-    printf "$(_main__get_script_name): only one path is allowed\n"
+    system__print_line "$(_main__get_script_name): only one path is allowed"
     _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
   fi
 }
@@ -79,7 +80,8 @@ function _main__print_usage_and_exit_with_code() {
 function _main__print_full_usage() {
   _main__print_usage
   local script="$(_main__get_script_name)"
-  printf "\n\
+  system__print_new_line
+  system__print_line "\
 [options]
 -c, --colors=${SBU_YES} or ${SBU_NO}
   tests output with colors or no
@@ -94,14 +96,13 @@ function _main__print_full_usage() {
 ${script} .
   run all tests in current directory
 ${script} -p=*test.sh sources/test
-  run all tests files ending with test.sh in sources/test
-\n"
+  run all tests files ending with test.sh in sources/test"
 }
 
 function _main__print_usage() {
-  printf "\
+  system__print_line "\
 usage: $(_main__get_script_name) [options] path
-       run all tests in path\n"
+       run all tests in path"
 }
 
 function _main__run_all_test_files() {

@@ -4,7 +4,7 @@ function can_get_string_if_not_empty() {
 	assertion__equal "not empty" "${result}"
 }
 
-function can_get_string_if_not_empty() {
+function can_get_default_if_string_empty() {
 	local result="$(system__get_string_or_default "" "default")"
 
 	assertion__equal "default" "${result}"
@@ -88,4 +88,16 @@ function can_get_random_number() {
   local second_number="$(system__random)"
 
   assertion__different "${first_number}" "${second_number}"
+}
+
+function can_print(){
+  assertion__equal "message" "$(system__print "message")"
+}
+
+function can_print_special_characters_safely(){
+  assertion__equal "%s" "$(system__print "%s")"
+}
+
+function can_print_line_with_special_characters_safely(){
+  assertion__equal "%s" "$(system__print_line "%s")"
 }

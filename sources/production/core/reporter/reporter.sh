@@ -61,5 +61,5 @@ function _reporter__get_color_code_for_tests_result() {
 	if ! runner__tests_are_successful; then
 		color_code=${SBU_RED_COLOR_CODE}
 	fi
-	printf "${color_code}"
+	system__print "${color_code}"
 }
