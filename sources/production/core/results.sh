@@ -1,7 +1,7 @@
 function results__tests_files_start_running() {
   database__put "sbu_successful_tests_count" "0"
   database__put "sbu_failing_tests_count" "0"
-  database__put "sbu_not_run_tests_count" "0"
+  database__put "sbu_skipped_tests_count" "0"
   database__put "sbu_run_beginning_date" "$(system__get_date_in_seconds)"
 }
 
@@ -31,19 +31,19 @@ function results__increment_failing_tests() {
   _results__increment_tests_of_type "failing"
 }
 
-function results__get_not_run_tests_count() {
-  _results__get_tests_count_of_type "not_run"
+function results__get_skipped_tests_count() {
+  _results__get_tests_count_of_type "skipped"
 }
 
-function results__increment_not_run_tests() {
-  _results__increment_tests_of_type "not_run"
+function results__increment_skipped_tests() {
+  _results__increment_tests_of_type "skipped"
 }
 
 function results__get_total_tests_count() {
   local successes="$(results__get_successful_tests_count)"
   local failures="$(results__get_failing_tests_count)"
-  local not_run="$(results__get_not_run_tests_count)"
-  system__print "$(( successes + failures + not_run ))"
+  local skipped="$(results__get_skipped_tests_count)"
+  system__print "$(( successes + failures + skipped ))"
 }
 
 function _results__get_tests_count_of_type() {

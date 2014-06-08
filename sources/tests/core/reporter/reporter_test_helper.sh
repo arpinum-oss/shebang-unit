@@ -25,12 +25,12 @@ one_successful_test_and_one_failing"
                    "$(database__get "${_OUTPUT_DOCUMENT_KEY}")"
 }
 
-function helper_can_report_tests_runs_with_tests_not_run() {
+function helper_can_report_tests_runs_with_tests_skipped() {
   _run_all_tests_files "${TESTS_RESOURCES_DIR}/reporter/\
-one_successful_test_and_one_not_run"
+one_successful_test_and_one_skipped"
 
   database__get "${_OUTPUT_DOCUMENT_KEY}" > /tmp/toto
-  local content="$(_reporter)_reporter_output_with_test_not_run"
+  local content="$(_reporter)_reporter_output_with_test_skipped"
   assertion__equal "$(_get_expected_content "${content}")" \
                    "$(database__get "${_OUTPUT_DOCUMENT_KEY}")"
 }

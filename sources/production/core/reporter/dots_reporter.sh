@@ -26,7 +26,7 @@ function dots_reporter__test_has_failed() {
   system__print_with_color "F" ${SBU_RED_COLOR_CODE}
 }
 
-function dots_reporter__test_cannot_run() {
+function dots_reporter__test_is_skipped() {
   system__print_with_color "E" ${SBU_YELLOW_COLOR_CODE}
 }
 

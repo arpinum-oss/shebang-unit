@@ -54,11 +54,11 @@ function can_call_for_each_reporter__test_has_failed() {
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 
-function can_call_for_each_reporter__test_cannot_run() {
-  local messages="$(reporter__test_cannot_run a b)"
+function can_call_for_each_reporter__test_is_skipped() {
+  local messages="$(reporter__test_is_skipped a b)"
 
-  local first="first_reporter__test_cannot_run with [a, b]"
-  local second="second_reporter__test_cannot_run with [a, b]"
+  local first="first_reporter__test_is_skipped with [a, b]"
+  local second="second_reporter__test_is_skipped with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 

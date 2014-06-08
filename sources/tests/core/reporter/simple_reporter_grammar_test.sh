@@ -11,13 +11,13 @@ function teardown() {
 function prints_summary_with_singular_nouns_for_no_test() {
   local summary="$(simple_reporter__tests_files_end_running)"
 
-  assertion__string_contains "${summary}" "0 test, 0 failure, 0 not run"
+  assertion__string_contains "${summary}" "0 test, 0 failure, 0 skipped"
 }
 
 function prints_summary_with_singular_nouns_for_1_test() {
   local summary="$(simple_reporter__tests_files_end_running)"
 
-  assertion__string_contains "${summary}" "0 test, 0 failure, 0 not run"
+  assertion__string_contains "${summary}" "0 test, 0 failure, 0 skipped"
 }
 
 function prints_summary_with_plural_nouns_for_several_tests() {
@@ -28,11 +28,11 @@ function prints_summary_with_plural_nouns_for_several_tests() {
   results__increment_failing_tests
   results__increment_failing_tests
   results__increment_failing_tests
-  results__increment_not_run_tests
-  results__increment_not_run_tests
-  results__increment_not_run_tests
+  results__increment_skipped_tests
+  results__increment_skipped_tests
+  results__increment_skipped_tests
 
   local summary="$(simple_reporter__tests_files_end_running)"
 
-  assertion__string_contains "${summary}" "10 tests, 4 failures, 3 not run"
+  assertion__string_contains "${summary}" "10 tests, 4 failures, 3 skipped"
 }

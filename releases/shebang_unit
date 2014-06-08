@@ -180,7 +180,7 @@ function _runner__run_all_test_files_with_pattern_in_directory() {
 
 function runner__tests_are_successful() {
 	(( $(results__get_failing_tests_count) == 0 \
-	    && $(results__get_not_run_tests_count) == 0 ))
+	    && $(results__get_skipped_tests_count) == 0 ))
 }
 
 function file_runner__run_test_file() {
@@ -202,7 +202,7 @@ function _file_runner__run_all_tests_if_global_setup_is_successful() {
 	  _file_runner__call_all_tests "$@"
 	else
 	  reporter__global_setup_has_failed
-	  _file_runner__report_all_tests_as_not_run "$@"
+	  _file_runner__skip_all_tests "$@"
 	fi
 }
 
@@ -216,12 +216,12 @@ function _file_runner__call_all_tests() {
 	done
 }
 
-function _file_runner__report_all_tests_as_not_run() {
+function _file_runner__skip_all_tests() {
 	local i
 	for (( i=1; i <= $#; i++ )); do
 	  local function=${!i}
 	  if _file_runner__function_is_a_test "${function}"; then
-		  test_runner__test_cannot_run "${function}"
+		  test_runner__skip_test "${function}"
 		fi
 	done
 }
@@ -274,7 +274,7 @@ function _parser__get_function_name_from_declaration() {
 function results__tests_files_start_running() {
   database__put "sbu_successful_tests_count" "0"
   database__put "sbu_failing_tests_count" "0"
-  database__put "sbu_not_run_tests_count" "0"
+  database__put "sbu_skipped_tests_count" "0"
   database__put "sbu_run_beginning_date" "$(system__get_date_in_seconds)"
 }
 
@@ -304,19 +304,19 @@ function results__increment_failing_tests() {
   _results__increment_tests_of_type "failing"
 }
 
-function results__get_not_run_tests_count() {
-  _results__get_tests_count_of_type "not_run"
+function results__get_skipped_tests_count() {
+  _results__get_tests_count_of_type "skipped"
 }
 
-function results__increment_not_run_tests() {
-  _results__increment_tests_of_type "not_run"
+function results__increment_skipped_tests() {
+  _results__increment_tests_of_type "skipped"
 }
 
 function results__get_total_tests_count() {
   local successes="$(results__get_successful_tests_count)"
   local failures="$(results__get_failing_tests_count)"
-  local not_run="$(results__get_not_run_tests_count)"
-  system__print "$(( successes + failures + not_run ))"
+  local skipped="$(results__get_skipped_tests_count)"
+  system__print "$(( successes + failures + skipped ))"
 }
 
 function _results__get_tests_count_of_type() {
@@ -376,10 +376,10 @@ function _test_runner__call_function_if_exits() {
 	fi
 }
 
-function test_runner__test_cannot_run() {
+function test_runner__skip_test() {
   local function=$1
-  results__increment_not_run_tests
-  reporter__test_cannot_run "${function}"
+  results__increment_skipped_tests
+  reporter__test_is_skipped "${function}"
 }
 
 function reporter__initialise() {
@@ -412,9 +412,9 @@ function reporter__test_has_succeeded() {
 	  _reporter__call_function "test_has_succeeded" "$@"
 }
 
-function reporter__test_cannot_run() {
+function reporter__test_is_skipped() {
 	reporter__for_each_reporter \
-	  _reporter__call_function "test_cannot_run" "$@"
+	  _reporter__call_function "test_is_skipped" "$@"
 }
 
 function reporter__test_has_failed() {
@@ -464,9 +464,9 @@ function simple_reporter__tests_files_end_running() {
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
-	local not_run_count="$(results__get_not_run_tests_count) not run"
+	local skipped_count="$(results__get_skipped_tests_count) skipped"
 	local time="in $(results__get_run_time)s"
-	local message="${total_count}, ${failures_count}, ${not_run_count} ${time}"
+	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
 	system__print_line_with_color "${message}" "${color}"
 }
 
@@ -511,9 +511,9 @@ function simple_reporter__test_has_failed() {
   system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
 }
 
-function simple_reporter__test_cannot_run() {
+function simple_reporter__test_is_skipped() {
   simple_reporter__test_starts_running "$1"
-  system__print_line_with_color "Not run" ${SBU_YELLOW_COLOR_CODE}
+  system__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__redirect_test_output() {
@@ -551,7 +551,7 @@ function dots_reporter__test_has_failed() {
   system__print_with_color "F" ${SBU_RED_COLOR_CODE}
 }
 
-function dots_reporter__test_cannot_run() {
+function dots_reporter__test_is_skipped() {
   system__print_with_color "E" ${SBU_YELLOW_COLOR_CODE}
 }
 

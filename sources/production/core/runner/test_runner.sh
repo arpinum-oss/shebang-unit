@@ -43,8 +43,8 @@ function _test_runner__call_function_if_exits() {
 	fi
 }
 
-function test_runner__test_cannot_run() {
+function test_runner__skip_test() {
   local function=$1
-  results__increment_not_run_tests
-  reporter__test_cannot_run "${function}"
+  results__increment_skipped_tests
+  reporter__test_is_skipped "${function}"
 }

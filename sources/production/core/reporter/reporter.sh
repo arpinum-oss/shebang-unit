@@ -28,9 +28,9 @@ function reporter__test_has_succeeded() {
 	  _reporter__call_function "test_has_succeeded" "$@"
 }
 
-function reporter__test_cannot_run() {
+function reporter__test_is_skipped() {
 	reporter__for_each_reporter \
-	  _reporter__call_function "test_cannot_run" "$@"
+	  _reporter__call_function "test_is_skipped" "$@"
 }
 
 function reporter__test_has_failed() {

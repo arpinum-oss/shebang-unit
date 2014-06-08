@@ -15,8 +15,8 @@ function can_report_tests_runs_with_failures() {
   helper_can_report_tests_runs_with_failures
 }
 
-function can_report_tests_runs_with_tests_not_run() {
-  helper_can_report_tests_runs_with_tests_not_run
+function can_report_tests_runs_with_tests_skipped() {
+  helper_can_report_tests_runs_with_tests_skipped
 }
 
 function _reporter() {

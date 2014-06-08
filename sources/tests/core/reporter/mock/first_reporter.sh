@@ -18,7 +18,7 @@ function first_reporter__test_has_failed() {
   printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }
 
-function first_reporter__test_cannot_run() {
+function first_reporter__test_is_skipped() {
   printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }
 

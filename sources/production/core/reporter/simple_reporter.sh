@@ -3,9 +3,9 @@ function simple_reporter__tests_files_end_running() {
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
-	local not_run_count="$(results__get_not_run_tests_count) not run"
+	local skipped_count="$(results__get_skipped_tests_count) skipped"
 	local time="in $(results__get_run_time)s"
-	local message="${total_count}, ${failures_count}, ${not_run_count} ${time}"
+	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
 	system__print_line_with_color "${message}" "${color}"
 }
 
@@ -50,9 +50,9 @@ function simple_reporter__test_has_failed() {
   system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
 }
 
-function simple_reporter__test_cannot_run() {
+function simple_reporter__test_is_skipped() {
   simple_reporter__test_starts_running "$1"
-  system__print_line_with_color "Not run" ${SBU_YELLOW_COLOR_CODE}
+  system__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__redirect_test_output() {

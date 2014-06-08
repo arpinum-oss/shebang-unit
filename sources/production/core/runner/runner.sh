@@ -25,5 +25,5 @@ function _runner__run_all_test_files_with_pattern_in_directory() {
 
 function runner__tests_are_successful() {
 	(( $(results__get_failing_tests_count) == 0 \
-	    && $(results__get_not_run_tests_count) == 0 ))
+	    && $(results__get_skipped_tests_count) == 0 ))
 }

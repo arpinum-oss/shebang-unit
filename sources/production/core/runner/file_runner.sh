@@ -17,7 +17,7 @@ function _file_runner__run_all_tests_if_global_setup_is_successful() {
 	  _file_runner__call_all_tests "$@"
 	else
 	  reporter__global_setup_has_failed
-	  _file_runner__report_all_tests_as_not_run "$@"
+	  _file_runner__skip_all_tests "$@"
 	fi
 }
 
@@ -31,12 +31,12 @@ function _file_runner__call_all_tests() {
 	done
 }
 
-function _file_runner__report_all_tests_as_not_run() {
+function _file_runner__skip_all_tests() {
 	local i
 	for (( i=1; i <= $#; i++ )); do
 	  local function=${!i}
 	  if _file_runner__function_is_a_test "${function}"; then
-		  test_runner__test_cannot_run "${function}"
+		  test_runner__skip_test "${function}"
 		fi
 	done
 }
