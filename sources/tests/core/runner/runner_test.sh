@@ -1,5 +1,5 @@
 function setup() {
-  results__tests_files_start_running
+  results__test_files_start_running
 }
 
 function tests_are_successful_if_no_failure_and_no_test_skipped() {

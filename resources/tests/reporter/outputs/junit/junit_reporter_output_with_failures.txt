@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite name="failing_test_sh" tests="2">
+    <testcase name="successful_test_function" classname="failing_test_sh">
+    </testcase>
+    <testcase name="failing_test_function" classname="failing_test_sh">
+      <failure>
+      </failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="successful_test_sh" tests="1">
+    <testcase name="successful_test_function" classname="successful_test_sh">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -9,10 +9,11 @@ function _runner__do_run_all_test_files_and_redirect_test_outputs() {
 }
 
 function _runner__run_all_test_files() {
-	results__tests_files_start_running
+	reporter__test_files_start_running
+	results__test_files_start_running
 	_runner__run_all_test_files_with_pattern_in_directory "$1"
-	results__tests_files_end_running
-	reporter__tests_files_end_running
+	results__test_files_end_running
+	reporter__test_files_end_running
 	runner__tests_are_successful
 }
 

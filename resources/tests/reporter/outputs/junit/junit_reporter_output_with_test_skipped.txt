@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite name="skipped_test_sh" tests="1">
+    <testcase name="skipped_test_function" classname="skipped_test_sh">
+      <skipped>
+      </skipped>
+    </testcase>
+  </testsuite>
+  <testsuite name="successful_test_sh" tests="1">
+    <testcase name="successful_test_function" classname="successful_test_sh">
+    </testcase>
+  </testsuite>
+</testsuites>

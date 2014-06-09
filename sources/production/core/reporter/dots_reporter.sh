@@ -1,3 +1,7 @@
+function dots_reporter__test_files_start_running() {
+  :
+}
+
 function dots_reporter__test_file_starts_running() {
 	:
 }
@@ -33,7 +37,7 @@ function dots_reporter__test_file_ends_running() {
 	:
 }
 
-function dots_reporter__tests_files_end_running() {
+function dots_reporter__test_files_end_running() {
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local texte="$(runner__tests_are_successful \
 	                && system__print "OK" \

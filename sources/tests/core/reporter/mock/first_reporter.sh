@@ -1,4 +1,8 @@
-function first_reporter__tests_files_end_running() {
+function first_reporter__test_files_start_running() {
+	printf "${FUNCNAME} with $(system__print_array "$@")\n"
+}
+
+function first_reporter__test_file_starts_running() {
 	printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }
 
@@ -22,14 +26,10 @@ function first_reporter__test_is_skipped() {
   printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }
 
-function first_reporter__test_file_starts_running() {
-	printf "${FUNCNAME} with $(system__print_array "$@")\n"
-}
-
 function first_reporter__test_file_ends_running() {
 	printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }
 
-function first_reporter__assertion_failed() {
-  printf "${FUNCNAME} with $(system__print_array "$@")\n"
+function first_reporter__test_files_end_running() {
+	printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }

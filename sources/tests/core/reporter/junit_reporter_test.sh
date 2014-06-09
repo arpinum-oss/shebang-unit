@@ -1,9 +1,14 @@
 function setup() {
   source "${TEST_SOURCES_DIR}/core/reporter/reporter_test_helper.sh"
+  _override_get_output
   helper__setup
+  SBU_JUNIT_REPORTER_OUTPUT_FILE="${SBU_TEMP_DIR}/junit_report.xml"
 }
 
 function teardown() {
+  if [[ -e "${SBU_JUNIT_REPORTER_OUTPUT_FILE}" ]]; then
+    rm "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
+  fi
 	helper__teardown
 }
 
@@ -23,6 +28,16 @@ function all_functions_are_overriden() {
   helper__all_functions_are_overriden
 }
 
+function _override_get_output() {
+  eval "function helper__get_output() { helper__get_output_overriden; };"
+}
+
+function helper__get_output_overriden() {
+  if [[ -e "${SBU_JUNIT_REPORTER_OUTPUT_FILE}" ]]; then
+    cat "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
+  fi
+}
+
 function _reporter() {
-  printf "dots"
+  printf "junit"
 }

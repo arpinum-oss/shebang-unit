@@ -9,6 +9,7 @@ core/runner/test_runner
 core/reporter/reporter
 core/reporter/simple_reporter
 core/reporter/dots_reporter
+core/reporter/junit_reporter
 utils/database
 utils/system
 main

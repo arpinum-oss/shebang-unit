@@ -1,4 +1,4 @@
-function silent_reporter__tests_files_end_running() {
+function silent_reporter__test_files_end_running() {
   :
 }
 

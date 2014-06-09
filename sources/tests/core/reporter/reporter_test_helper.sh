@@ -1,40 +1,43 @@
-function helper_setup() {
+function helper__setup() {
   _OUTPUT_DOCUMENT_KEY="reporter_output"
   _TESTS_DIR="${TESTS_RESOURCES_DIR}/reporter/tests"
   _OUTPUTS_DIR="${TESTS_RESOURCES_DIR}/reporter/outputs/$(_reporter)"
   reporter__initialise
 }
 
-function helper_teardown() {
+function helper__teardown() {
   reporter__release
 }
 
-function helper_can_report_tests_runs_without_failures() {
-  _run_all_tests_files "${_TESTS_DIR}/two_successful_tests"
+function helper__can_report_tests_runs_without_failures() {
+  _run_all_test_files "${_TESTS_DIR}/two_successful_tests"
 
   local content="$(_reporter)_reporter_output"
   assertion__equal "$(_get_expected_content "${content}")" \
-                   "$(database__get "${_OUTPUT_DOCUMENT_KEY}")"
+                   "$(helper__get_output)"
 }
 
-function helper_can_report_tests_runs_with_failures() {
-  _run_all_tests_files "${_TESTS_DIR}/one_successful_test_and_one_failing"
+function helper__can_report_tests_runs_with_failures() {
+  _run_all_test_files "${_TESTS_DIR}/one_successful_test_and_one_failing"
 
   local content="$(_reporter)_reporter_output_with_failures"
   assertion__equal "$(_get_expected_content "${content}")" \
-                   "$(database__get "${_OUTPUT_DOCUMENT_KEY}")"
+                   "$(helper__get_output)"
 }
 
-function helper_can_report_tests_runs_with_tests_skipped() {
-  _run_all_tests_files "${_TESTS_DIR}/one_successful_test_and_one_skipped"
+function helper__can_report_tests_runs_with_tests_skipped() {
+  _run_all_test_files "${_TESTS_DIR}/one_successful_test_and_one_skipped"
 
-  database__get "${_OUTPUT_DOCUMENT_KEY}" > /tmp/toto
   local content="$(_reporter)_reporter_output_with_test_skipped"
   assertion__equal "$(_get_expected_content "${content}")" \
-                   "$(database__get "${_OUTPUT_DOCUMENT_KEY}")"
+                   "$(helper__get_output)"
 }
 
-function _run_all_tests_files() {
+function helper__get_output() {
+  database__get "${_OUTPUT_DOCUMENT_KEY}"
+}
+
+function _run_all_test_files() {
   local directory=$1
   SBU_REPORTERS="$(_reporter)"
   _stub_results_to_return_1337s_for_run_time
@@ -60,7 +63,8 @@ function _evaluate() {
     printf "%s" "${string//${key}/${value}}"
 }
 
-function helper_all_functions_are_overriden() {
+function helper__all_functions_are_overriden() {
+  _assert_function_declared "test_files_start_running"
   _assert_function_declared "global_setup_has_failed"
   _assert_function_declared "test_file_starts_running"
   _assert_function_declared "test_starts_running"
@@ -69,7 +73,7 @@ function helper_all_functions_are_overriden() {
   _assert_function_declared "test_is_skipped"
   _assert_function_declared "redirect_test_output"
   _assert_function_declared "test_file_ends_running"
-  _assert_function_declared "tests_files_end_running"
+  _assert_function_declared "test_files_end_running"
 }
 
 function _assert_function_declared() {

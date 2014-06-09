@@ -1,3 +1,7 @@
+function simple_reporter__test_files_start_running() {
+  :
+}
+
 function simple_reporter__test_file_starts_running() {
 	system__print_line "[File] $1"
 }
@@ -35,7 +39,7 @@ function simple_reporter__test_file_ends_running() {
 	system__print_new_line
 }
 
-function simple_reporter__tests_files_end_running() {
+function simple_reporter__test_files_end_running() {
 	system__print_line "[Results]"
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"

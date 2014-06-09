@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite name="first_test_sh" tests="2">
+    <testcase name="first_successful_test_function" classname="first_test_sh">
+    </testcase>
+    <testcase name="second_successful_test_function" classname="first_test_sh">
+    </testcase>
+  </testsuite>
+  <testsuite name="second_test_sh" tests="1">
+    <testcase name="successful_test_function" classname="second_test_sh">
+    </testcase>
+  </testsuite>
+</testsuites>
