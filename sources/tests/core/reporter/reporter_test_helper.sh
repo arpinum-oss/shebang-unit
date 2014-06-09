@@ -1,5 +1,7 @@
 function helper_setup() {
   _OUTPUT_DOCUMENT_KEY="reporter_output"
+  _TESTS_DIR="${TESTS_RESOURCES_DIR}/reporter/tests"
+  _OUTPUTS_DIR="${TESTS_RESOURCES_DIR}/reporter/outputs/$(_reporter)"
   reporter__initialise
 }
 
@@ -8,8 +10,7 @@ function helper_teardown() {
 }
 
 function helper_can_report_tests_runs_without_failures() {
-  _run_all_tests_files "${TESTS_RESOURCES_DIR}/reporter/\
-two_successful_tests"
+  _run_all_tests_files "${_TESTS_DIR}/two_successful_tests"
 
   local content="$(_reporter)_reporter_output"
   assertion__equal "$(_get_expected_content "${content}")" \
@@ -17,8 +18,7 @@ two_successful_tests"
 }
 
 function helper_can_report_tests_runs_with_failures() {
-  _run_all_tests_files "${TESTS_RESOURCES_DIR}/reporter/\
-one_successful_test_and_one_failing"
+  _run_all_tests_files "${_TESTS_DIR}/one_successful_test_and_one_failing"
 
   local content="$(_reporter)_reporter_output_with_failures"
   assertion__equal "$(_get_expected_content "${content}")" \
@@ -26,8 +26,7 @@ one_successful_test_and_one_failing"
 }
 
 function helper_can_report_tests_runs_with_tests_skipped() {
-  _run_all_tests_files "${TESTS_RESOURCES_DIR}/reporter/\
-one_successful_test_and_one_skipped"
+  _run_all_tests_files "${_TESTS_DIR}/one_successful_test_and_one_skipped"
 
   database__get "${_OUTPUT_DOCUMENT_KEY}" > /tmp/toto
   local content="$(_reporter)_reporter_output_with_test_skipped"
@@ -48,7 +47,7 @@ function _stub_results_to_return_1337s_for_run_time() {
 }
 
 function _get_expected_content() {
-  local expected_output_file="${TESTS_RESOURCES_DIR}/reporter/$1.txt"
+  local expected_output_file="${_OUTPUTS_DIR}/$1.txt"
   _evaluate "$(cat "${expected_output_file}")" \
                     "TESTS_RESOURCES_DIR" \
                     "${TESTS_RESOURCES_DIR}"

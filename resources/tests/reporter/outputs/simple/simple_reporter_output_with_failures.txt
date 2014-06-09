@@ -1,11 +1,11 @@
-[File] ${TESTS_RESOURCES_DIR}/reporter/one_successful_test_and_one_failing/failing_test.sh
+[File] ${TESTS_RESOURCES_DIR}/reporter/tests/one_successful_test_and_one_failing/failing_test.sh
 [Test] successful_test_function
 [1;32mOK[0m
 [Test] failing_test_function
 Assertion failed. Actual: <2>, expected: <3>.
 [1;31mKO[0m
 
-[File] ${TESTS_RESOURCES_DIR}/reporter/one_successful_test_and_one_failing/successful_test.sh
+[File] ${TESTS_RESOURCES_DIR}/reporter/tests/one_successful_test_and_one_failing/successful_test.sh
 [Test] successful_test_function
 [1;32mOK[0m
 
