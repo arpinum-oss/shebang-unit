@@ -14,6 +14,7 @@ With **Shebang Unit** you can :
  * assert that status code is success or failure,
  * assert that command is successful or failing,
  * write setup or teardown functions for a test or a whole test file,
+ * view tests results with different kind of reports,
  * save a baby kitten every time you use it!
 
 Now you don't have any excuse for not practicing some sexy Test-Driven Development in Bash.
@@ -111,6 +112,16 @@ function can_assert_that_command_is_failing() {
 5. Write production code,
 6. Refactor. Enough said.
 
+### Use another reporter
+
+You can use another reporter with `-r` or `--reporters` options.
+
+`./shebang_unit --reporters=dots`
+
+The default reporter is called *simple*. It writes a verbose logging of test run to standard output.
+
+You can use its little brother, the *dots* reporter which only displays dots, E or F. Such a lazy cat.
+ 
 ### Use colors or no
 
 You can use colors in test outputs with `-c` or `--colors` options. Colors are activated by default.
