@@ -1,36 +1,5 @@
-function simple_reporter__tests_files_end_running() {
-	system__print_line "[Results]"
-	local color="$(_reporter__get_color_code_for_tests_result)"
-	local total_count="$(_simple_reporter__get_total_count_message)"
-	local failures_count="$(_simple_reporter__get_failures_count_message)"
-	local skipped_count="$(results__get_skipped_tests_count) skipped"
-	local time="in $(results__get_run_time)s"
-	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
-	system__print_line_with_color "${message}" "${color}"
-}
-
-function _simple_reporter__get_total_count_message() {
-  local count="$(results__get_total_tests_count)"
-  system__print "${count} test$(_simple_reporter__get_agreement ${count})"
-}
-
-function _simple_reporter__get_failures_count_message() {
-  local count="$(results__get_failing_tests_count)"
-  system__print "${count} failure$(_simple_reporter__get_agreement ${count})"
-}
-
-function _simple_reporter__get_agreement() {
-  (( $1 > 1 )) \
-    && system__print "s" \
-    || system__print ""
-}
-
 function simple_reporter__test_file_starts_running() {
 	system__print_line "[File] $1"
-}
-
-function simple_reporter__test_file_ends_running() {
-	system__print_new_line
 }
 
 function simple_reporter__global_setup_has_failed() {
@@ -60,4 +29,35 @@ function simple_reporter__redirect_test_output() {
   while read text; do
     system__print_line "${text}"
   done
+}
+
+function simple_reporter__test_file_ends_running() {
+	system__print_new_line
+}
+
+function simple_reporter__tests_files_end_running() {
+	system__print_line "[Results]"
+	local color="$(_reporter__get_color_code_for_tests_result)"
+	local total_count="$(_simple_reporter__get_total_count_message)"
+	local failures_count="$(_simple_reporter__get_failures_count_message)"
+	local skipped_count="$(results__get_skipped_tests_count) skipped"
+	local time="in $(results__get_run_time)s"
+	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
+	system__print_line_with_color "${message}" "${color}"
+}
+
+function _simple_reporter__get_total_count_message() {
+  local count="$(results__get_total_tests_count)"
+  system__print "${count} test$(_simple_reporter__get_agreement ${count})"
+}
+
+function _simple_reporter__get_failures_count_message() {
+  local count="$(results__get_failing_tests_count)"
+  system__print "${count} failure$(_simple_reporter__get_agreement ${count})"
+}
+
+function _simple_reporter__get_agreement() {
+  (( $1 > 1 )) \
+    && system__print "s" \
+    || system__print ""
 }

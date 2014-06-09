@@ -60,3 +60,22 @@ function _evaluate() {
     local value=$3
     printf "%s" "${string//${key}/${value}}"
 }
+
+function helper_all_functions_are_overriden() {
+  _assert_function_declared "global_setup_has_failed"
+  _assert_function_declared "test_file_starts_running"
+  _assert_function_declared "test_starts_running"
+  _assert_function_declared "test_has_succeeded"
+  _assert_function_declared "test_has_failed"
+  _assert_function_declared "test_is_skipped"
+  _assert_function_declared "redirect_test_output"
+  _assert_function_declared "test_file_ends_running"
+  _assert_function_declared "tests_files_end_running"
+}
+
+function _assert_function_declared() {
+  local function="$(_reporter)_reporter__$1"
+  type -t "${function}" > /dev/null
+  assertion__status_code_is_success $? \
+    "Function <${function}> should be declared."
+}

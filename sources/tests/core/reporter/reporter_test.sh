@@ -14,11 +14,11 @@ function can_execute_for_each_reporters() {
   assertion__equal "toto#tutu" "${read_reporters}"
 }
 
-function can_call_for_each_reporter__tests_files_end_running() {
-  local messages="$(reporter__tests_files_end_running a b)"
+function can_call_for_each_reporter__test_file_starts_running() {
+  local messages="$(reporter__test_file_starts_running a b)"
 
-  local first="first_reporter__tests_files_end_running with [a, b]"
-  local second="second_reporter__tests_files_end_running with [a, b]"
+  local first="first_reporter__test_file_starts_running with [a, b]"
+  local second="second_reporter__test_file_starts_running with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 
@@ -62,19 +62,19 @@ function can_call_for_each_reporter__test_is_skipped() {
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 
-function can_call_for_each_reporter__test_file_starts_running() {
-  local messages="$(reporter__test_file_starts_running a b)"
-
-  local first="first_reporter__test_file_starts_running with [a, b]"
-  local second="second_reporter__test_file_starts_running with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
-}
-
 function can_call_for_each_reporter__test_file_ends_running() {
   local messages="$(reporter__test_file_ends_running a b)"
 
   local first="first_reporter__test_file_ends_running with [a, b]"
   local second="second_reporter__test_file_ends_running with [a, b]"
+  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+}
+
+function can_call_for_each_reporter__tests_files_end_running() {
+  local messages="$(reporter__tests_files_end_running a b)"
+
+  local first="first_reporter__tests_files_end_running with [a, b]"
+  local second="second_reporter__tests_files_end_running with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 

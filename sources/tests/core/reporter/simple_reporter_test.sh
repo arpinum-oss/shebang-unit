@@ -19,6 +19,10 @@ function can_report_tests_runs_with_tests_skipped() {
   helper_can_report_tests_runs_with_tests_skipped
 }
 
+function all_functions_are_overriden() {
+  helper_all_functions_are_overriden
+}
+
 function _reporter() {
   printf "simple"
 }
