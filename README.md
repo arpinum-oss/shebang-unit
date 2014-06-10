@@ -120,7 +120,7 @@ You can use another reporter with `-r` or `--reporters` options.
 
 The default reporter is called *simple*. It writes a verbose logging of test run to standard output.
 
-You can use its little brother, the *dots* reporter which only displays dots, E or F. Such a lazy cat.
+You can use its little brother, the *dots* reporter which only displays dots (successful), S (skipped) or F (failing). Such a lazy cat.
  
 ### Use colors or no
 
