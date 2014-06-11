@@ -24,7 +24,6 @@ function simple_reporter__test_has_failed() {
 }
 
 function simple_reporter__test_is_skipped() {
-  simple_reporter__test_starts_running "$1"
   system__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
 }
 
@@ -33,6 +32,10 @@ function simple_reporter__redirect_test_output() {
   while read text; do
     system__print_line "${text}"
   done
+}
+
+function simple_reporter__test_ends_running() {
+  :
 }
 
 function simple_reporter__test_file_ends_running() {

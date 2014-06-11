@@ -26,6 +26,10 @@ function second_reporter__test_is_skipped() {
   printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }
 
+function second_reporter__test_ends_running() {
+	printf "${FUNCNAME} with $(system__print_array "$@")\n"
+}
+
 function second_reporter__test_file_ends_running() {
 	printf "${FUNCNAME} with $(system__print_array "$@")\n"
 }

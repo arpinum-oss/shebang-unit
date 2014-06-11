@@ -15,74 +15,52 @@ function can_execute_for_each_reporters() {
 }
 
 function can_call_for_each_reporter__test_files_start_running() {
-  local messages="$(reporter__test_files_start_running a b)"
-
-  local first="first_reporter__test_files_start_running with [a, b]"
-  local second="second_reporter__test_files_start_running with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+  _can_call_for_each_reporter "test_files_start_running"
 }
 
 function can_call_for_each_reporter__test_file_starts_running() {
-  local messages="$(reporter__test_file_starts_running a b)"
-
-  local first="first_reporter__test_file_starts_running with [a, b]"
-  local second="second_reporter__test_file_starts_running with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+  _can_call_for_each_reporter "test_file_starts_running"
 }
 
 function can_call_for_each_reporter__global_setup_has_failed() {
-  local messages="$(reporter__global_setup_has_failed a b)"
-
-  local first="first_reporter__global_setup_has_failed with [a, b]"
-  local second="second_reporter__global_setup_has_failed with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+  _can_call_for_each_reporter "global_setup_has_failed"
 }
 
 function can_call_for_each_reporter__test_starts_running() {
-  local messages="$(reporter__test_starts_running a b)"
-
-  local first="first_reporter__test_starts_running with [a, b]"
-  local second="second_reporter__test_starts_running with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+  _can_call_for_each_reporter "test_starts_running"
 }
 
 function can_call_for_each_reporter__test_has_succeeded() {
-  local messages="$(reporter__test_has_succeeded a b)"
-
-  local first="first_reporter__test_has_succeeded with [a, b]"
-  local second="second_reporter__test_has_succeeded with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+  _can_call_for_each_reporter "test_has_succeeded"
 }
 
 function can_call_for_each_reporter__test_has_failed() {
-  local messages="$(reporter__test_has_failed a b)"
-
-  local first="first_reporter__test_has_failed with [a, b]"
-  local second="second_reporter__test_has_failed with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+  _can_call_for_each_reporter "test_has_failed"
 }
 
 function can_call_for_each_reporter__test_is_skipped() {
-  local messages="$(reporter__test_is_skipped a b)"
+  _can_call_for_each_reporter "test_is_skipped"
+}
 
-  local first="first_reporter__test_is_skipped with [a, b]"
-  local second="second_reporter__test_is_skipped with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+function can_call_for_each_reporter__test_ends_running() {
+  _can_call_for_each_reporter "test_ends_running"
 }
 
 function can_call_for_each_reporter__test_file_ends_running() {
-  local messages="$(reporter__test_file_ends_running a b)"
-
-  local first="first_reporter__test_file_ends_running with [a, b]"
-  local second="second_reporter__test_file_ends_running with [a, b]"
-  assertion__equal "${first}"$'\n'"${second}" "${messages}"
+  _can_call_for_each_reporter "test_file_ends_running"
 }
 
 function can_call_for_each_reporter__test_files_end_running() {
-  local messages="$(reporter__test_files_end_running a b)"
+  _can_call_for_each_reporter "test_files_end_running"
+}
 
-  local first="first_reporter__test_files_end_running with [a, b]"
-  local second="second_reporter__test_files_end_running with [a, b]"
+function _can_call_for_each_reporter() {
+  local function=$1
+
+  local messages="$("reporter__${function}" a b)"
+
+  local first="first_reporter__${function} with [a, b]"
+  local second="second_reporter__${function} with [a, b]"
   assertion__equal "${first}"$'\n'"${second}" "${messages}"
 }
 

@@ -72,6 +72,7 @@ function helper__all_functions_are_overriden() {
   _assert_function_declared "test_has_failed"
   _assert_function_declared "test_is_skipped"
   _assert_function_declared "redirect_test_output"
+  _assert_function_declared "test_ends_running"
   _assert_function_declared "test_file_ends_running"
   _assert_function_declared "test_files_end_running"
 }

@@ -1,6 +1,6 @@
 function assertion__equal() {
 	if [[ "$1" != "$2" ]]; then
-		_assertion__failed "Actual: <$2>, expected: <$1>."
+		_assertion__failed "Actual: <$2>, expected: <$1>"
 	fi
 }
 

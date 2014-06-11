@@ -33,6 +33,10 @@ function dots_reporter__redirect_test_output() {
   done
 }
 
+function dots_reporter__test_ends_running() {
+  :
+}
+
 function dots_reporter__test_file_ends_running() {
 	:
 }

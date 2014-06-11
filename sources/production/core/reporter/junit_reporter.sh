@@ -22,21 +22,17 @@ function junit_reporter__test_starts_running() {
 }
 
 function junit_reporter__test_has_succeeded() {
-  _junit_reporter__write_line_to_report "    </testcase>"
+  :
 }
 
 function junit_reporter__test_has_failed() {
   _junit_reporter__write_line_to_report "      <failure>"
   _junit_reporter__write_line_to_report "      </failure>"
-  _junit_reporter__write_line_to_report "    </testcase>"
 }
 
 function junit_reporter__test_is_skipped() {
-  _junit_reporter__write_line_to_report \
-    "    <testcase name=\"$1\" classname=\"${sbu_current_suite_name}\">"
   _junit_reporter__write_line_to_report "      <skipped>"
   _junit_reporter__write_line_to_report "      </skipped>"
-  _junit_reporter__write_line_to_report "    </testcase>"
 }
 
 function junit_reporter__redirect_test_output() {
@@ -44,6 +40,10 @@ function junit_reporter__redirect_test_output() {
   while read text; do
     :
   done
+}
+
+function junit_reporter__test_ends_running() {
+  _junit_reporter__write_line_to_report "    </testcase>"
 }
 
 function junit_reporter__test_file_ends_running() {

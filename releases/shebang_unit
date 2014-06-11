@@ -56,7 +56,7 @@ function configuration__load() {
 
 function assertion__equal() {
 	if [[ "$1" != "$2" ]]; then
-		_assertion__failed "Actual: <$2>, expected: <$1>."
+		_assertion__failed "Actual: <$2>, expected: <$1>"
 	fi
 }
 
@@ -347,6 +347,7 @@ function test_runner__run_test() {
 	  &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
 	)
 	_test_runner__parse_test_function_result $?
+	reporter__test_ends_running
 }
 
 function _test_runner__call_test_fonction() {
@@ -380,9 +381,11 @@ function _test_runner__call_function_if_exits() {
 }
 
 function test_runner__skip_test() {
-  local function=$1
+  local test_function=$1
+  reporter__test_starts_running "${test_function}"
   results__increment_skipped_tests
-  reporter__test_is_skipped "${function}"
+  reporter__test_is_skipped "${test_function}"
+  reporter__test_ends_running
 }
 
 function reporter__initialise() {
@@ -433,6 +436,11 @@ function reporter__test_is_skipped() {
 function reporter__redirect_tests_outputs() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "redirect_test_output" "$@"
+}
+
+function reporter__test_ends_running() {
+	reporter__for_each_reporter \
+	  _reporter__call_function "test_ends_running" "$@"
 }
 
 function reporter__test_file_ends_running() {
@@ -493,7 +501,6 @@ function simple_reporter__test_has_failed() {
 }
 
 function simple_reporter__test_is_skipped() {
-  simple_reporter__test_starts_running "$1"
   system__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
 }
 
@@ -502,6 +509,10 @@ function simple_reporter__redirect_test_output() {
   while read text; do
     system__print_line "${text}"
   done
+}
+
+function simple_reporter__test_ends_running() {
+  :
 }
 
 function simple_reporter__test_file_ends_running() {
@@ -570,6 +581,10 @@ function dots_reporter__redirect_test_output() {
   done
 }
 
+function dots_reporter__test_ends_running() {
+  :
+}
+
 function dots_reporter__test_file_ends_running() {
 	:
 }
@@ -606,21 +621,17 @@ function junit_reporter__test_starts_running() {
 }
 
 function junit_reporter__test_has_succeeded() {
-  _junit_reporter__write_line_to_report "    </testcase>"
+  :
 }
 
 function junit_reporter__test_has_failed() {
   _junit_reporter__write_line_to_report "      <failure>"
   _junit_reporter__write_line_to_report "      </failure>"
-  _junit_reporter__write_line_to_report "    </testcase>"
 }
 
 function junit_reporter__test_is_skipped() {
-  _junit_reporter__write_line_to_report \
-    "    <testcase name=\"$1\" classname=\"${sbu_current_suite_name}\">"
   _junit_reporter__write_line_to_report "      <skipped>"
   _junit_reporter__write_line_to_report "      </skipped>"
-  _junit_reporter__write_line_to_report "    </testcase>"
 }
 
 function junit_reporter__redirect_test_output() {
@@ -628,6 +639,10 @@ function junit_reporter__redirect_test_output() {
   while read text; do
     :
   done
+}
+
+function junit_reporter__test_ends_running() {
+  _junit_reporter__write_line_to_report "    </testcase>"
 }
 
 function junit_reporter__test_file_ends_running() {

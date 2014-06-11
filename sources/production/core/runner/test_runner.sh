@@ -11,6 +11,7 @@ function test_runner__run_test() {
 	  &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
 	)
 	_test_runner__parse_test_function_result $?
+	reporter__test_ends_running
 }
 
 function _test_runner__call_test_fonction() {
@@ -44,7 +45,9 @@ function _test_runner__call_function_if_exits() {
 }
 
 function test_runner__skip_test() {
-  local function=$1
+  local test_function=$1
+  reporter__test_starts_running "${test_function}"
   results__increment_skipped_tests
-  reporter__test_is_skipped "${function}"
+  reporter__test_is_skipped "${test_function}"
+  reporter__test_ends_running
 }

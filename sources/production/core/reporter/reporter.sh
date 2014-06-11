@@ -48,6 +48,11 @@ function reporter__redirect_tests_outputs() {
 	  _reporter__call_function "redirect_test_output" "$@"
 }
 
+function reporter__test_ends_running() {
+	reporter__for_each_reporter \
+	  _reporter__call_function "test_ends_running" "$@"
+}
+
 function reporter__test_file_ends_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_file_ends_running" "$@"
