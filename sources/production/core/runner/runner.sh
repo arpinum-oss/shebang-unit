@@ -10,10 +10,10 @@ function _runner__do_run_all_test_files_and_redirect_test_outputs() {
 
 function _runner__run_all_test_files() {
 	reporter__test_files_start_running
+	timer__store_current_time "global_time"
 	results__test_files_start_running
 	_runner__run_all_test_files_with_pattern_in_directory "$1"
-	results__test_files_end_running
-	reporter__test_files_end_running
+	reporter__test_files_end_running "$(timer__get_time_elapsed "global_time")"
 	runner__tests_are_successful
 }
 

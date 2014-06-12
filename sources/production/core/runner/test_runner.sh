@@ -49,5 +49,5 @@ function test_runner__skip_test() {
   reporter__test_starts_running "${test_function}"
   results__increment_skipped_tests
   reporter__test_is_skipped "${test_function}"
-  reporter__test_ends_running
+  reporter__test_ends_running 0
 }

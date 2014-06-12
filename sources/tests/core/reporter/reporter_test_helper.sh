@@ -3,6 +3,7 @@ function helper__setup() {
   _TESTS_DIR="${TESTS_RESOURCES_DIR}/reporter/tests"
   _OUTPUTS_DIR="${TESTS_RESOURCES_DIR}/reporter/outputs/$(_reporter)"
   reporter__initialise
+  source "${TEST_SOURCES_DIR}/tests_utils/mock.sh"
 }
 
 function helper__teardown() {
@@ -40,13 +41,13 @@ function helper__get_output() {
 function _run_all_test_files() {
   local directory=$1
   SBU_REPORTERS="$(_reporter)"
-  _stub_results_to_return_1337s_for_run_time
+  _make_timer_return_1337_for_time_elapsed
   database__put "${_OUTPUT_DOCUMENT_KEY}" \
     "$(runner__run_all_test_files "${directory}")"
 }
 
-function _stub_results_to_return_1337s_for_run_time() {
-  eval "function results__get_run_time() { printf "1337"; }"
+function _make_timer_return_1337_for_time_elapsed() {
+  mock__make_function_prints "timer__get_time_elapsed" "1337"
 }
 
 function _get_expected_content() {

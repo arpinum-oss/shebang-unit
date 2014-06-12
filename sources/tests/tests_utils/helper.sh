@@ -1,5 +1,5 @@
 function helper__use_silent_reporter() {
-  source "${TEST_SOURCES_DIR}/tests_utils/mock/silent_reporter.sh"
+  source "${TEST_SOURCES_DIR}/tests_utils/mock_objects/silent_reporter.sh"
   SBU_REPORTERS=silent
 }
 

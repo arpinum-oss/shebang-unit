@@ -43,12 +43,12 @@ function simple_reporter__test_file_ends_running() {
 }
 
 function simple_reporter__test_files_end_running() {
+	local time="in $1s"
 	system__print_line "[Results]"
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
 	local skipped_count="$(results__get_skipped_tests_count) skipped"
-	local time="in $(results__get_run_time)s"
 	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
 	system__print_line_with_color "${message}" "${color}"
 }

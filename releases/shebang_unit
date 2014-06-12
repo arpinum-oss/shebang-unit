@@ -56,7 +56,7 @@ function configuration__load() {
 
 function assertion__equal() {
 	if [[ "$1" != "$2" ]]; then
-		_assertion__failed "Actual: <$2>, expected: <$1>"
+		_assertion__failed "Actual: <$2>, expected: <$1>."
 	fi
 }
 
@@ -166,10 +166,10 @@ function _runner__do_run_all_test_files_and_redirect_test_outputs() {
 
 function _runner__run_all_test_files() {
 	reporter__test_files_start_running
+	timer__store_current_time "global_time"
 	results__test_files_start_running
 	_runner__run_all_test_files_with_pattern_in_directory "$1"
-	results__test_files_end_running
-	reporter__test_files_end_running
+	reporter__test_files_end_running "$(timer__get_time_elapsed "global_time")"
 	runner__tests_are_successful
 }
 
@@ -274,21 +274,25 @@ function _parser__get_function_name_from_declaration() {
 	sed "s/${SBU_FUNCTION_DECLARATION_REGEX}/\1/"
 }
 
+function timer__store_current_time() {
+  local id=$1
+  database__put "sbu_beginning_date_$1" "$(system__get_date_in_seconds)"
+}
+
+function timer__get_time_elapsed() {
+  local id=$1
+  local beginning_date="$(database__get "sbu_beginning_date_$1")"
+  local ending_date="$(system__get_date_in_seconds)"
+
+  [[ -n "${beginning_date}" ]] \
+    && system__print "$(( ending_date - beginning_date ))" \
+    || system__print "0"
+}
+
 function results__test_files_start_running() {
   database__put "sbu_successful_tests_count" "0"
   database__put "sbu_failing_tests_count" "0"
   database__put "sbu_skipped_tests_count" "0"
-  database__put "sbu_run_beginning_date" "$(system__get_date_in_seconds)"
-}
-
-function results__test_files_end_running() {
-  database__put "sbu_run_ending_date" "$(system__get_date_in_seconds)"
-}
-
-function results__get_run_time() {
-  local beginning_date="$(database__get "sbu_run_beginning_date")"
-  local ending_date="$(database__get "sbu_run_ending_date")"
-  system__print "$(( ending_date - beginning_date ))"
 }
 
 function results__get_successful_tests_count() {
@@ -385,7 +389,7 @@ function test_runner__skip_test() {
   reporter__test_starts_running "${test_function}"
   results__increment_skipped_tests
   reporter__test_is_skipped "${test_function}"
-  reporter__test_ends_running
+  reporter__test_ends_running 0
 }
 
 function reporter__initialise() {
@@ -520,12 +524,12 @@ function simple_reporter__test_file_ends_running() {
 }
 
 function simple_reporter__test_files_end_running() {
+	local time="in $1s"
 	system__print_line "[Results]"
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
 	local skipped_count="$(results__get_skipped_tests_count) skipped"
-	local time="in $(results__get_run_time)s"
 	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
 	system__print_line_with_color "${message}" "${color}"
 }
