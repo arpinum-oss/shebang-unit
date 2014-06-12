@@ -1,5 +1,6 @@
 function setup() {
   source "${TEST_SOURCES_DIR}/core/reporter/reporter_test_helper.sh"
+  source "${TEST_SOURCES_DIR}/tests_utils/mock.sh"
   _override_get_output
   helper__setup
   SBU_JUNIT_REPORTER_OUTPUT_FILE="${SBU_TEMP_DIR}/junit_report.xml"
@@ -29,7 +30,7 @@ function all_functions_are_overriden() {
 }
 
 function _override_get_output() {
-  eval "function helper__get_output() { helper__get_output_overriden; };"
+  mock__make_function_call "helper__get_output" "helper__get_output_overriden"
 }
 
 function helper__get_output_overriden() {
