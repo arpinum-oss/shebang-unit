@@ -101,3 +101,11 @@ function can_print_special_characters_safely(){
 function can_print_line_with_special_characters_safely(){
   assertion__equal "%s" "$(system__print_line "%s")"
 }
+
+function can_substitute_variable_in_text() {
+  local text='The value is : ${value}'
+
+  local result="$(system__substitute_variable "${text}" "value" "my_value")"
+
+  assertion__equal "The value is : my_value" "${result}"
+}

@@ -2,6 +2,7 @@ function test_runner__run_test() {
 	local test_function=$1
 	shift 1
   reporter__test_starts_running "${test_function}"
+	timer__store_current_time "test_time"
 	(
 	  _test_runner__call_setup_if_exists "$@" \
 	    && _test_runner__call_test_fonction "${test_function}"
@@ -11,7 +12,7 @@ function test_runner__run_test() {
 	  &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
 	)
 	_test_runner__parse_test_function_result $?
-	reporter__test_ends_running
+	reporter__test_ends_running "$(timer__get_time_elapsed "test_time")"
 }
 
 function _test_runner__call_test_fonction() {

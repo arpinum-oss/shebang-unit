@@ -52,16 +52,9 @@ function _make_timer_return_1337_for_time_elapsed() {
 
 function _get_expected_content() {
   local expected_output_file="${_OUTPUTS_DIR}/$1.txt"
-  _evaluate "$(cat "${expected_output_file}")" \
+  system__substitute_variable "$(cat "${expected_output_file}")" \
                     "TESTS_RESOURCES_DIR" \
                     "${TESTS_RESOURCES_DIR}"
-}
-
-function _evaluate() {
-    local string=$1
-    local key="\$\{$2\}"
-    local value=$3
-    printf "%s" "${string//${key}/${value}}"
 }
 
 function helper__all_functions_are_overriden() {

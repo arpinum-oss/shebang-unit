@@ -18,7 +18,8 @@ function junit_reporter__global_setup_has_failed() {
 
 function junit_reporter__test_starts_running() {
   _junit_reporter__write_line_to_report \
-    "    <testcase name=\"$1\" classname=\"${sbu_current_suite_name}\">"
+    "    <testcase name=\"$1\" classname=\"${sbu_current_suite_name}\" \
+time=\"\${sbu_current_test_time}\">"
 }
 
 function junit_reporter__test_has_succeeded() {
@@ -43,6 +44,11 @@ function junit_reporter__redirect_test_output() {
 }
 
 function junit_reporter__test_ends_running() {
+  local test_time=$1
+  local report_content=$(cat "${SBU_JUNIT_REPORTER_OUTPUT_FILE}")
+  local content_with_time="$(system__substitute_variable \
+    "${report_content}" "sbu_current_test_time" "${test_time}")"
+  system__print_line "${content_with_time}" > "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
   _junit_reporter__write_line_to_report "    </testcase>"
 }
 

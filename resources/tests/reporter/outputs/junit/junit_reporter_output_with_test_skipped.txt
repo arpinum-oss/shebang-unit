@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
   <testsuite name="skipped_test_sh" tests="1">
-    <testcase name="skipped_test_function" classname="skipped_test_sh">
+    <testcase name="skipped_test_function" classname="skipped_test_sh" time="0">
       <skipped>
       </skipped>
     </testcase>
   </testsuite>
   <testsuite name="successful_test_sh" tests="1">
-    <testcase name="successful_test_function" classname="successful_test_sh">
+    <testcase name="successful_test_function" classname="successful_test_sh" time="1337">
     </testcase>
   </testsuite>
 </testsuites>

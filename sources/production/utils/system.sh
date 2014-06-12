@@ -64,3 +64,10 @@ function system__string_contains() {
 function system__random() {
   system__print "${RANDOM}"
 }
+
+function system__substitute_variable() {
+    local string=$1
+    local key="\$\{$2\}"
+    local value=$3
+    printf "%s" "${string//${key}/${value}}"
+}
