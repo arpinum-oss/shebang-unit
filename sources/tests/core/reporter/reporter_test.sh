@@ -1,7 +1,6 @@
 function setup() {
   source "${TEST_SOURCES_DIR}/core/reporter/mock_objects/first_reporter.sh"
   source "${TEST_SOURCES_DIR}/core/reporter/mock_objects/second_reporter.sh"
-  SBU_REPORTERS_FD=1
   SBU_REPORTERS=first,second
 }
 

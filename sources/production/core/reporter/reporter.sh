@@ -1,13 +1,3 @@
-function reporter__initialise() {
-  local reporter_dir="${SBU_TEMP_DIR}/reporter"
-  mkdir -p "${reporter_dir}"
-  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/$(system__random)"
-}
-
-function reporter__release() {
-  eval "exec ${SBU_REPORTERS_FD}>&-"
-}
-
 function reporter__test_files_start_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_files_start_running" "$@"
@@ -66,7 +56,7 @@ function reporter__test_files_end_running() {
 function _reporter__call_function() {
   local function=$1
   shift 1
-  "${reporter}_reporter__${function}" "$@" >&${SBU_REPORTERS_FD}
+  "${reporter}_reporter__${function}" "$@"
 }
 
 function reporter__for_each_reporter() {

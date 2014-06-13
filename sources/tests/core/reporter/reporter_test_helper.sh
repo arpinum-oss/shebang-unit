@@ -2,12 +2,11 @@ function helper__setup() {
   _OUTPUT_DOCUMENT_KEY="reporter_output"
   _TESTS_DIR="${TESTS_RESOURCES_DIR}/reporter/tests"
   _OUTPUTS_DIR="${TESTS_RESOURCES_DIR}/reporter/outputs/$(_reporter)"
-  reporter__initialise
   source "${TEST_SOURCES_DIR}/tests_utils/mock.sh"
 }
 
 function helper__teardown() {
-  reporter__release
+  :
 }
 
 function helper__can_report_tests_runs_without_failures() {
@@ -43,7 +42,7 @@ function _run_all_test_files() {
   SBU_REPORTERS="$(_reporter)"
   _make_timer_return_1337_for_time_elapsed
   database__put "${_OUTPUT_DOCUMENT_KEY}" \
-    "$(runner__run_all_test_files "${directory}")"
+    "$(runner__run_all_test_files "${directory}" 2>&1)"
 }
 
 function _make_timer_return_1337_for_time_elapsed() {

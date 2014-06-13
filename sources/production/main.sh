@@ -117,10 +117,8 @@ function _main__run_all_test_files() {
 
 function _main__initialise() {
   database__initialise
-  reporter__initialise
 }
 
 function _main__release() {
-  reporter__release
   database__release
 }

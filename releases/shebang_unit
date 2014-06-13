@@ -50,7 +50,6 @@ function configuration__load() {
   SBU_VALUE_SEPARATOR=","
   SBU_TEMP_DIR="/tmp/.shebang_unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
-  SBU_REPORTERS_FD=3
   SBU_NO_RUN="${SBU_NO}"
 }
 
@@ -155,16 +154,6 @@ function _assertion__get_assertion_message_to_use() {
 }
 
 function runner__run_all_test_files() {
-   eval "_runner__do_run_all_test_files_and_redirect_test_outputs "$@" \
-            ${SBU_REPORTERS_FD}>&1"
-}
-
-function _runner__do_run_all_test_files_and_redirect_test_outputs() {
-  _runner__run_all_test_files "$@" 2>&1 | reporter__redirect_tests_outputs;
-  return "${PIPESTATUS[0]}"
-}
-
-function _runner__run_all_test_files() {
 	reporter__test_files_start_running
 	timer__store_current_time "global_time"
 	results__test_files_start_running
@@ -393,16 +382,6 @@ function test_runner__skip_test() {
   reporter__test_ends_running 0
 }
 
-function reporter__initialise() {
-  local reporter_dir="${SBU_TEMP_DIR}/reporter"
-  mkdir -p "${reporter_dir}"
-  eval "exec ${SBU_REPORTERS_FD}<> ${reporter_dir}/$(system__random)"
-}
-
-function reporter__release() {
-  eval "exec ${SBU_REPORTERS_FD}>&-"
-}
-
 function reporter__test_files_start_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_files_start_running" "$@"
@@ -461,7 +440,7 @@ function reporter__test_files_end_running() {
 function _reporter__call_function() {
   local function=$1
   shift 1
-  "${reporter}_reporter__${function}" "$@" >&${SBU_REPORTERS_FD}
+  "${reporter}_reporter__${function}" "$@"
 }
 
 function reporter__for_each_reporter() {
@@ -552,7 +531,7 @@ function _simple_reporter__get_agreement() {
 }
 
 function dots_reporter__test_files_start_running() {
-  :
+  _dots_reporter__redirect_outputs_to_trash
 }
 
 function dots_reporter__test_file_starts_running() {
@@ -568,15 +547,21 @@ function dots_reporter__test_starts_running() {
 }
 
 function dots_reporter__test_has_succeeded() {
+  _dots_reporter__cancel_outputs_redirection
   system__print_with_color "." ${SBU_GREEN_COLOR_CODE}
+  _dots_reporter__redirect_outputs_to_trash
 }
 
 function dots_reporter__test_has_failed() {
+  _dots_reporter__cancel_outputs_redirection
   system__print_with_color "F" ${SBU_RED_COLOR_CODE}
+  _dots_reporter__redirect_outputs_to_trash
 }
 
 function dots_reporter__test_is_skipped() {
+  _dots_reporter__cancel_outputs_redirection
   system__print_with_color "S" ${SBU_YELLOW_COLOR_CODE}
+  _dots_reporter__redirect_outputs_to_trash
 }
 
 function dots_reporter__redirect_test_output() {
@@ -595,11 +580,22 @@ function dots_reporter__test_file_ends_running() {
 }
 
 function dots_reporter__test_files_end_running() {
+  _dots_reporter__cancel_outputs_redirection
 	local color="$(_reporter__get_color_code_for_tests_result)"
 	local texte="$(runner__tests_are_successful \
 	                && system__print "OK" \
 	                || system__print "KO")"
 	system__print_line_with_color "${texte}" "${color}"
+}
+
+_dots_reporter__redirect_outputs_to_trash() {
+  exec 8>&1 1>/dev/null
+  exec 9>&2 2>/dev/null
+}
+
+_dots_reporter__cancel_outputs_redirection() {
+  exec 1>&8
+  exec 2>&9
 }
 
 function junit_reporter__test_files_start_running() {
@@ -907,11 +903,9 @@ function _main__run_all_test_files() {
 
 function _main__initialise() {
   database__initialise
-  reporter__initialise
 }
 
 function _main__release() {
-  reporter__release
   database__release
 }
 

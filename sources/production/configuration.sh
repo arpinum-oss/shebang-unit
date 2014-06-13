@@ -31,6 +31,5 @@ function configuration__load() {
   SBU_VALUE_SEPARATOR=","
   SBU_TEMP_DIR="/tmp/.shebang_unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
-  SBU_REPORTERS_FD=3
   SBU_NO_RUN="${SBU_NO}"
 }

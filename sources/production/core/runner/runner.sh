@@ -1,14 +1,4 @@
 function runner__run_all_test_files() {
-   eval "_runner__do_run_all_test_files_and_redirect_test_outputs "$@" \
-            ${SBU_REPORTERS_FD}>&1"
-}
-
-function _runner__do_run_all_test_files_and_redirect_test_outputs() {
-  _runner__run_all_test_files "$@" 2>&1 | reporter__redirect_tests_outputs;
-  return "${PIPESTATUS[0]}"
-}
-
-function _runner__run_all_test_files() {
 	reporter__test_files_start_running
 	timer__store_current_time "global_time"
 	results__test_files_start_running
