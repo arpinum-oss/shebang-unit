@@ -180,20 +180,15 @@ function file_runner__run_test_file() {
   local test_functions=($(_file_runner__get_test_functions))
 	reporter__test_file_starts_running "${file}" "${#test_functions[@]}"
 	( source "${file}"
-	  _file_runner__run_global_setup_if_exists
-	  _file_runner__run_all_tests_if_global_setup_is_successful $?
+	  _file_runner__run_global_setup_if_exists \
+	    && _file_runner__call_all_tests
 	  _file_runner__run_global_teardown_if_exists )
   _file_runner__check_if_global_setup_has_exited
 	reporter__test_file_ends_running
 }
 
 function _file_runner__run_all_tests_if_global_setup_is_successful() {
-  local global_setup_status_code=$1
-	if (( ${global_setup_status_code} == ${SBU_SUCCESS_STATUS_CODE} )); then
 	  _file_runner__call_all_tests
-	else
-	  _file_runner__handle_failure_in_global_setup
-	fi
 }
 
 function _file_runner__call_all_tests() {
@@ -221,11 +216,9 @@ function _file_runner__get_test_functions() {
 }
 
 function _file_runner__run_global_setup_if_exists() {
-  database__put "sbu_current_global_setup_has_exited" "${SBU_YES}"
-  _file_runner__call_function_if_exists "${SBU_GLOBAL_SETUP_FUNCTION_NAME}"
-  local status_code=$?
-  database__put "sbu_current_global_setup_has_exited" "${SBU_NO}"
-  return ${status_code}
+  database__put "sbu_current_global_setup_has_failed" "${SBU_YES}"
+  _file_runner__call_function_if_exists "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
+    && database__put "sbu_current_global_setup_has_failed" "${SBU_NO}"
 }
 
 function _file_runner__run_global_teardown_if_exists() {
@@ -249,7 +242,7 @@ function _file_runner__call_function_if_exists() {
 }
 
 function _file_runner__check_if_global_setup_has_exited() {
-  local has_exited="$(database__get "sbu_current_global_setup_has_exited")"
+  local has_exited="$(database__get "sbu_current_global_setup_has_failed")"
   if [[ "${has_exited}" == "${SBU_YES}" ]]; then
     _file_runner__handle_failure_in_global_setup
   fi
