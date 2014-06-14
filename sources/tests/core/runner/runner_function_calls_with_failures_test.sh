@@ -11,7 +11,7 @@ function teardown() {
   database__release
 }
 
-function _the_runner_calls_global_teardown_if_global_setup_fails() {
+function the_runner_calls_global_teardown_if_global_setup_fails() {
   SBU_TEST_FILE_PATTERN="*file_with_failing_global_setup.sh"
 
   runner__run_all_test_files "${_TESTS_DIR}"
@@ -23,7 +23,7 @@ function _the_runner_calls_global_teardown_if_global_setup_fails() {
 	assertion__equal "global_teardown" "${called_functions[1]}"
 }
 
-function _the_runner_stops_file_run_if_global_setup_exits() {
+function the_runner_stops_file_run_if_global_setup_exits() {
   SBU_TEST_FILE_PATTERN="*file_with_exiting_global_setup.sh"
 
 	runner__run_all_test_files "${_TESTS_DIR}"
