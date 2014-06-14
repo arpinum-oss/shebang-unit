@@ -17,6 +17,11 @@ function database__post() {
   system__print "$2" >> "$(_database__get_dir)/$1"
 }
 
+function database__post_line() {
+  _database__ensure_directory_exists
+  system__print_line "$2" >> "$(_database__get_dir)/$1"
+}
+
 function database__put_variable() {
   _database__ensure_directory_exists
   database__put "$1" "${!1}"

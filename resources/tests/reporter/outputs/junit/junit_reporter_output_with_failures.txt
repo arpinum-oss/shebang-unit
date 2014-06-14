@@ -6,6 +6,9 @@
     <testcase name="failing_test_function" classname="failing_test_sh" time="1337">
       <failure>
       </failure>
+      <system-out>
+Assertion failed. Actual: &lt;2&gt;, expected: &lt;3&gt;.
+      </system-out>
     </testcase>
   </testsuite>
   <testsuite name="successful_test_sh" tests="1">

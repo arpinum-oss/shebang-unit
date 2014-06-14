@@ -2,8 +2,18 @@
 <testsuites>
   <testsuite name="first_test_sh" tests="2">
     <testcase name="first_successful_test_function" classname="first_test_sh" time="1337">
+      <system-out>
+some log in setup
+some log in test
+some error log in test
+some log in teardown
+      </system-out>
     </testcase>
     <testcase name="second_successful_test_function" classname="first_test_sh" time="1337">
+      <system-out>
+some log in setup
+some log in teardown
+      </system-out>
     </testcase>
   </testsuite>
   <testsuite name="second_test_sh" tests="1">

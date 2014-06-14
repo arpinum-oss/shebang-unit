@@ -11,6 +11,7 @@ core/reporter/reporter
 core/reporter/simple_reporter
 core/reporter/dots_reporter
 core/reporter/junit_reporter
+utils/xml
 utils/database
 utils/system
 main
