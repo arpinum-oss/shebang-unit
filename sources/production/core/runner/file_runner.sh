@@ -30,11 +30,11 @@ function _file_runner__skip_all_tests() {
 }
 
 function _file_runner__get_test_functions() {
-	local i
-	for (( i=0; i < "${#public_functions[@]}"; i++ )); do
-	  local function="${public_functions[${i}]}"
-	  if _file_runner__function_is_a_test "${function}"; then
-		  system__print_line "${function}"
+	local test_function
+	for test_function in "${public_functions[@]}"; do
+	  if _file_runner__function_is_a_test "${test_function}"\
+	     && [[ "${test_function}" == ${SBU_TEST_FUNCTION_PATTERN} ]]; then
+		  system__print_line "${test_function}"
 		fi
 	done
 }

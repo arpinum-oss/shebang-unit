@@ -38,6 +38,10 @@ function _main__parse_arguments() {
 			_main__print_full_usage
 			exit ${SBU_SUCCESS_STATUS_CODE}
 			;;
+			-f=*|--file-pattern=*)
+			SBU_TEST_FILE_PATTERN="${argument#*=}"
+			(( parsed_arguments++ ))
+			;;
 			--no-run)
 			SBU_NO_RUN="${SBU_YES}"
 			(( parsed_arguments++ ))
@@ -46,8 +50,8 @@ function _main__parse_arguments() {
 			SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
-			-p=*|--pattern=*)
-			SBU_TEST_FILE_PATTERN="${argument#*=}"
+			-t=*|--test-pattern=*)
+			SBU_TEST_FUNCTION_PATTERN="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
 			-r=*|--reporters=*)
@@ -109,10 +113,12 @@ function _main__print_full_usage() {
     tests output with colors or no
   -h
     print usage
+  -f, --file-pattern=<pattern>
+    pattern to filter test files
   -o, --output-file=<file>
     output file for JUnit reporter
-  -p, --pattern=<pattern>
-    pattern to filter test files in path
+  -t, --test-pattern=<pattern>
+    pattern to filter test function in files
   -r, --reporters=<reporter1,reporter2>
     comma-separated reporters (simple, dots or junit)
 

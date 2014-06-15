@@ -22,16 +22,29 @@ function can_disable_colors() {
 }
 
 function can_use_a_test_file_pattern() {
-	${_MAIN} --pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
+	${_MAIN} --file-pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
 
 	assertion__equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
 }
 
 function can_use_a_test_file_pattern_with_short_option() {
-	${_MAIN} -p=*my_test.sh "${_TEST_DIR}" > /dev/null
+	${_MAIN} -f=*my_test.sh "${_TEST_DIR}" > /dev/null
 
   local variable="$(database__get "SBU_TEST_FILE_PATTERN")"
 	assertion__equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
+}
+
+function can_use_a_test_function_pattern() {
+	${_MAIN} --test-pattern=my_test* "${_TEST_DIR}" > /dev/null
+
+	assertion__equal "my_test*" "${SBU_TEST_FUNCTION_PATTERN}"
+}
+
+function can_use_a_test_function_pattern_with_short_option() {
+	${_MAIN} -t=my_test* "${_TEST_DIR}" > /dev/null
+
+  local variable="$(database__get "SBU_TEST_FUNCTION_PATTERN")"
+	assertion__equal "my_test*" "${SBU_TEST_FUNCTION_PATTERN}"
 }
 
 function can_define_one_reporter() {
@@ -104,6 +117,12 @@ function unkown_option_is_printed_without_characters_evaluation() {
 
 function can_define_reporter_output_file() {
 	${_MAIN} --output-file="myfile.xml" "${_TEST_DIR}" > /dev/null
+
+	assertion__equal "myfile.xml" "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
+}
+
+function can_define_reporter_output_file_with_short_option() {
+	${_MAIN} -o="myfile.xml" "${_TEST_DIR}" > /dev/null
 
 	assertion__equal "myfile.xml" "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
 }

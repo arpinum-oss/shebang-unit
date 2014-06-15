@@ -21,6 +21,7 @@ function configuration__load() {
   # Default configuration that can be modified with shebang_unit parameters
   # For more information see shebang_unit usages
   SBU_TEST_FILE_PATTERN="*_test.sh"
+  SBU_TEST_FUNCTION_PATTERN="*"
   SBU_USE_COLORS="${SBU_YES}"
   SBU_REPORTERS="simple"
   SBU_JUNIT_REPORTER_OUTPUT_FILE="./junit_report.xml"

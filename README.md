@@ -140,11 +140,17 @@ You can use colors in test outputs with `-c` or `--colors` options. Colors are a
 
 ### Use another test file pattern
 
-Test file pattern can be changed with `-p` or `--pattern` options. It can be convenient to run only few tests or totally change the default pattern (`*_test.sh`).
+Test file pattern can be changed with `-f` or `--file-pattern` options. It can be convenient to run only few tests or totally change the default pattern (`*_test.sh`).
 
 `./shebang_unit --pattern=this_only_test.sh your_folder`
 
 `./shebang_unit --pattern=test_*.sh your_folder`
+
+### Use another test function pattern
+
+Test function pattern can be changed with `-t` or `--test-pattern` options. The default is `*` and can be changed if you want to focus on a couple of tests only.
+
+`./shebang_unit --test-pattern=can_compare* your_folder`
 
 ## Convention over configuration
 

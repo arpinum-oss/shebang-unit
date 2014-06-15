@@ -40,6 +40,7 @@ function configuration__load() {
   # Default configuration that can be modified with shebang_unit parameters
   # For more information see shebang_unit usages
   SBU_TEST_FILE_PATTERN="*_test.sh"
+  SBU_TEST_FUNCTION_PATTERN="*"
   SBU_USE_COLORS="${SBU_YES}"
   SBU_REPORTERS="simple"
   SBU_JUNIT_REPORTER_OUTPUT_FILE="./junit_report.xml"
@@ -209,11 +210,11 @@ function _file_runner__skip_all_tests() {
 }
 
 function _file_runner__get_test_functions() {
-	local i
-	for (( i=0; i < "${#public_functions[@]}"; i++ )); do
-	  local function="${public_functions[${i}]}"
-	  if _file_runner__function_is_a_test "${function}"; then
-		  system__print_line "${function}"
+	local test_function
+	for test_function in "${public_functions[@]}"; do
+	  if _file_runner__function_is_a_test "${test_function}"\
+	     && [[ "${test_function}" == ${SBU_TEST_FUNCTION_PATTERN} ]]; then
+		  system__print_line "${test_function}"
 		fi
 	done
 }
@@ -915,6 +916,10 @@ function _main__parse_arguments() {
 			_main__print_full_usage
 			exit ${SBU_SUCCESS_STATUS_CODE}
 			;;
+			-f=*|--file-pattern=*)
+			SBU_TEST_FILE_PATTERN="${argument#*=}"
+			(( parsed_arguments++ ))
+			;;
 			--no-run)
 			SBU_NO_RUN="${SBU_YES}"
 			(( parsed_arguments++ ))
@@ -923,8 +928,8 @@ function _main__parse_arguments() {
 			SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
-			-p=*|--pattern=*)
-			SBU_TEST_FILE_PATTERN="${argument#*=}"
+			-t=*|--test-pattern=*)
+			SBU_TEST_FUNCTION_PATTERN="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
 			-r=*|--reporters=*)
@@ -986,10 +991,12 @@ function _main__print_full_usage() {
     tests output with colors or no
   -h
     print usage
+  -f, --file-pattern=<pattern>
+    pattern to filter test files
   -o, --output-file=<file>
     output file for JUnit reporter
-  -p, --pattern=<pattern>
-    pattern to filter test files in path
+  -t, --test-pattern=<pattern>
+    pattern to filter test function in files
   -r, --reporters=<reporter1,reporter2>
     comma-separated reporters (simple, dots or junit)
 
