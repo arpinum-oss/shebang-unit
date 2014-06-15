@@ -2,8 +2,8 @@ function global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/runner/directory_with_one_test"
   helper__use_silent_reporter
 	database__initialise
-  runner__run_all_test_files "${_TESTS_DIRECTORY}"
-  _called_functions=($(helper__get_called_functions) )
+  ( runner__run_all_test_files "${_TESTS_DIRECTORY}" )
+  _called_functions=($(helper__get_called_functions))
 }
 
 function global_teardown() {

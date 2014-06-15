@@ -3,28 +3,28 @@ function simple_reporter__test_files_start_running() {
 }
 
 function simple_reporter__test_file_starts_running() {
-	system__print_line "[File] $1"
+	reporter__print_line "[File] $1"
 }
 
 function simple_reporter__global_setup_has_failed() {
-  system__print_line_with_color \
+  reporter__print_line_with_color \
     "Global setup has failed" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__test_starts_running() {
-	system__print_line "[Test] $1"
+	reporter__print_line "[Test] $1"
 }
 
 function simple_reporter__test_has_succeeded() {
-  system__print_line_with_color "OK" ${SBU_GREEN_COLOR_CODE}
+  reporter__print_line_with_color "OK" ${SBU_GREEN_COLOR_CODE}
 }
 
 function simple_reporter__test_has_failed() {
-  system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
+  reporter__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
 }
 
 function simple_reporter__test_is_skipped() {
-  system__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
+  reporter__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__test_ends_running() {
@@ -32,18 +32,18 @@ function simple_reporter__test_ends_running() {
 }
 
 function simple_reporter__test_file_ends_running() {
-	system__print_new_line
+	reporter__print_new_line
 }
 
 function simple_reporter__test_files_end_running() {
 	local time="in $1s"
-	system__print_line "[Results]"
-	local color="$(_reporter__get_color_code_for_tests_result)"
+	reporter__print_line "[Results]"
+	local color="$(reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
 	local skipped_count="$(results__get_skipped_tests_count) skipped"
 	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
-	system__print_line_with_color "${message}" "${color}"
+	reporter__print_line_with_color "${message}" "${color}"
 }
 
 function _simple_reporter__get_total_count_message() {

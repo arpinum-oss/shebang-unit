@@ -1,6 +1,7 @@
 function setup() {
   source "${TEST_SOURCES_DIR}/core/reporter/mock_objects/first_reporter.sh"
   source "${TEST_SOURCES_DIR}/core/reporter/mock_objects/second_reporter.sh"
+  source "${TEST_SOURCES_DIR}/tests_utils/mock.sh"
   SBU_REPORTERS=first,second
 }
 
@@ -50,6 +51,8 @@ function can_call_for_each_reporter__test_file_ends_running() {
 }
 
 function can_call_for_each_reporter__test_files_end_running() {
+  mock__make_function_do_nothing "_reporter__release_file_descriptors"
+
   _can_call_for_each_reporter "test_files_end_running"
 }
 

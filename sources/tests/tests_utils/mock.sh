@@ -4,6 +4,10 @@ function mock__make_function_prints() {
   eval "function ${function}() { printf "${text}"; }"
 }
 
+function mock__make_function_do_nothing() {
+  mock__make_function_call "$1" ":"
+}
+
 function mock__make_function_call() {
   local function_to_mock=$1
   local function_to_call=$2

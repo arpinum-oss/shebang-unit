@@ -1,6 +1,12 @@
 function reporter__test_files_start_running() {
+  _reporter__initialise_file_descriptors
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_files_start_running" "$@"
+}
+
+function _reporter__initialise_file_descriptors() {
+  eval "exec ${SBU_STANDARD_FD}>&1"
+  eval "exec ${SBU_ERROR_FD}>&2"
 }
 
 function reporter__global_setup_has_failed() {
@@ -33,11 +39,6 @@ function reporter__test_is_skipped() {
 	  _reporter__call_function "test_is_skipped" "$@"
 }
 
-function reporter__redirect_tests_outputs() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "redirect_test_output" "$@"
-}
-
 function reporter__test_ends_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_ends_running" "$@"
@@ -51,6 +52,12 @@ function reporter__test_file_ends_running() {
 function reporter__test_files_end_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_files_end_running" "$@"
+	_reporter__release_file_descriptors
+}
+
+function _reporter__release_file_descriptors() {
+  eval "exec 1>&${SBU_STANDARD_FD} ${SBU_STANDARD_FD}>&-"
+  eval "exec 2>&${SBU_ERROR_FD} ${SBU_ERROR_FD}>&-"
 }
 
 function _reporter__call_function() {
@@ -66,10 +73,27 @@ function reporter__for_each_reporter() {
   done
 }
 
-function _reporter__get_color_code_for_tests_result() {
+function reporter__print_with_color() {
+  system__print_with_color "$@" >&${SBU_STANDARD_FD}
+}
+
+function reporter__print_line() {
+  system__print_line "$@" >&${SBU_STANDARD_FD}
+}
+
+function reporter__print_line_with_color() {
+  system__print_line_with_color "$@" >&${SBU_STANDARD_FD}
+}
+
+function reporter__print_new_line() {
+  system__print_new_line >&${SBU_STANDARD_FD}
+}
+
+function reporter__get_color_code_for_tests_result() {
 	local color_code=${SBU_GREEN_COLOR_CODE}
 	if ! runner__tests_are_successful; then
 		color_code=${SBU_RED_COLOR_CODE}
 	fi
 	system__print "${color_code}"
 }
+

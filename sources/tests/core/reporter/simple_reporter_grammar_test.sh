@@ -2,6 +2,8 @@ function setup() {
 	database__initialise
 	results__test_files_start_running
   SBU_USE_COLOR=${SBU_NO}
+  SBU_STANDARD_FD=1
+  SBU_ERROR_FD=1
 }
 
 function teardown() {

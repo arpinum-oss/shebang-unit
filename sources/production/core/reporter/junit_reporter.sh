@@ -29,9 +29,9 @@ time=\"\${sbu_current_test_time}\">"
 
 function _junit_reporter__redirect_test_outputs_to_database() {
   local descriptor="$(database__get_descriptor "sbu_current_test_ouputs_lines")"
-  exec 8>&1 1<>\
+  exec 1<>\
     "$(database__get_descriptor "sbu_current_test_standard_ouputs_lines")"
-  exec 9>&2 2<>\
+  exec 2<>\
     "$(database__get_descriptor "sbu_current_test_error_ouputs_lines")"
 }
 
@@ -54,7 +54,6 @@ function junit_reporter__test_ends_running() {
   _junit_reporter__write_test_outputs_to_report_if_any "standard"
   _junit_reporter__write_test_outputs_to_report_if_any "error"
   _junit_reporter__write_line_to_report "    </testcase>"
-  _junit_reporter__cancel_outputs_redirection
 }
 
 function _junit_reporter__write_test_outputs_to_report_if_any() {
@@ -108,9 +107,4 @@ function _junit_reporter__initialise_report_with() {
 
 function _junit_reporter__write_line_to_report() {
   system__print_line "$1" >> "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
-}
-
-_junit_reporter__cancel_outputs_redirection() {
-  exec 1>&8 8>&-
-  exec 2>&9 9>&-
 }

@@ -32,4 +32,6 @@ function configuration__load() {
   SBU_TEMP_DIR="/tmp/.shebang_unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
   SBU_NO_RUN="${SBU_NO}"
+  SBU_STANDARD_FD=42
+  SBU_ERROR_FD=43
 }

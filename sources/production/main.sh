@@ -1,5 +1,6 @@
 function main__main() {
 	configuration__load
+	_main__initialise
   local parsed_arguments=0
   _main__parse_arguments "$@"
   shift ${parsed_arguments}
@@ -7,9 +8,18 @@ function main__main() {
 	_main__assert_reporters_are_known
 
 	if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
-	  _main__run_all_test_files "$1"
+	  runner__run_all_test_files "$1"
 	  return $?
 	fi
+}
+
+function _main__initialise() {
+  database__initialise
+  trap _main__release EXIT
+}
+
+function _main__release() {
+  database__release
 }
 
 function _main__parse_arguments() {
@@ -105,20 +115,4 @@ function _main__print_usage() {
   system__print_line "\
 usage: $(_main__get_script_name) [options] path
        run all tests in path"
-}
-
-function _main__run_all_test_files() {
-  _main__initialise
-	runner__run_all_test_files "$1"
-	local status=$?
-	_main__release
-	return ${status}
-}
-
-function _main__initialise() {
-  database__initialise
-}
-
-function _main__release() {
-  database__release
 }

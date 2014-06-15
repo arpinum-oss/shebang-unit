@@ -51,6 +51,8 @@ function configuration__load() {
   SBU_TEMP_DIR="/tmp/.shebang_unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
   SBU_NO_RUN="${SBU_NO}"
+  SBU_STANDARD_FD=42
+  SBU_ERROR_FD=43
 }
 
 function assertion__equal() {
@@ -392,8 +394,14 @@ function test_runner__skip_test() {
 }
 
 function reporter__test_files_start_running() {
+  _reporter__initialise_file_descriptors
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_files_start_running" "$@"
+}
+
+function _reporter__initialise_file_descriptors() {
+  eval "exec ${SBU_STANDARD_FD}>&1"
+  eval "exec ${SBU_ERROR_FD}>&2"
 }
 
 function reporter__global_setup_has_failed() {
@@ -426,11 +434,6 @@ function reporter__test_is_skipped() {
 	  _reporter__call_function "test_is_skipped" "$@"
 }
 
-function reporter__redirect_tests_outputs() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "redirect_test_output" "$@"
-}
-
 function reporter__test_ends_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_ends_running" "$@"
@@ -444,6 +447,12 @@ function reporter__test_file_ends_running() {
 function reporter__test_files_end_running() {
 	reporter__for_each_reporter \
 	  _reporter__call_function "test_files_end_running" "$@"
+	_reporter__release_file_descriptors
+}
+
+function _reporter__release_file_descriptors() {
+  eval "exec 1>&${SBU_STANDARD_FD} ${SBU_STANDARD_FD}>&-"
+  eval "exec 2>&${SBU_ERROR_FD} ${SBU_ERROR_FD}>&-"
 }
 
 function _reporter__call_function() {
@@ -459,7 +468,23 @@ function reporter__for_each_reporter() {
   done
 }
 
-function _reporter__get_color_code_for_tests_result() {
+function reporter__print_with_color() {
+  system__print_with_color "$@" >&${SBU_STANDARD_FD}
+}
+
+function reporter__print_line() {
+  system__print_line "$@" >&${SBU_STANDARD_FD}
+}
+
+function reporter__print_line_with_color() {
+  system__print_line_with_color "$@" >&${SBU_STANDARD_FD}
+}
+
+function reporter__print_new_line() {
+  system__print_new_line >&${SBU_STANDARD_FD}
+}
+
+function reporter__get_color_code_for_tests_result() {
 	local color_code=${SBU_GREEN_COLOR_CODE}
 	if ! runner__tests_are_successful; then
 		color_code=${SBU_RED_COLOR_CODE}
@@ -468,33 +493,34 @@ function _reporter__get_color_code_for_tests_result() {
 }
 
 
+
 function simple_reporter__test_files_start_running() {
   :
 }
 
 function simple_reporter__test_file_starts_running() {
-	system__print_line "[File] $1"
+	reporter__print_line "[File] $1"
 }
 
 function simple_reporter__global_setup_has_failed() {
-  system__print_line_with_color \
+  reporter__print_line_with_color \
     "Global setup has failed" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__test_starts_running() {
-	system__print_line "[Test] $1"
+	reporter__print_line "[Test] $1"
 }
 
 function simple_reporter__test_has_succeeded() {
-  system__print_line_with_color "OK" ${SBU_GREEN_COLOR_CODE}
+  reporter__print_line_with_color "OK" ${SBU_GREEN_COLOR_CODE}
 }
 
 function simple_reporter__test_has_failed() {
-  system__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
+  reporter__print_line_with_color "KO" ${SBU_RED_COLOR_CODE}
 }
 
 function simple_reporter__test_is_skipped() {
-  system__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
+  reporter__print_line_with_color "Skipped" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function simple_reporter__test_ends_running() {
@@ -502,18 +528,18 @@ function simple_reporter__test_ends_running() {
 }
 
 function simple_reporter__test_file_ends_running() {
-	system__print_new_line
+	reporter__print_new_line
 }
 
 function simple_reporter__test_files_end_running() {
 	local time="in $1s"
-	system__print_line "[Results]"
-	local color="$(_reporter__get_color_code_for_tests_result)"
+	reporter__print_line "[Results]"
+	local color="$(reporter__get_color_code_for_tests_result)"
 	local total_count="$(_simple_reporter__get_total_count_message)"
 	local failures_count="$(_simple_reporter__get_failures_count_message)"
 	local skipped_count="$(results__get_skipped_tests_count) skipped"
 	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
-	system__print_line_with_color "${message}" "${color}"
+	reporter__print_line_with_color "${message}" "${color}"
 }
 
 function _simple_reporter__get_total_count_message() {
@@ -533,7 +559,8 @@ function _simple_reporter__get_agreement() {
 }
 
 function dots_reporter__test_files_start_running() {
-  _dots_reporter__redirect_outputs_to_trash
+  exec 1>/dev/null
+  exec 2>/dev/null
 }
 
 function dots_reporter__test_file_starts_running() {
@@ -549,15 +576,15 @@ function dots_reporter__test_starts_running() {
 }
 
 function dots_reporter__test_has_succeeded() {
-  _dots_reporter__print_with_color "." ${SBU_GREEN_COLOR_CODE}
+  reporter__print_with_color "." ${SBU_GREEN_COLOR_CODE}
 }
 
 function dots_reporter__test_has_failed() {
-  _dots_reporter__print_with_color "F" ${SBU_RED_COLOR_CODE}
+  reporter__print_with_color "F" ${SBU_RED_COLOR_CODE}
 }
 
 function dots_reporter__test_is_skipped() {
-  _dots_reporter__print_with_color "S" ${SBU_YELLOW_COLOR_CODE}
+  reporter__print_with_color "S" ${SBU_YELLOW_COLOR_CODE}
 }
 
 function dots_reporter__test_ends_running() {
@@ -569,28 +596,11 @@ function dots_reporter__test_file_ends_running() {
 }
 
 function dots_reporter__test_files_end_running() {
-  _dots_reporter__cancel_outputs_redirection
-	local color="$(_reporter__get_color_code_for_tests_result)"
+	local color="$(reporter__get_color_code_for_tests_result)"
 	local texte="$(runner__tests_are_successful \
 	                && system__print "OK" \
 	                || system__print "KO")"
-	system__print_line_with_color "${texte}" "${color}"
-}
-
-_dots_reporter__print_with_color() {
-  _dots_reporter__cancel_outputs_redirection
-  system__print_with_color "$@"
-  _dots_reporter__redirect_outputs_to_trash
-}
-
-_dots_reporter__redirect_outputs_to_trash() {
-  exec 8>&1 1>/dev/null
-  exec 9>&2 2>/dev/null
-}
-
-_dots_reporter__cancel_outputs_redirection() {
-  exec 1>&8 8>&-
-  exec 2>&9 9>&-
+	reporter__print_line_with_color "${texte}" "${color}"
 }
 
 function junit_reporter__test_files_start_running() {
@@ -624,9 +634,9 @@ time=\"\${sbu_current_test_time}\">"
 
 function _junit_reporter__redirect_test_outputs_to_database() {
   local descriptor="$(database__get_descriptor "sbu_current_test_ouputs_lines")"
-  exec 8>&1 1<>\
+  exec 1<>\
     "$(database__get_descriptor "sbu_current_test_standard_ouputs_lines")"
-  exec 9>&2 2<>\
+  exec 2<>\
     "$(database__get_descriptor "sbu_current_test_error_ouputs_lines")"
 }
 
@@ -649,7 +659,6 @@ function junit_reporter__test_ends_running() {
   _junit_reporter__write_test_outputs_to_report_if_any "standard"
   _junit_reporter__write_test_outputs_to_report_if_any "error"
   _junit_reporter__write_line_to_report "    </testcase>"
-  _junit_reporter__cancel_outputs_redirection
 }
 
 function _junit_reporter__write_test_outputs_to_report_if_any() {
@@ -703,11 +712,6 @@ function _junit_reporter__initialise_report_with() {
 
 function _junit_reporter__write_line_to_report() {
   system__print_line "$1" >> "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
-}
-
-_junit_reporter__cancel_outputs_redirection() {
-  exec 1>&8 8>&-
-  exec 2>&9 9>&-
 }
 
 function xml__encode_text() {
@@ -840,6 +844,7 @@ function system__substitute_variable() {
 
 function main__main() {
 	configuration__load
+	_main__initialise
   local parsed_arguments=0
   _main__parse_arguments "$@"
   shift ${parsed_arguments}
@@ -847,9 +852,18 @@ function main__main() {
 	_main__assert_reporters_are_known
 
 	if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
-	  _main__run_all_test_files "$1"
+	  runner__run_all_test_files "$1"
 	  return $?
 	fi
+}
+
+function _main__initialise() {
+  database__initialise
+  trap _main__release EXIT
+}
+
+function _main__release() {
+  database__release
 }
 
 function _main__parse_arguments() {
@@ -945,22 +959,6 @@ function _main__print_usage() {
   system__print_line "\
 usage: $(_main__get_script_name) [options] path
        run all tests in path"
-}
-
-function _main__run_all_test_files() {
-  _main__initialise
-	runner__run_all_test_files "$1"
-	local status=$?
-	_main__release
-	return ${status}
-}
-
-function _main__initialise() {
-  database__initialise
-}
-
-function _main__release() {
-  database__release
 }
 
 main__main $@

@@ -6,6 +6,8 @@ function protector__protect_symbols() {
 
 function _protector__protect_all_global_variables() {
   local file=$1
+  _protector__sed_in_place "${file}" "s/SBU_STANDARD_FD=42/SBU_STANDARD_FD=52/g"
+  _protector__sed_in_place "${file}" "s/SBU_ERROR_FD=43/SBU_ERROR_FD=53/g"
   _protector__sed_in_place "${file}" "s/SBU_/SBU_COPY_/g"
   _protector__sed_in_place "${file}" "s/sbu_/sbu_copy_/g"
 }
