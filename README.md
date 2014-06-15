@@ -142,9 +142,9 @@ You can use colors in test outputs with `-c` or `--colors` options. Colors are a
 
 Test file pattern can be changed with `-f` or `--file-pattern` options. It can be convenient to run only few tests or totally change the default pattern (`*_test.sh`).
 
-`./shebang_unit --pattern=this_only_test.sh your_folder`
+`./shebang_unit --file-pattern=this_only_test.sh your_folder`
 
-`./shebang_unit --pattern=test_*.sh your_folder`
+`./shebang_unit --file-pattern=test_*.sh your_folder`
 
 ### Use another test function pattern
 
