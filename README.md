@@ -1,4 +1,4 @@
-# Shebang unit [![Etat build]](https://travis-ci.org/arpinum/shebang_unit)
+# Shebang unit [![Etat build travis]](https://travis-ci.org/arpinum/shebang_unit) [![Etat build drone]](https://drone.io/github.com/arpinum/shebang_unit/latest)
 
 > Bang bang, my baby shot me down.
 > <cite>(Cher)</cite>
@@ -202,7 +202,8 @@ Copyright (C) 2013, Arpinum
 You should have received a copy of the GNU General Public License along with **Shebang Unit**.  If not, see [http://www.gnu.org/licenses/lgpl.html].
 
 
-[Etat build]: https://travis-ci.org/arpinum/shebang_unit.png?branch=master
+[Etat build travis]: https://travis-ci.org/arpinum/shebang_unit.png?branch=master
+[Etat build drone]: https://drone.io/github.com/arpinum/shebang_unit/status.png
 [xUnit]: http://wikipedia.org/wiki/XUnit
 [releases/shebang_unit]: https://github.com/arpinum/shebang_unit/blob/master/releases/shebang_unit
 [examples/fizzbuzz]: https://github.com/arpinum/shebang_unit/tree/master/examples/fizzbuzz
