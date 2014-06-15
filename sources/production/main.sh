@@ -39,6 +39,10 @@ function _main__parse_arguments() {
 			SBU_REPORTERS="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
+			-o=*|--output-file=*)
+			SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
+			(( parsed_arguments++ ))
+			;;
 			--no-run)
 			SBU_NO_RUN="${SBU_YES}"
 			(( parsed_arguments++ ))

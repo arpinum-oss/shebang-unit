@@ -121,6 +121,16 @@ You can use another reporter with `-r` or `--reporters` options.
 The default reporter is called *simple*. It writes a verbose logging of test run to standard output.
 
 You can use its little brother, the *dots* reporter which only displays dots (successful), S (skipped) or F (failing). Such a lazy cat.
+
+If you are a rock star you can try the über JUnit reporter in combination with your favorite CI server (Jenkins?).
+
+Here we use the JUnit reporter plus the dots one to display some log in the console.
+
+`./shebang_unit --reporters=dots,junit`
+
+The JUnit reporter creates a *junit_report.xml* file in your working directory. You can define another file with :
+
+`./shebang_unit --reporters=junit --output-file=/tmp/i_love_ponies.xml`
  
 ### Use colors or no
 

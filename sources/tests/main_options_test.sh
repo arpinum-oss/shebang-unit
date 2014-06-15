@@ -102,6 +102,12 @@ function unkown_option_is_printed_without_characters_evaluation() {
   assertion__string_contains "${message}" "usage:"
 }
 
+function can_define_reporter_output_file() {
+	${_MAIN} --output-file="myfile.xml" "${_TEST_DIR}" > /dev/null
+
+	assertion__equal "myfile.xml" "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
+}
+
 function cannot_use_unknown_option() {
   local message
 
