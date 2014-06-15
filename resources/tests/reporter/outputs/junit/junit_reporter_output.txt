@@ -23,8 +23,8 @@ some log in global setup
 some log in global teardown
     </system-out>
   </testsuite>
-  <testsuite name="second_test_sh" tests="1">
-    <testcase name="successful_test_function" classname="second_test_sh" time="1337">
+  <testsuite name="subdir.second_test_sh" tests="1">
+    <testcase name="successful_test_function" classname="subdir.second_test_sh" time="1337">
     </testcase>
   </testsuite>
 </testsuites>

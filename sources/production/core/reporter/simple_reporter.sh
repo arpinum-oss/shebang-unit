@@ -3,7 +3,8 @@ function simple_reporter__test_files_start_running() {
 }
 
 function simple_reporter__test_file_starts_running() {
-	reporter__print_line "[File] $1"
+  local relative_name="$(reporter__get_test_file_relative_name "$1")"
+	reporter__print_line "[File] ${relative_name}"
 }
 
 function simple_reporter__global_setup_has_failed() {

@@ -1,4 +1,5 @@
 function runner__run_all_test_files() {
+	SBU_BASE_TEST_DIRECTORY=$1
 	reporter__test_files_start_running
 	timer__store_current_time "global_time"
 	results__test_files_start_running

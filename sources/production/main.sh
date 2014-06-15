@@ -6,6 +6,7 @@ function main__main() {
   shift ${parsed_arguments}
   _main__assert_only_one_argument_left $#
 	_main__assert_reporters_are_known
+	SBU_BASE_TEST_DIRECTORY=$1
 
 	if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
 	  runner__run_all_test_files "$1"

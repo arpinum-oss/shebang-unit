@@ -21,8 +21,9 @@ function junit_reporter__global_setup_has_failed() {
 
 function junit_reporter__test_starts_running() {
   local suite_name="$(database__get "sbu_current_suite_name")"
+  local test_name="$(xml__encode_text "$1")"
   _junit_reporter__write_line_to_report \
-    "    <testcase name=\"$1\" classname=\"${suite_name}\" \
+    "    <testcase name=\"${test_name}\" classname=\"${suite_name}\" \
 time=\"\${sbu_current_test_time}\">"
   _junit_reporter__delete_all_outputs_lines "test"
   _junit_reporter__redirect_outputs_to_database "test"
@@ -69,8 +70,10 @@ function junit_reporter__test_files_end_running() {
 }
 
 function _junit_reporter__get_suite_name() {
-  local test_file_name="$(system__print "$1" | sed "s|^.*/\(.*\)|\\1|")"
-  system__print "${test_file_name//./_}"
+  local relative_name="$(reporter__get_test_file_relative_name "$1")"
+  local dots_replaced_by_underscores="${relative_name//./_}"
+  local slashes_replaced_by_dots="${dots_replaced_by_underscores//\//.}"
+  xml__encode_text "${slashes_replaced_by_dots}"
 }
 
 function _junit_reporter__initialise_report_with() {

@@ -97,3 +97,6 @@ function reporter__get_color_code_for_tests_result() {
 	system__print "${color_code}"
 }
 
+function reporter__get_test_file_relative_name() {
+  system__print "${1#${SBU_BASE_TEST_DIRECTORY}\/}"
+}

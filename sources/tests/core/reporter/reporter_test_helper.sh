@@ -50,10 +50,7 @@ function _make_timer_return_1337_for_time_elapsed() {
 }
 
 function _get_expected_content() {
-  local expected_output_file="${_OUTPUTS_DIR}/$1.txt"
-  system__substitute_variable "$(cat "${expected_output_file}")" \
-                    "TESTS_RESOURCES_DIR" \
-                    "${TESTS_RESOURCES_DIR}"
+  cat "${_OUTPUTS_DIR}/$1.txt"
 }
 
 function helper__all_functions_are_overriden() {

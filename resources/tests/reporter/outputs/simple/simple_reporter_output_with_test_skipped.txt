@@ -1,9 +1,9 @@
-[File] ${TESTS_RESOURCES_DIR}/reporter/tests/one_successful_test_and_one_skipped/skipped_test.sh
+[File] skipped_test.sh
 [1;33mGlobal setup has failed[0m
 [Test] skipped_test_function
 [1;33mSkipped[0m
 
-[File] ${TESTS_RESOURCES_DIR}/reporter/tests/one_successful_test_and_one_skipped/successful_test.sh
+[File] successful_test.sh
 [Test] successful_test_function
 [1;32mOK[0m
 
