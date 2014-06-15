@@ -27,8 +27,23 @@ function _main__parse_arguments() {
 	local argument
 	for argument in "$@"; do
 		case "${argument}" in
+			-a|--api-cheat-sheet)
+			_main__print_api_cheat_sheet_and_exit
+			;;
 			-c=*|--colors=*)
 			SBU_USE_COLORS="${argument#*=}"
+			(( parsed_arguments++ ))
+			;;
+			-h|--help)
+			_main__print_full_usage
+			exit ${SBU_SUCCESS_STATUS_CODE}
+			;;
+			--no-run)
+			SBU_NO_RUN="${SBU_YES}"
+			(( parsed_arguments++ ))
+			;;
+			-o=*|--output-file=*)
+			SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
 			-p=*|--pattern=*)
@@ -38,18 +53,6 @@ function _main__parse_arguments() {
 			-r=*|--reporters=*)
 			SBU_REPORTERS="${argument#*=}"
 			(( parsed_arguments++ ))
-			;;
-			-o=*|--output-file=*)
-			SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			--no-run)
-			SBU_NO_RUN="${SBU_YES}"
-			(( parsed_arguments++ ))
-			;;
-			-h|--help)
-			_main__print_full_usage
-			exit ${SBU_SUCCESS_STATUS_CODE}
 			;;
 			-*|--*)
 			_main__print_illegal_option "${argument}"
@@ -100,24 +103,68 @@ function _main__print_full_usage() {
   system__print_new_line
   system__print_line "\
 [options]
--c, --colors=${SBU_YES} or ${SBU_NO}
-  tests output with colors or no
--h
-  print usage
--p, --pattern=<pattern>
-  pattern to filter test files in path
--r, --reporters=<reporter1,reporter2>
-  comma-separated reporters
+  -a, --api-cheat-sheet
+    print api cheat sheet like assertions
+  -c, --colors=${SBU_YES} or ${SBU_NO}
+    tests output with colors or no
+  -h
+    print usage
+  -o, --output-file=<file>
+    output file for JUnit reporter
+  -p, --pattern=<pattern>
+    pattern to filter test files in path
+  -r, --reporters=<reporter1,reporter2>
+    comma-separated reporters (simple, dots or junit)
 
 [examples]
-${script} .
-  run all tests in current directory
-${script} -p=*test.sh sources/test
-  run all tests files ending with test.sh in sources/test"
+  ${script} .
+    run all tests in current directory
+  ${script} -p=*test.sh sources/test
+    run all tests files ending with test.sh in sources/test"
 }
 
 function _main__print_usage() {
   system__print_line "\
 usage: $(_main__get_script_name) [options] path
        run all tests in path"
+}
+
+function _main__print_api_cheat_sheet_and_exit() {
+  system__print_line "\
+[assertions]
+  assertion__equal (value, other)
+    -> assert that <value> is equal to <other>
+  assertion__different (value, other)
+    -> assert that <value> is different from <other>
+  assertion__string_contains (string, substring)
+    -> assert that <string> contains <substring>
+  assertion__string_does_not_contain (string, substring)
+    -> assert that <string> does not contain <substring>
+  assertion__string_empty (string)
+    -> assert that <string> is empty
+  assertion__string_not_empty (string)
+    -> assert that <string> is not empty
+  assertion__array_contains (element, array[0], array[1], ...)
+    -> assert that the <array> contains the <element>
+  assertion__array_does_not_contain (element, array elements...)
+    -> assert that the <array> does not contain the <element>
+  assertion__successful (command)
+    -> assert that the <command> is successful
+  assertion__failing (command)
+    -> assert that the <command> is failing
+  assertion__status_code_is_success (code)
+    -> assert that the status <code> is 0
+  assertion__status_code_is_failure (code)
+    -> assert that the status <code> is not 0
+
+[special functions]
+  ${SBU_GLOBAL_SETUP_FUNCTION_NAME}
+    -> Executed before all tests in a file
+  ${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}
+    -> Executed after all tests in a file
+  ${SBU_SETUP_FUNCTION_NAME}
+    -> Executed before each test in a file
+  ${SBU_TEARDOWN_FUNCTION_NAME}
+    -> Executed after each test in a file"
+  exit ${SBU_SUCCESS_STATUS_CODE}
 }

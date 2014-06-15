@@ -161,3 +161,15 @@ function cannot_use_more_than_one_argument_after_options() {
   assertion__string_contains "${message}" "${expected}"
   assertion__string_contains "${message}" "usage:"
 }
+
+function can_print_api_cheat_sheet() {
+  local message
+
+  message="$(${_MAIN} --api-cheat-sheet)"
+
+  assertion__status_code_is_success $?
+  assertion__string_contains "${message}" "[assertions]"
+  assertion__string_contains "${message}" "  assertion__equal"
+  assertion__string_contains "${message}" "[special functions]"
+  assertion__string_contains "${message}" "  ${SBU_GLOBAL_SETUP_FUNCTION_NAME}"
+}
