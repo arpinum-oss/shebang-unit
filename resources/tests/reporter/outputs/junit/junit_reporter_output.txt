@@ -17,6 +17,11 @@ some log in setup
 some log in teardown
       </system-out>
     </testcase>
+    <system-out>
+some log in the file
+some log in global setup
+some log in global teardown
+    </system-out>
   </testsuite>
   <testsuite name="second_test_sh" tests="1">
     <testcase name="successful_test_function" classname="second_test_sh" time="1337">
