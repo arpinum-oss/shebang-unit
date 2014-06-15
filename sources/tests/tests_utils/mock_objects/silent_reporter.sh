@@ -26,10 +26,6 @@ function silent_reporter__test_is_skipped() {
   :
 }
 
-function silent_reporter__redirect_test_output() {
- :
-}
-
 function silent_reporter__test_ends_running() {
 	:
 }

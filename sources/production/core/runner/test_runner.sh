@@ -10,8 +10,8 @@ function test_runner__run_test() {
 	  _test_runner__call_teardown_if_exists "$@"
 	  (( $? == ${SBU_SUCCESS_STATUS_CODE} \
 	  &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
-	) 2>&1 | reporter__redirect_tests_outputs
-	_test_runner__parse_test_function_result ${PIPESTATUS[0]}
+	)
+	_test_runner__parse_test_function_result $?
 	reporter__test_ends_running "$(timer__get_time_elapsed "test_time")"
 }
 

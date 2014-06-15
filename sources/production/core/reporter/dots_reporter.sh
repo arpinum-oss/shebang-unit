@@ -26,13 +26,6 @@ function dots_reporter__test_is_skipped() {
   _dots_reporter__print_with_color "S" ${SBU_YELLOW_COLOR_CODE}
 }
 
-function dots_reporter__redirect_test_output() {
-  local text
-  while read text; do
-   :
-  done
-}
-
 function dots_reporter__test_ends_running() {
   :
 }
@@ -62,6 +55,6 @@ _dots_reporter__redirect_outputs_to_trash() {
 }
 
 _dots_reporter__cancel_outputs_redirection() {
-  exec 1>&8
-  exec 2>&9
+  exec 1>&8 8>&-
+  exec 2>&9 9>&-
 }

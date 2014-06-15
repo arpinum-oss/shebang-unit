@@ -31,6 +31,10 @@ function database__get() {
   [[ -e "$(_database__get_dir)/$1" ]] && cat "$(_database__get_dir)/$1"
 }
 
+function database__get_descriptor() {
+  system__print "$(_database__get_dir)/$1"
+}
+
 function _database__ensure_directory_exists() {
   mkdir -p "$(_database__get_dir)"
 }
