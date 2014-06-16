@@ -1,4 +1,4 @@
-# Shebang unit [![Etat build travis]](https://travis-ci.org/arpinum/shebang_unit) [![Etat build drone]](https://drone.io/github.com/arpinum/shebang_unit/latest)
+# Shebang unit [![Etat build travis]](https://travis-ci.org/arpinum/shebang_unit) [![Etat build drone]](https://drone.io/github.com/arpinum/shebang_unit/latest) [![Etat build Jenkins]](https://michaelborde.ci.cloudbees.com/job/shebang_unit/)
 
 > Bang bang, my baby shot me down.
 > <cite>(Cher)</cite>
@@ -131,6 +131,8 @@ Here we use the JUnit reporter plus the dots one to display some log in the cons
 The JUnit reporter creates a *junit_report.xml* file in your working directory. You can define another file with :
 
 `./shebang_unit --reporters=junit --output-file=/tmp/i_love_ponies.xml`
+
+Example with **Shebang Unit** [last build].
  
 ### Use colors or no
 
@@ -220,6 +222,8 @@ You should have received a copy of the GNU General Public License along with **S
 
 [Etat build travis]: https://travis-ci.org/arpinum/shebang_unit.png?branch=master
 [Etat build drone]: https://drone.io/github.com/arpinum/shebang_unit/status.png
+[Etat build Jenkins]: https://michaelborde.ci.cloudbees.com/buildStatus/icon?job=shebang_unit
+[last build]: https://michaelborde.ci.cloudbees.com/job/shebang_unit/lastCompletedBuild/testReport/
 [xUnit]: http://wikipedia.org/wiki/XUnit
 [releases/shebang_unit]: https://github.com/arpinum/shebang_unit/blob/master/releases/shebang_unit
 [examples/fizzbuzz]: https://github.com/arpinum/shebang_unit/tree/master/examples/fizzbuzz
