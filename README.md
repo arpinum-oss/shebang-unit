@@ -1,13 +1,13 @@
-# Shebang unit [![Etat build travis]](https://travis-ci.org/arpinum/shebang_unit) [![Etat build drone]](https://drone.io/github.com/arpinum/shebang_unit/latest) [![Etat build Jenkins]](https://michaelborde.ci.cloudbees.com/job/shebang_unit/)
+# shebang_unit [![Etat build travis]](https://travis-ci.org/arpinum/shebang_unit) [![Etat build drone]](https://drone.io/github.com/arpinum/shebang_unit/latest) [![Etat build Jenkins]](https://michaelborde.ci.cloudbees.com/job/shebang_unit/)
 
 > Bang bang, my baby shot me down.
 > <cite>(Cher)</cite>
 
-**Shebang Unit** is an automated testing framework for Bash 4 based on [xUnit].
+**shebang_unit** is an automated testing framework for Bash 4 based on [xUnit].
 
 Just download it here : *[releases/shebang_unit]*. Write a kata like *[examples/fizzbuzz]* and have fun!
 
-With **Shebang Unit** you can :
+With **shebang_unit** you can :
  * assert equality,
  * assert that string contains or not another string,
  * assert that array contains or not an element,
@@ -132,7 +132,7 @@ The JUnit reporter creates a *junit_report.xml* file in your working directory. 
 
 `./shebang_unit --reporters=junit --output-file=/tmp/i_love_ponies.xml`
 
-Example with **Shebang Unit** [last build].
+Example with **shebang_unit** [last build].
  
 ### Use colors or no
 
@@ -213,11 +213,11 @@ SBU_USE_COLORS="${SBU_NO}"
 
 Copyright (C) 2013, Arpinum
 
-**Shebang Unit** is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+**shebang_unit** is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-**Shebang Unit** is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+**shebang_unit** is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with **Shebang Unit**.  If not, see [http://www.gnu.org/licenses/lgpl.html].
+You should have received a copy of the GNU General Public License along with **shebang_unit**.  If not, see [http://www.gnu.org/licenses/lgpl.html].
 
 
 [Etat build travis]: https://travis-ci.org/arpinum/shebang_unit.png?branch=master
