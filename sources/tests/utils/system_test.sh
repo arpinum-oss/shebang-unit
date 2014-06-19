@@ -64,13 +64,24 @@ function can_print_array() {
 
 	local string="$(system__print_array "${array[@]}")"
 
+  local expected="a
+123
+douze"
+	assertion__equal "${expected}" "${string}"
+}
+
+function can_pretty_print_array() {
+	local array=("a" "123" "douze")
+
+	local string="$(system__pretty_print_array "${array[@]}")"
+
 	assertion__equal "[a, 123, douze]" "${string}"
 }
 
 function can_print_array_with_spaces() {
 	local array=("un deux" "54" "choco lat")
 
-	local string="$(system__print_array "${array[@]}")"
+	local string="$(system__pretty_print_array "${array[@]}")"
 
 	assertion__equal "[un deux, 54, choco lat]" "${string}"
 }
@@ -108,4 +119,18 @@ function can_substitute_variable_in_text() {
   local result="$(system__substitute_variable "${text}" "value" "my_value")"
 
   assertion__equal "The value is : my_value" "${result}"
+}
+
+function can_randomize_array() {
+  local ordered=(1 2 3 4 5 6 7 8 9 10)
+
+  local actual=($(system__randomize_array "${ordered[@]}"))
+
+  assertion__equal 10 "${#actual[@]}"
+  assertion__array_contains "1" "${actual[@]}"
+  assertion__array_contains "7" "${actual[@]}"
+  assertion__array_contains "10" "${actual[@]}"
+  local ordred_as_string="$(system__pretty_print_array "${ordered[@]}")"
+  local actual_as_string="$(system__pretty_print_array "${actual[@]}")"
+  assertion__different "${ordred_as_string}" "${actual_as_string}"
 }

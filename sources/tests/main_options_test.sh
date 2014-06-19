@@ -21,6 +21,24 @@ function can_disable_colors() {
 	assertion__equal "${SBU_NO}" "${SBU_USE_COLORS}"
 }
 
+function can_enable_random_run() {
+	${_MAIN} --random-run="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+
+	assertion__equal "${SBU_YES}" "${SBU_RANDOM_RUN}"
+}
+
+function can_enable_random_run_with_short_option() {
+	${_MAIN} -d="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+
+	assertion__equal "${SBU_YES}" "${SBU_RANDOM_RUN}"
+}
+
+function can_disable_random_run() {
+	${_MAIN} --random-run="${SBU_NO}" "${_TEST_DIR}" > /dev/null
+
+	assertion__equal "${SBU_NO}" "${SBU_RANDOM_RUN}"
+}
+
 function can_use_a_test_file_pattern() {
 	${_MAIN} --file-pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
 

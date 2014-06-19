@@ -15,6 +15,7 @@ With **shebang_unit** you can :
  * assert that command is successful or failing,
  * write setup or teardown functions for a test or a whole test file,
  * view tests results with different kind of reports,
+ * randomly execute tests to verify isolation,
  * save a baby kitten every time you use it!
 
 Now you don't have any excuse for not practicing some sexy Test-Driven Development in Bash.
@@ -139,6 +140,14 @@ Example with **shebang_unit** [last build].
 You can use colors in test outputs with `-c` or `--colors` options. Colors are activated by default.
 
 `./shebang_unit --colors=no your_folder`
+
+### Run test files and functions randomly or no
+
+You can run test files and functions randomly with `-d` or `--random-run` options. Runs are sorted by default.
+
+`./shebang_unit --random-run=yes your_folder`
+
+Test files are alphabetically ordered and functions are ordered from top to bottom by default. If you select a random run, test files are randomized then inside a file, each functions are randomized.
 
 ### Use another test file pattern
 

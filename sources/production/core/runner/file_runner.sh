@@ -30,13 +30,23 @@ function _file_runner__skip_all_tests() {
 }
 
 function _file_runner__get_test_functions() {
+	local result=()
 	local test_function
 	for test_function in "${public_functions[@]}"; do
 	  if _file_runner__function_is_a_test "${test_function}"\
 	     && [[ "${test_function}" == ${SBU_TEST_FUNCTION_PATTERN} ]]; then
-		  system__print_line "${test_function}"
+		  result+=("${test_function}")
 		fi
 	done
+	_file_runner__get_randomized_test_functions_if_needed "${result[@]}"
+}
+
+function _file_runner__get_randomized_test_functions_if_needed() {
+  if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}" ]]; then
+    system__randomize_array "$@"
+  else
+    system__print_array "$@"
+  fi
 }
 
 function _file_runner__run_global_setup_if_exists() {

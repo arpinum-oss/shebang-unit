@@ -48,6 +48,13 @@ function system__array_contains() {
 }
 
 function system__print_array() {
+  local element
+  for element in "$@"; do
+    system__print_line "${element}"
+  done
+}
+
+function system__pretty_print_array() {
 	local array_as_string=""
 	local i
 	for (( i=1; i <= $#; i++ )); do
@@ -59,6 +66,16 @@ function system__print_array() {
 
 function system__string_contains() {
 	[[ "$1" == *"$2"* ]]
+}
+
+function system__randomize_array() {
+  local copy=("$@")
+  while (( ${#copy[@]} > 0 )); do
+    local random_index=$(( $(system__random) % ${#copy[@]} ))
+    system__print_line "${copy[${random_index}]}"
+    unset copy[${random_index}]
+    copy=(${copy[@]})
+  done
 }
 
 function system__random() {

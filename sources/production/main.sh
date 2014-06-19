@@ -34,6 +34,10 @@ function _main__parse_arguments() {
 			SBU_USE_COLORS="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
+			-d=*|--random-run=*)
+			SBU_RANDOM_RUN="${argument#*=}"
+			(( parsed_arguments++ ))
+			;;
 			-h|--help)
 			_main__print_full_usage
 			exit ${SBU_SUCCESS_STATUS_CODE}
@@ -111,16 +115,18 @@ function _main__print_full_usage() {
     print api cheat sheet like assertions
   -c, --colors=${SBU_YES} or ${SBU_NO}
     tests output with colors or no
-  -h
-    print usage
+  -d, --random-run=${SBU_YES} or ${SBU_NO}
+    tests files and functions randomly run or no
   -f, --file-pattern=<pattern>
     pattern to filter test files
+  -h
+    print usage
   -o, --output-file=<file>
     output file for JUnit reporter
-  -t, --test-pattern=<pattern>
-    pattern to filter test function in files
   -r, --reporters=<reporter1,reporter2>
     comma-separated reporters (simple, dots or junit)
+  -t, --test-pattern=<pattern>
+    pattern to filter test function in files
 
 [examples]
   ${script} .

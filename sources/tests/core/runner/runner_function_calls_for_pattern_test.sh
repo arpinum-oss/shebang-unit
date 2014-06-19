@@ -16,8 +16,8 @@ function can_execute_function_for_a_given_pattern() {
 
   runner__run_all_test_files "${_TESTS_DIRECTORY}"
 
-  _called_functions=($(helper__get_called_functions))
-  assertion__equal 2 "${#_called_functions[@]}"
-	assertion__array_contains "my_test_function" "${_called_functions[0]}"
-	assertion__array_contains "my_other_test_function" "${_called_functions[1]}"
+  local called_functions=($(helper__get_called_functions))
+  assertion__equal 2 "${#called_functions[@]}"
+	assertion__array_contains "my_test_function" "${called_functions[0]}"
+	assertion__array_contains "my_other_test_function" "${called_functions[1]}"
 }

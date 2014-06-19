@@ -42,6 +42,7 @@ function configuration__load() {
   SBU_TEST_FILE_PATTERN="*_test.sh"
   SBU_TEST_FUNCTION_PATTERN="*"
   SBU_USE_COLORS="${SBU_YES}"
+  SBU_RANDOM_RUN="${SBU_NO}"
   SBU_REPORTERS="simple"
   SBU_JUNIT_REPORTER_OUTPUT_FILE="./junit_report.xml"
 
@@ -96,7 +97,7 @@ function assertion__array_contains() {
 	local element=$1
 	shift 1
 	if ! system__array_contains "${element}" "$@"; then
-		local array_as_string="$(system__print_array "$@")"
+		local array_as_string="$(system__pretty_print_array "$@")"
 		_assertion__failed \
 			"Array: <${array_as_string}> does not contain: <${element}>."
 	fi
@@ -106,7 +107,7 @@ function assertion__array_does_not_contain() {
 	local element=$1
 	shift 1
 	if system__array_contains "${element}" "$@"; then
-		local array_as_string="$(system__print_array "$@")"
+		local array_as_string="$(system__pretty_print_array "$@")"
 		_assertion__failed \
 			"Array: <${array_as_string}> contains: <${element}>."
 	fi
@@ -168,9 +169,18 @@ function runner__run_all_test_files() {
 
 function _runner__run_all_test_files_with_pattern_in_directory() {
 	local file
-	for file in $(find "$1" -name "${SBU_TEST_FILE_PATTERN}" | sort); do
+	local files=($(_runner__get_test_files_in_directory "$1"))
+	for file in "${files[@]}"; do
 		file_runner__run_test_file "${file}"
 	done
+}
+
+function _runner__get_test_files_in_directory() {
+  local files=($(find "$1" -name "${SBU_TEST_FILE_PATTERN}" | sort))
+  if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}"  ]]; then
+    files=($(system__randomize_array "${files[@]}"))
+  fi
+  system__print_array "${files[@]}"
 }
 
 function runner__tests_are_successful() {
@@ -210,13 +220,23 @@ function _file_runner__skip_all_tests() {
 }
 
 function _file_runner__get_test_functions() {
+	local result=()
 	local test_function
 	for test_function in "${public_functions[@]}"; do
 	  if _file_runner__function_is_a_test "${test_function}"\
 	     && [[ "${test_function}" == ${SBU_TEST_FUNCTION_PATTERN} ]]; then
-		  system__print_line "${test_function}"
+		  result+=("${test_function}")
 		fi
 	done
+	_file_runner__get_randomized_test_functions_if_needed "${result[@]}"
+}
+
+function _file_runner__get_randomized_test_functions_if_needed() {
+  if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}" ]]; then
+    system__randomize_array "$@"
+  else
+    system__print_array "$@"
+  fi
 }
 
 function _file_runner__run_global_setup_if_exists() {
@@ -852,6 +872,13 @@ function system__array_contains() {
 }
 
 function system__print_array() {
+  local element
+  for element in "$@"; do
+    system__print_line "${element}"
+  done
+}
+
+function system__pretty_print_array() {
 	local array_as_string=""
 	local i
 	for (( i=1; i <= $#; i++ )); do
@@ -863,6 +890,16 @@ function system__print_array() {
 
 function system__string_contains() {
 	[[ "$1" == *"$2"* ]]
+}
+
+function system__randomize_array() {
+  local copy=("$@")
+  while (( ${#copy[@]} > 0 )); do
+    local random_index=$(( $(system__random) % ${#copy[@]} ))
+    system__print_line "${copy[${random_index}]}"
+    unset copy[${random_index}]
+    copy=(${copy[@]})
+  done
 }
 
 function system__random() {
@@ -910,6 +947,10 @@ function _main__parse_arguments() {
 			;;
 			-c=*|--colors=*)
 			SBU_USE_COLORS="${argument#*=}"
+			(( parsed_arguments++ ))
+			;;
+			-d=*|--random-run=*)
+			SBU_RANDOM_RUN="${argument#*=}"
 			(( parsed_arguments++ ))
 			;;
 			-h|--help)
@@ -989,16 +1030,18 @@ function _main__print_full_usage() {
     print api cheat sheet like assertions
   -c, --colors=${SBU_YES} or ${SBU_NO}
     tests output with colors or no
-  -h
-    print usage
+  -d, --random-run=${SBU_YES} or ${SBU_NO}
+    tests files and functions randomly executed or no
   -f, --file-pattern=<pattern>
     pattern to filter test files
+  -h
+    print usage
   -o, --output-file=<file>
     output file for JUnit reporter
-  -t, --test-pattern=<pattern>
-    pattern to filter test function in files
   -r, --reporters=<reporter1,reporter2>
     comma-separated reporters (simple, dots or junit)
+  -t, --test-pattern=<pattern>
+    pattern to filter test function in files
 
 [examples]
   ${script} .
