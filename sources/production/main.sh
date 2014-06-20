@@ -177,6 +177,14 @@ function _main__print_api_cheat_sheet_and_exit() {
   ${SBU_SETUP_FUNCTION_NAME}
     -> Executed before each test in a file
   ${SBU_TEARDOWN_FUNCTION_NAME}
-    -> Executed after each test in a file"
+    -> Executed after each test in a file
+
+[mocks]
+  mock__make_function_do_nothing (function_to_mock)
+    -> make function do nothing
+  mock__make_function_prints (function_to_mock, message)
+    -> make function prints a message
+  mock__make_function_call (function_to_mock, function_to_call)
+    -> make function call another function"
   exit ${SBU_SUCCESS_STATUS_CODE}
 }
