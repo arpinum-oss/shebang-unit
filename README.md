@@ -14,6 +14,7 @@ With **shebang_unit** you can :
  * assert that status code is success or failure,
  * assert that command is successful or failing,
  * write setup or teardown functions for a test or a whole test file,
+ * mock functions to speed up tests or enhance reliability,
  * view tests results with different kind of reports,
  * randomly execute tests to verify isolation,
  * save a baby kitten every time you use it!
@@ -101,6 +102,34 @@ function can_assert_that_command_is_successful() {
 ```bash
 function can_assert_that_command_is_failing() {
   assertion__failing false
+}
+```
+
+### Mock in the Shell
+> Your effort to remain what you are is what limits you.
+> <cite>(Puppeteer, Ghost in the Shell)</cite>
+
+```bash
+function can_mock_pwd_to_do_nothing() {
+  mock__make_function_do_nothing "pwd"
+
+  assertion__equal "" "$(pwd)"
+}
+```
+
+```bash
+function can_mock_pwd_to_print_root() {
+  mock__make_function_prints "pwd" "/"
+
+  assertion__equal "/" "$(pwd)"
+}
+```
+
+```bash
+function can_mock_pwd_to_call_a_custom_function() {
+  mock__make_function_call "pwd" "printf hello"
+
+  assertion__equal "hello" "$(pwd)"
 }
 ```
 

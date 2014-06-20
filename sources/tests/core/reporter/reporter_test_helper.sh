@@ -2,7 +2,6 @@ function helper__setup() {
   _OUTPUT_DOCUMENT_KEY="reporter_output"
   _TESTS_DIR="${TESTS_RESOURCES_DIR}/reporter/tests"
   _OUTPUTS_DIR="${TESTS_RESOURCES_DIR}/reporter/outputs/$(_reporter)"
-  source "${TEST_SOURCES_DIR}/tests_utils/mock.sh"
 }
 
 function helper__teardown() {

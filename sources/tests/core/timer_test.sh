@@ -1,5 +1,4 @@
 function setup() {
-  source "${TEST_SOURCES_DIR}/tests_utils/mock.sh"
   database__initialise
 }
 

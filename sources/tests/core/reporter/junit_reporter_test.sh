@@ -1,6 +1,5 @@
 function setup() {
   source "${TEST_SOURCES_DIR}/core/reporter/reporter_test_helper.sh"
-  source "${TEST_SOURCES_DIR}/tests_utils/mock.sh"
   _override_get_output
   helper__setup
   SBU_JUNIT_REPORTER_OUTPUT_FILE="${SBU_TEMP_DIR}/junit_report.xml"

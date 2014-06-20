@@ -157,6 +157,23 @@ function _assertion__get_assertion_message_to_use() {
 	fi
 }
 
+function mock__make_function_do_nothing() {
+  mock__make_function_call "$1" ":"
+}
+
+function mock__make_function_prints() {
+  local function=$1
+  local text=$2
+  eval "function ${function}() { printf "${text}"; }"
+}
+
+function mock__make_function_call() {
+  local function_to_mock=$1
+  local function_to_call=$2
+  shift 2
+  eval "function ${function_to_mock}() { ${function_to_call}; }"
+}
+
 function runner__run_all_test_files() {
 	SBU_BASE_TEST_DIRECTORY=$1
 	reporter__test_files_start_running
@@ -1031,7 +1048,7 @@ function _main__print_full_usage() {
   -c, --colors=${SBU_YES} or ${SBU_NO}
     tests output with colors or no
   -d, --random-run=${SBU_YES} or ${SBU_NO}
-    tests files and functions randomly executed or no
+    tests files and functions randomly run or no
   -f, --file-pattern=<pattern>
     pattern to filter test files
   -h

@@ -49,3 +49,21 @@ function can_assert_that_command_is_successful() {
 function can_assert_that_command_is_failing() {
   assertion__failing false
 }
+
+function can_mock_pwd_to_do_nothing() {
+  mock__make_function_do_nothing "pwd"
+
+  assertion__equal "" "$(pwd)"
+}
+
+function can_mock_pwd_to_print_root() {
+  mock__make_function_prints "pwd" "/"
+
+  assertion__equal "/" "$(pwd)"
+}
+
+function can_mock_pwd_to_call_a_custom_function() {
+  mock__make_function_call "pwd" "printf hello"
+
+  assertion__equal "hello" "$(pwd)"
+}
