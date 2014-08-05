@@ -1,4 +1,4 @@
-# shebang_unit [![Etat build travis]](https://travis-ci.org/arpinum/shebang_unit) [![Etat build drone]](https://drone.io/github.com/arpinum/shebang_unit/latest) [![Etat build Jenkins]](https://michaelborde.ci.cloudbees.com/job/shebang_unit/)
+# shebang_unit [![Etat build travis]](https://travis-ci.org/arpinum/shebang_unit) [![Etat build drone]](https://drone.io/github.com/arpinum/shebang_unit/latest)
 
 > Bang bang, my baby shot me down.
 > <cite>(Cher)</cite>
@@ -162,8 +162,6 @@ The JUnit reporter creates a *junit_report.xml* file in your working directory. 
 
 `./shebang_unit --reporters=junit --output-file=/tmp/i_love_ponies.xml`
 
-Example with **shebang_unit** [last build].
- 
 ### Use colors or no
 
 You can use colors in test outputs with `-c` or `--colors` options. Colors are activated by default.
@@ -260,8 +258,6 @@ You should have received a copy of the GNU General Public License along with **s
 
 [Etat build travis]: https://travis-ci.org/arpinum/shebang_unit.png?branch=master
 [Etat build drone]: https://drone.io/github.com/arpinum/shebang_unit/status.png
-[Etat build Jenkins]: https://michaelborde.ci.cloudbees.com/buildStatus/icon?job=shebang_unit
-[last build]: https://michaelborde.ci.cloudbees.com/job/shebang_unit/lastCompletedBuild/testReport/
 [xUnit]: http://wikipedia.org/wiki/XUnit
 [releases/shebang_unit]: https://github.com/arpinum/shebang_unit/blob/master/releases/shebang_unit
 [examples/fizzbuzz]: https://github.com/arpinum/shebang_unit/tree/master/examples/fizzbuzz
