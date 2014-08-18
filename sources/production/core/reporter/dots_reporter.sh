@@ -4,7 +4,7 @@ function dots_reporter__test_files_start_running() {
 }
 
 function dots_reporter__test_file_starts_running() {
-	:
+  :
 }
 
 function dots_reporter__global_setup_has_failed() {
@@ -12,7 +12,7 @@ function dots_reporter__global_setup_has_failed() {
 }
 
 function dots_reporter__test_starts_running() {
-	:
+  :
 }
 
 function dots_reporter__test_has_succeeded() {
@@ -32,13 +32,13 @@ function dots_reporter__test_ends_running() {
 }
 
 function dots_reporter__test_file_ends_running() {
-	:
+  :
 }
 
 function dots_reporter__test_files_end_running() {
-	local color="$(reporter__get_color_code_for_tests_result)"
-	local texte="$(runner__tests_are_successful \
-	                && system__print "OK" \
-	                || system__print "KO")"
-	reporter__print_line_with_color "${texte}" "${color}"
+  local color="$(reporter__get_color_code_for_tests_result)"
+  local texte="$(runner__tests_are_successful \
+                  && system__print "OK" \
+                  || system__print "KO")"
+  reporter__print_line_with_color "${texte}" "${color}"
 }

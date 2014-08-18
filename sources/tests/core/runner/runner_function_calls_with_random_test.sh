@@ -4,7 +4,7 @@ function global_setup() {
 }
 
 function setup() {
-	database__initialise
+  database__initialise
 }
 
 function teardown() {

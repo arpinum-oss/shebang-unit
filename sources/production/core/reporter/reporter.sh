@@ -1,7 +1,7 @@
 function reporter__test_files_start_running() {
   _reporter__initialise_file_descriptors
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_files_start_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_files_start_running" "$@"
 }
 
 function _reporter__initialise_file_descriptors() {
@@ -10,49 +10,49 @@ function _reporter__initialise_file_descriptors() {
 }
 
 function reporter__global_setup_has_failed() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "global_setup_has_failed" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "global_setup_has_failed" "$@"
 }
 
 function reporter__test_file_starts_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_file_starts_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_file_starts_running" "$@"
 }
 
 function reporter__test_starts_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_starts_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_starts_running" "$@"
 }
 
 function reporter__test_has_succeeded() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_has_succeeded" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_has_succeeded" "$@"
 }
 
 function reporter__test_has_failed() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_has_failed" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_has_failed" "$@"
 }
 
 function reporter__test_is_skipped() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_is_skipped" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_is_skipped" "$@"
 }
 
 function reporter__test_ends_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_ends_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_ends_running" "$@"
 }
 
 function reporter__test_file_ends_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_file_ends_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_file_ends_running" "$@"
 }
 
 function reporter__test_files_end_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_files_end_running" "$@"
-	_reporter__release_file_descriptors
+  reporter__for_each_reporter \
+    _reporter__call_function "test_files_end_running" "$@"
+  _reporter__release_file_descriptors
 }
 
 function _reporter__release_file_descriptors() {
@@ -90,11 +90,11 @@ function reporter__print_new_line() {
 }
 
 function reporter__get_color_code_for_tests_result() {
-	local color_code=${SBU_GREEN_COLOR_CODE}
-	if ! runner__tests_are_successful; then
-		color_code=${SBU_RED_COLOR_CODE}
-	fi
-	system__print "${color_code}"
+  local color_code=${SBU_GREEN_COLOR_CODE}
+  if ! runner__tests_are_successful; then
+    color_code=${SBU_RED_COLOR_CODE}
+  fi
+  system__print "${color_code}"
 }
 
 function reporter__get_test_file_relative_name() {

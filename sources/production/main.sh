@@ -1,17 +1,17 @@
 function main__main() {
-	configuration__load
-	_main__initialise
+  configuration__load
+  _main__initialise
   local parsed_arguments=0
   _main__parse_arguments "$@"
   shift ${parsed_arguments}
   _main__assert_only_one_argument_left $#
-	_main__assert_reporters_are_known
-	SBU_BASE_TEST_DIRECTORY=$1
+  _main__assert_reporters_are_known
+  SBU_BASE_TEST_DIRECTORY=$1
 
-	if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
-	  runner__run_all_test_files "$1"
-	  return $?
-	fi
+  if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
+    runner__run_all_test_files "$1"
+    return $?
+  fi
 }
 
 function _main__initialise() {
@@ -24,53 +24,53 @@ function _main__release() {
 }
 
 function _main__parse_arguments() {
-	local argument
-	for argument in "$@"; do
-		case "${argument}" in
-			-a|--api-cheat-sheet)
-			_main__print_api_cheat_sheet_and_exit
-			;;
-			-c=*|--colors=*)
-			SBU_USE_COLORS="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-d=*|--random-run=*)
-			SBU_RANDOM_RUN="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-h|--help)
-			_main__print_full_usage
-			exit ${SBU_SUCCESS_STATUS_CODE}
-			;;
-			-f=*|--file-pattern=*)
-			SBU_TEST_FILE_PATTERN="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			--no-run)
-			SBU_NO_RUN="${SBU_YES}"
-			(( parsed_arguments++ ))
-			;;
-			-o=*|--output-file=*)
-			SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-t=*|--test-pattern=*)
-			SBU_TEST_FUNCTION_PATTERN="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-r=*|--reporters=*)
-			SBU_REPORTERS="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-*|--*)
-			_main__print_illegal_option "${argument}"
+  local argument
+  for argument in "$@"; do
+    case "${argument}" in
+      -a|--api-cheat-sheet)
+      _main__print_api_cheat_sheet_and_exit
+      ;;
+      -c=*|--colors=*)
+      SBU_USE_COLORS="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -d=*|--random-run=*)
+      SBU_RANDOM_RUN="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -h|--help)
+      _main__print_full_usage
+      exit ${SBU_SUCCESS_STATUS_CODE}
+      ;;
+      -f=*|--file-pattern=*)
+      SBU_TEST_FILE_PATTERN="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      --no-run)
+      SBU_NO_RUN="${SBU_YES}"
+      (( parsed_arguments++ ))
+      ;;
+      -o=*|--output-file=*)
+      SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -t=*|--test-pattern=*)
+      SBU_TEST_FUNCTION_PATTERN="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -r=*|--reporters=*)
+      SBU_REPORTERS="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -*|--*)
+      _main__print_illegal_option "${argument}"
       _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
-			;;
-		esac
-	done
+      ;;
+    esac
+  done
 }
 
-function 	_main__assert_reporters_are_known() {
+function  _main__assert_reporters_are_known() {
   reporter__for_each_reporter _main__fail_if_reporter_unknown
 }
 
@@ -102,7 +102,7 @@ function _main__get_script_name() {
 
 function _main__print_usage_and_exit_with_code() {
   _main__print_usage
-	exit $1
+  exit $1
 }
 
 function _main__print_full_usage() {

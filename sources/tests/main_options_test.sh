@@ -4,89 +4,89 @@ function global_setup() {
 }
 
 function can_enable_colors() {
-	${_MAIN} --colors="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --colors="${SBU_YES}" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "${SBU_YES}" "${SBU_USE_COLORS}"
+  assertion__equal "${SBU_YES}" "${SBU_USE_COLORS}"
 }
 
 function can_enable_colors_with_short_option() {
-	${_MAIN} -c="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} -c="${SBU_YES}" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "${SBU_YES}" "${SBU_USE_COLORS}"
+  assertion__equal "${SBU_YES}" "${SBU_USE_COLORS}"
 }
 
 function can_disable_colors() {
-	${_MAIN} --colors="${SBU_NO}" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --colors="${SBU_NO}" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "${SBU_NO}" "${SBU_USE_COLORS}"
+  assertion__equal "${SBU_NO}" "${SBU_USE_COLORS}"
 }
 
 function can_enable_random_run() {
-	${_MAIN} --random-run="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --random-run="${SBU_YES}" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "${SBU_YES}" "${SBU_RANDOM_RUN}"
+  assertion__equal "${SBU_YES}" "${SBU_RANDOM_RUN}"
 }
 
 function can_enable_random_run_with_short_option() {
-	${_MAIN} -d="${SBU_YES}" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} -d="${SBU_YES}" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "${SBU_YES}" "${SBU_RANDOM_RUN}"
+  assertion__equal "${SBU_YES}" "${SBU_RANDOM_RUN}"
 }
 
 function can_disable_random_run() {
-	${_MAIN} --random-run="${SBU_NO}" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --random-run="${SBU_NO}" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "${SBU_NO}" "${SBU_RANDOM_RUN}"
+  assertion__equal "${SBU_NO}" "${SBU_RANDOM_RUN}"
 }
 
 function can_use_a_test_file_pattern() {
-	${_MAIN} --file-pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --file-pattern=*my_test.sh "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
+  assertion__equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
 }
 
 function can_use_a_test_file_pattern_with_short_option() {
-	${_MAIN} -f=*my_test.sh "${_TEST_DIR}" > /dev/null
+  ${_MAIN} -f=*my_test.sh "${_TEST_DIR}" > /dev/null
 
   local variable="$(database__get "SBU_TEST_FILE_PATTERN")"
-	assertion__equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
+  assertion__equal "*my_test.sh" "${SBU_TEST_FILE_PATTERN}"
 }
 
 function can_use_a_test_function_pattern() {
-	${_MAIN} --test-pattern=my_test* "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --test-pattern=my_test* "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "my_test*" "${SBU_TEST_FUNCTION_PATTERN}"
+  assertion__equal "my_test*" "${SBU_TEST_FUNCTION_PATTERN}"
 }
 
 function can_use_a_test_function_pattern_with_short_option() {
-	${_MAIN} -t=my_test* "${_TEST_DIR}" > /dev/null
+  ${_MAIN} -t=my_test* "${_TEST_DIR}" > /dev/null
 
   local variable="$(database__get "SBU_TEST_FUNCTION_PATTERN")"
-	assertion__equal "my_test*" "${SBU_TEST_FUNCTION_PATTERN}"
+  assertion__equal "my_test*" "${SBU_TEST_FUNCTION_PATTERN}"
 }
 
 function can_define_one_reporter() {
-	${_MAIN} --reporters="dots" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --reporters="dots" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "dots" "${SBU_REPORTERS}"
+  assertion__equal "dots" "${SBU_REPORTERS}"
 }
 
 function can_define_multiple_reporters() {
-	${_MAIN} --reporters="simple,dots" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --reporters="simple,dots" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "simple,dots" "${SBU_REPORTERS}"
+  assertion__equal "simple,dots" "${SBU_REPORTERS}"
 }
 
 function can_define_reporters_with_short_option() {
-	${_MAIN} -r="dots" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} -r="dots" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "dots" "${SBU_REPORTERS}"
+  assertion__equal "dots" "${SBU_REPORTERS}"
 }
 
 function cannot_define_unkown_reporter() {
-	local message
+  local message
 
-	message="$(${_MAIN} --reporters="unknown" "${_TEST_DIR}")"
+  message="$(${_MAIN} --reporters="unknown" "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
   local expected="shebang_unit: unknown reporter <unknown>"
@@ -94,9 +94,9 @@ function cannot_define_unkown_reporter() {
 }
 
 function unkown_reporter_is_printed_without_characters_evaluation() {
-	local message
+  local message
 
-	message="$(${_MAIN} --reporters="%s" "${_TEST_DIR}")"
+  message="$(${_MAIN} --reporters="%s" "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
   local expected="shebang_unit: unknown reporter <%s>"
@@ -104,9 +104,9 @@ function unkown_reporter_is_printed_without_characters_evaluation() {
 }
 
 function cannot_define_known_and_unkown_reporter() {
-	local message
+  local message
 
-	message="$(${_MAIN} --reporters="simple,unknown" "${_TEST_DIR}")"
+  message="$(${_MAIN} --reporters="simple,unknown" "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
   local expected="shebang_unit: unknown reporter <unknown>"
@@ -134,15 +134,15 @@ function unkown_option_is_printed_without_characters_evaluation() {
 }
 
 function can_define_reporter_output_file() {
-	${_MAIN} --output-file="myfile.xml" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} --output-file="myfile.xml" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "myfile.xml" "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
+  assertion__equal "myfile.xml" "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
 }
 
 function can_define_reporter_output_file_with_short_option() {
-	${_MAIN} -o="myfile.xml" "${_TEST_DIR}" > /dev/null
+  ${_MAIN} -o="myfile.xml" "${_TEST_DIR}" > /dev/null
 
-	assertion__equal "myfile.xml" "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
+  assertion__equal "myfile.xml" "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
 }
 
 function cannot_use_unknown_option() {

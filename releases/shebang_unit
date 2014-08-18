@@ -58,103 +58,103 @@ function configuration__load() {
 }
 
 function assertion__equal() {
-	if [[ "$1" != "$2" ]]; then
-		_assertion__failed "Actual: <$2>, expected: <$1>."
-	fi
+  if [[ "$1" != "$2" ]]; then
+    _assertion__failed "Actual: <$2>, expected: <$1>."
+  fi
 }
 
 function assertion__different() {
-	if [[ "$1" == "$2" ]]; then
-		_assertion__failed "Both values are: <$1>."
-	fi
+  if [[ "$1" == "$2" ]]; then
+    _assertion__failed "Both values are: <$1>."
+  fi
 }
 
 function assertion__string_contains() {
-	if ! system__string_contains "$1" "$2"; then
-		_assertion__failed "String: <$1> does not contain: <$2>."
-	fi
+  if ! system__string_contains "$1" "$2"; then
+    _assertion__failed "String: <$1> does not contain: <$2>."
+  fi
 }
 
 function assertion__string_does_not_contain() {
-	if system__string_contains "$1" "$2"; then
-		_assertion__failed "String: <$1> contains: <$2>."
-	fi
+  if system__string_contains "$1" "$2"; then
+    _assertion__failed "String: <$1> contains: <$2>."
+  fi
 }
 
 function assertion__string_empty() {
-	if [[ -n "$1" ]]; then
-		_assertion__failed "String: <$1> is not empty."
-	fi
+  if [[ -n "$1" ]]; then
+    _assertion__failed "String: <$1> is not empty."
+  fi
 }
 
 function assertion__string_not_empty() {
-	if [[ -z "$1" ]]; then
-		_assertion__failed "The string is empty."
-	fi
+  if [[ -z "$1" ]]; then
+    _assertion__failed "The string is empty."
+  fi
 }
 
 function assertion__array_contains() {
-	local element=$1
-	shift 1
-	if ! system__array_contains "${element}" "$@"; then
-		local array_as_string="$(system__pretty_print_array "$@")"
-		_assertion__failed \
-			"Array: <${array_as_string}> does not contain: <${element}>."
-	fi
+  local element=$1
+  shift 1
+  if ! system__array_contains "${element}" "$@"; then
+    local array_as_string="$(system__pretty_print_array "$@")"
+    _assertion__failed \
+      "Array: <${array_as_string}> does not contain: <${element}>."
+  fi
 }
 
 function assertion__array_does_not_contain() {
-	local element=$1
-	shift 1
-	if system__array_contains "${element}" "$@"; then
-		local array_as_string="$(system__pretty_print_array "$@")"
-		_assertion__failed \
-			"Array: <${array_as_string}> contains: <${element}>."
-	fi
+  local element=$1
+  shift 1
+  if system__array_contains "${element}" "$@"; then
+    local array_as_string="$(system__pretty_print_array "$@")"
+    _assertion__failed \
+      "Array: <${array_as_string}> contains: <${element}>."
+  fi
 }
 
 function assertion__status_code_is_success() {
-	if (( $1 != ${SBU_SUCCESS_STATUS_CODE} )); then
-		_assertion__failed \
-			"Status code is failure instead of success." "$2"
-	fi
+  if (( $1 != ${SBU_SUCCESS_STATUS_CODE} )); then
+    _assertion__failed \
+      "Status code is failure instead of success." "$2"
+  fi
 }
 
 function assertion__status_code_is_failure() {
-	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
-		_assertion__failed \
-			"Status code is success instead of failure." "$2"
-	fi
+  if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
+    _assertion__failed \
+      "Status code is success instead of failure." "$2"
+  fi
 }
 
 function assertion__successful() {
-	"$@"
-	if (( $? != ${SBU_SUCCESS_STATUS_CODE} )); then
-		_assertion__failed "Command is failing instead of successful."
-	fi
+  "$@"
+  if (( $? != ${SBU_SUCCESS_STATUS_CODE} )); then
+    _assertion__failed "Command is failing instead of successful."
+  fi
 }
 
 function assertion__failing() {
-	"$@"
-	if (( $? == ${SBU_SUCCESS_STATUS_CODE} )); then
-		_assertion__failed "Command is successful instead of failing."
-	fi
+  "$@"
+  if (( $? == ${SBU_SUCCESS_STATUS_CODE} )); then
+    _assertion__failed "Command is successful instead of failing."
+  fi
 }
 
 function _assertion__failed() {
-	local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
-	system__print_line "Assertion failed. ${message_to_use}"
-	exit ${SBU_FAILURE_STATUS_CODE}
+  local message_to_use="$(_assertion__get_assertion_message_to_use "$1" "$2")"
+  system__print_line "Assertion failed. ${message_to_use}"
+  exit ${SBU_FAILURE_STATUS_CODE}
 }
 
 function _assertion__get_assertion_message_to_use() {
-	local message=$1
-	local custom_messsage=$2
-	if [[ -n "${custom_messsage}" ]]; then
-	  system__print "${message} ${custom_messsage}"
-	else
-		system__print "${message}"
-	fi
+  local message=$1
+  local custom_messsage=$2
+  if [[ -n "${custom_messsage}" ]]; then
+    system__print "${message} ${custom_messsage}"
+  else
+    system__print "${message}"
+  fi
 }
 
 function mock__make_function_do_nothing() {
@@ -175,21 +175,21 @@ function mock__make_function_call() {
 }
 
 function runner__run_all_test_files() {
-	SBU_BASE_TEST_DIRECTORY=$1
-	reporter__test_files_start_running
-	timer__store_current_time "global_time"
-	results__test_files_start_running
-	_runner__run_all_test_files_with_pattern_in_directory "$1"
-	reporter__test_files_end_running "$(timer__get_time_elapsed "global_time")"
-	runner__tests_are_successful
+  SBU_BASE_TEST_DIRECTORY=$1
+  reporter__test_files_start_running
+  timer__store_current_time "global_time"
+  results__test_files_start_running
+  _runner__run_all_test_files_with_pattern_in_directory "$1"
+  reporter__test_files_end_running "$(timer__get_time_elapsed "global_time")"
+  runner__tests_are_successful
 }
 
 function _runner__run_all_test_files_with_pattern_in_directory() {
-	local file
-	local files=($(_runner__get_test_files_in_directory "$1"))
-	for file in "${files[@]}"; do
-		file_runner__run_test_file "${file}"
-	done
+  local file
+  local files=($(_runner__get_test_files_in_directory "$1"))
+  for file in "${files[@]}"; do
+    file_runner__run_test_file "${file}"
+  done
 }
 
 function _runner__get_test_files_in_directory() {
@@ -201,51 +201,51 @@ function _runner__get_test_files_in_directory() {
 }
 
 function runner__tests_are_successful() {
-	(( $(results__get_failing_tests_count) == 0 \
-	    && $(results__get_skipped_tests_count) == 0 ))
+  (( $(results__get_failing_tests_count) == 0 \
+      && $(results__get_skipped_tests_count) == 0 ))
 }
 
 function file_runner__run_test_file() {
-	local file=$1
-	local public_functions=($(parser__get_public_functions_in_file "${file}"))
+  local file=$1
+  local public_functions=($(parser__get_public_functions_in_file "${file}"))
   local test_functions=($(_file_runner__get_test_functions))
-	reporter__test_file_starts_running "${file}" "${#test_functions[@]}"
-	( source "${file}"
-	  _file_runner__run_global_setup_if_exists \
-	    && _file_runner__call_all_tests
-	  _file_runner__run_global_teardown_if_exists )
+  reporter__test_file_starts_running "${file}" "${#test_functions[@]}"
+  ( source "${file}"
+    _file_runner__run_global_setup_if_exists \
+      && _file_runner__call_all_tests
+    _file_runner__run_global_teardown_if_exists )
   _file_runner__check_if_global_setup_has_exited
-	reporter__test_file_ends_running
+  reporter__test_file_ends_running
 }
 
 function _file_runner__run_all_tests_if_global_setup_is_successful() {
-	  _file_runner__call_all_tests
+    _file_runner__call_all_tests
 }
 
 function _file_runner__call_all_tests() {
-	local i
-	for (( i=0; i < ${#test_functions[@]}; i++ )); do
+  local i
+  for (( i=0; i < ${#test_functions[@]}; i++ )); do
     test_runner__run_test "${test_functions[${i}]}" "${public_functions[@]}"
-	done
+  done
 }
 
 function _file_runner__skip_all_tests() {
-	local i
-	for (( i=0; i < ${#test_functions[@]}; i++ )); do
+  local i
+  for (( i=0; i < ${#test_functions[@]}; i++ )); do
     test_runner__skip_test "${test_functions[${i}]}" "${public_functions[@]}"
-	done
+  done
 }
 
 function _file_runner__get_test_functions() {
-	local result=()
-	local test_function
-	for test_function in "${public_functions[@]}"; do
-	  if _file_runner__function_is_a_test "${test_function}"\
-	     && [[ "${test_function}" == ${SBU_TEST_FUNCTION_PATTERN} ]]; then
-		  result+=("${test_function}")
-		fi
-	done
-	_file_runner__get_randomized_test_functions_if_needed "${result[@]}"
+  local result=()
+  local test_function
+  for test_function in "${public_functions[@]}"; do
+    if _file_runner__function_is_a_test "${test_function}"\
+       && [[ "${test_function}" == ${SBU_TEST_FUNCTION_PATTERN} ]]; then
+      result+=("${test_function}")
+    fi
+  done
+  _file_runner__get_randomized_test_functions_if_needed "${result[@]}"
 }
 
 function _file_runner__get_randomized_test_functions_if_needed() {
@@ -267,19 +267,19 @@ function _file_runner__run_global_teardown_if_exists() {
 }
 
 function _file_runner__function_is_a_test() {
-	! system__array_contains "$1" \
-	                    "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
-	                    "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
-	                    "${SBU_SETUP_FUNCTION_NAME}" \
-	                    "${SBU_TEARDOWN_FUNCTION_NAME}"
+  ! system__array_contains "$1" \
+                      "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
+                      "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
+                      "${SBU_SETUP_FUNCTION_NAME}" \
+                      "${SBU_TEARDOWN_FUNCTION_NAME}"
 }
 
 function _file_runner__call_function_if_exists() {
-	local function=$1
-	shift 1
-	if system__array_contains "${function}" "${public_functions[@]}"; then
-	  "${function}"
-	fi
+  local function=$1
+  shift 1
+  if system__array_contains "${function}" "${public_functions[@]}"; then
+    "${function}"
+  fi
 }
 
 function _file_runner__check_if_global_setup_has_exited() {
@@ -290,27 +290,27 @@ function _file_runner__check_if_global_setup_has_exited() {
 }
 
 function _file_runner__handle_failure_in_global_setup() {
-	  reporter__global_setup_has_failed
-	  _file_runner__skip_all_tests
+    reporter__global_setup_has_failed
+    _file_runner__skip_all_tests
 }
 
 function parser__get_public_functions_in_file() {
-	_parser__find_functions_in_file "$1" \
-	  | _parser__filter_private_functions \
-	  | awk '{ print $1 }'
+  _parser__find_functions_in_file "$1" \
+    | _parser__filter_private_functions \
+    | awk '{ print $1 }'
 }
 
 function _parser__find_functions_in_file() {
-	grep -o "${SBU_FUNCTION_DECLARATION_REGEX}" "$1" \
-		| _parser__get_function_name_from_declaration
+  grep -o "${SBU_FUNCTION_DECLARATION_REGEX}" "$1" \
+    | _parser__get_function_name_from_declaration
 }
 
 function _parser__filter_private_functions() {
-	grep -v "${SBU_PRIVATE_FUNCTION_NAME_REGEX}"
+  grep -v "${SBU_PRIVATE_FUNCTION_NAME_REGEX}"
 }
 
 function _parser__get_function_name_from_declaration() {
-	sed "s/${SBU_FUNCTION_DECLARATION_REGEX}/\1/"
+  sed "s/${SBU_FUNCTION_DECLARATION_REGEX}/\1/"
 }
 
 function timer__store_current_time() {
@@ -378,20 +378,20 @@ function _results__increment_tests_of_type() {
 
 
 function test_runner__run_test() {
-	local test_function=$1
-	shift 1
+  local test_function=$1
+  shift 1
   reporter__test_starts_running "${test_function}"
-	timer__store_current_time "test_time"
-	(
-	  _test_runner__call_setup_if_exists "$@" \
-	    && _test_runner__call_test_fonction "${test_function}"
-	  local setup_and_test_code=$?
-	  _test_runner__call_teardown_if_exists "$@"
-	  (( $? == ${SBU_SUCCESS_STATUS_CODE} \
-	  &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
-	)
-	_test_runner__parse_test_function_result $?
-	reporter__test_ends_running "$(timer__get_time_elapsed "test_time")"
+  timer__store_current_time "test_time"
+  (
+    _test_runner__call_setup_if_exists "$@" \
+      && _test_runner__call_test_fonction "${test_function}"
+    local setup_and_test_code=$?
+    _test_runner__call_teardown_if_exists "$@"
+    (( $? == ${SBU_SUCCESS_STATUS_CODE} \
+    &&  ${setup_and_test_code} == ${SBU_SUCCESS_STATUS_CODE} ))
+  )
+  _test_runner__parse_test_function_result $?
+  reporter__test_ends_running "$(timer__get_time_elapsed "test_time")"
 }
 
 function _test_runner__call_test_fonction() {
@@ -407,21 +407,21 @@ function _test_runner__call_teardown_if_exists() {
 }
 
 function _test_runner__parse_test_function_result() {
-	if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
-		results__increment_successful_tests
-		reporter__test_has_succeeded
-	else
-		results__increment_failing_tests
-		reporter__test_has_failed
-	fi
+  if (( $1 == ${SBU_SUCCESS_STATUS_CODE} )); then
+    results__increment_successful_tests
+    reporter__test_has_succeeded
+  else
+    results__increment_failing_tests
+    reporter__test_has_failed
+  fi
 }
 
 function _test_runner__call_function_if_exits() {
-	local function=$1
-	shift 1
-	if system__array_contains "${function}" "$@"; then
-	  "${function}"
-	fi
+  local function=$1
+  shift 1
+  if system__array_contains "${function}" "$@"; then
+    "${function}"
+  fi
 }
 
 function test_runner__skip_test() {
@@ -434,8 +434,8 @@ function test_runner__skip_test() {
 
 function reporter__test_files_start_running() {
   _reporter__initialise_file_descriptors
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_files_start_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_files_start_running" "$@"
 }
 
 function _reporter__initialise_file_descriptors() {
@@ -444,49 +444,49 @@ function _reporter__initialise_file_descriptors() {
 }
 
 function reporter__global_setup_has_failed() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "global_setup_has_failed" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "global_setup_has_failed" "$@"
 }
 
 function reporter__test_file_starts_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_file_starts_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_file_starts_running" "$@"
 }
 
 function reporter__test_starts_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_starts_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_starts_running" "$@"
 }
 
 function reporter__test_has_succeeded() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_has_succeeded" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_has_succeeded" "$@"
 }
 
 function reporter__test_has_failed() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_has_failed" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_has_failed" "$@"
 }
 
 function reporter__test_is_skipped() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_is_skipped" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_is_skipped" "$@"
 }
 
 function reporter__test_ends_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_ends_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_ends_running" "$@"
 }
 
 function reporter__test_file_ends_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_file_ends_running" "$@"
+  reporter__for_each_reporter \
+    _reporter__call_function "test_file_ends_running" "$@"
 }
 
 function reporter__test_files_end_running() {
-	reporter__for_each_reporter \
-	  _reporter__call_function "test_files_end_running" "$@"
-	_reporter__release_file_descriptors
+  reporter__for_each_reporter \
+    _reporter__call_function "test_files_end_running" "$@"
+  _reporter__release_file_descriptors
 }
 
 function _reporter__release_file_descriptors() {
@@ -524,11 +524,11 @@ function reporter__print_new_line() {
 }
 
 function reporter__get_color_code_for_tests_result() {
-	local color_code=${SBU_GREEN_COLOR_CODE}
-	if ! runner__tests_are_successful; then
-		color_code=${SBU_RED_COLOR_CODE}
-	fi
-	system__print "${color_code}"
+  local color_code=${SBU_GREEN_COLOR_CODE}
+  if ! runner__tests_are_successful; then
+    color_code=${SBU_RED_COLOR_CODE}
+  fi
+  system__print "${color_code}"
 }
 
 function reporter__get_test_file_relative_name() {
@@ -542,7 +542,7 @@ function simple_reporter__test_files_start_running() {
 
 function simple_reporter__test_file_starts_running() {
   local relative_name="$(reporter__get_test_file_relative_name "$1")"
-	reporter__print_line "[File] ${relative_name}"
+  reporter__print_line "[File] ${relative_name}"
 }
 
 function simple_reporter__global_setup_has_failed() {
@@ -551,7 +551,7 @@ function simple_reporter__global_setup_has_failed() {
 }
 
 function simple_reporter__test_starts_running() {
-	reporter__print_line "[Test] $1"
+  reporter__print_line "[Test] $1"
 }
 
 function simple_reporter__test_has_succeeded() {
@@ -571,18 +571,18 @@ function simple_reporter__test_ends_running() {
 }
 
 function simple_reporter__test_file_ends_running() {
-	reporter__print_new_line
+  reporter__print_new_line
 }
 
 function simple_reporter__test_files_end_running() {
-	local time="in $1s"
-	reporter__print_line "[Results]"
-	local color="$(reporter__get_color_code_for_tests_result)"
-	local total_count="$(_simple_reporter__get_total_count_message)"
-	local failures_count="$(_simple_reporter__get_failures_count_message)"
-	local skipped_count="$(results__get_skipped_tests_count) skipped"
-	local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
-	reporter__print_line_with_color "${message}" "${color}"
+  local time="in $1s"
+  reporter__print_line "[Results]"
+  local color="$(reporter__get_color_code_for_tests_result)"
+  local total_count="$(_simple_reporter__get_total_count_message)"
+  local failures_count="$(_simple_reporter__get_failures_count_message)"
+  local skipped_count="$(results__get_skipped_tests_count) skipped"
+  local message="${total_count}, ${failures_count}, ${skipped_count} ${time}"
+  reporter__print_line_with_color "${message}" "${color}"
 }
 
 function _simple_reporter__get_total_count_message() {
@@ -607,7 +607,7 @@ function dots_reporter__test_files_start_running() {
 }
 
 function dots_reporter__test_file_starts_running() {
-	:
+  :
 }
 
 function dots_reporter__global_setup_has_failed() {
@@ -615,7 +615,7 @@ function dots_reporter__global_setup_has_failed() {
 }
 
 function dots_reporter__test_starts_running() {
-	:
+  :
 }
 
 function dots_reporter__test_has_succeeded() {
@@ -635,15 +635,15 @@ function dots_reporter__test_ends_running() {
 }
 
 function dots_reporter__test_file_ends_running() {
-	:
+  :
 }
 
 function dots_reporter__test_files_end_running() {
-	local color="$(reporter__get_color_code_for_tests_result)"
-	local texte="$(runner__tests_are_successful \
-	                && system__print "OK" \
-	                || system__print "KO")"
-	reporter__print_line_with_color "${texte}" "${color}"
+  local color="$(reporter__get_color_code_for_tests_result)"
+  local texte="$(runner__tests_are_successful \
+                  && system__print "OK" \
+                  || system__print "KO")"
+  reporter__print_line_with_color "${texte}" "${color}"
 }
 
 function junit_reporter__test_files_start_running() {
@@ -840,13 +840,13 @@ function _database__get_dir() {
 }
 
 function system__get_string_or_default() {
-	[[ -n "$1" ]] \
-	  && system__print "$1" \
-	  || system__print "$2"
+  [[ -n "$1" ]] \
+    && system__print "$1" \
+    || system__print "$2"
 }
 
 function system__get_date_in_seconds() {
-	date +%s
+  date +%s
 }
 
 function system__print_line_with_color() {
@@ -855,11 +855,11 @@ function system__print_line_with_color() {
 }
 
 function system__print_with_color() {
-	if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
-		printf "$2$1${SBU_DEFAULT_COLOR_CODE}"
-	else
-		system__print "$1"
-	fi
+  if [[ "${SBU_USE_COLORS}" == "${SBU_YES}" ]]; then
+    printf "$2$1${SBU_DEFAULT_COLOR_CODE}"
+  else
+    system__print "$1"
+  fi
 }
 
 function system__print_line() {
@@ -877,15 +877,15 @@ function system__print_new_line() {
 }
 
 function system__array_contains() {
-	local value=$1
-	shift 1
-	local i
-	for (( i=1; i <= $#; i++ )); do
-		if [[ "${!i}" == "${value}" ]]; then
-			return ${SBU_SUCCESS_STATUS_CODE}
-		fi
-	done
-	return ${SBU_FAILURE_STATUS_CODE}
+  local value=$1
+  shift 1
+  local i
+  for (( i=1; i <= $#; i++ )); do
+    if [[ "${!i}" == "${value}" ]]; then
+      return ${SBU_SUCCESS_STATUS_CODE}
+    fi
+  done
+  return ${SBU_FAILURE_STATUS_CODE}
 }
 
 function system__print_array() {
@@ -896,17 +896,17 @@ function system__print_array() {
 }
 
 function system__pretty_print_array() {
-	local array_as_string=""
-	local i
-	for (( i=1; i <= $#; i++ )); do
-		array_as_string+="${!i}, "
-	done
-	array_as_string=${array_as_string/%, /}
-	printf "[%s]" "${array_as_string}"
+  local array_as_string=""
+  local i
+  for (( i=1; i <= $#; i++ )); do
+    array_as_string+="${!i}, "
+  done
+  array_as_string=${array_as_string/%, /}
+  printf "[%s]" "${array_as_string}"
 }
 
 function system__string_contains() {
-	[[ "$1" == *"$2"* ]]
+  [[ "$1" == *"$2"* ]]
 }
 
 function system__randomize_array() {
@@ -931,19 +931,19 @@ function system__substitute_variable() {
 }
 
 function main__main() {
-	configuration__load
-	_main__initialise
+  configuration__load
+  _main__initialise
   local parsed_arguments=0
   _main__parse_arguments "$@"
   shift ${parsed_arguments}
   _main__assert_only_one_argument_left $#
-	_main__assert_reporters_are_known
-	SBU_BASE_TEST_DIRECTORY=$1
+  _main__assert_reporters_are_known
+  SBU_BASE_TEST_DIRECTORY=$1
 
-	if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
-	  runner__run_all_test_files "$1"
-	  return $?
-	fi
+  if [[ "${SBU_NO_RUN}" != "${SBU_YES}" ]]; then
+    runner__run_all_test_files "$1"
+    return $?
+  fi
 }
 
 function _main__initialise() {
@@ -956,53 +956,53 @@ function _main__release() {
 }
 
 function _main__parse_arguments() {
-	local argument
-	for argument in "$@"; do
-		case "${argument}" in
-			-a|--api-cheat-sheet)
-			_main__print_api_cheat_sheet_and_exit
-			;;
-			-c=*|--colors=*)
-			SBU_USE_COLORS="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-d=*|--random-run=*)
-			SBU_RANDOM_RUN="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-h|--help)
-			_main__print_full_usage
-			exit ${SBU_SUCCESS_STATUS_CODE}
-			;;
-			-f=*|--file-pattern=*)
-			SBU_TEST_FILE_PATTERN="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			--no-run)
-			SBU_NO_RUN="${SBU_YES}"
-			(( parsed_arguments++ ))
-			;;
-			-o=*|--output-file=*)
-			SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-t=*|--test-pattern=*)
-			SBU_TEST_FUNCTION_PATTERN="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-r=*|--reporters=*)
-			SBU_REPORTERS="${argument#*=}"
-			(( parsed_arguments++ ))
-			;;
-			-*|--*)
-			_main__print_illegal_option "${argument}"
+  local argument
+  for argument in "$@"; do
+    case "${argument}" in
+      -a|--api-cheat-sheet)
+      _main__print_api_cheat_sheet_and_exit
+      ;;
+      -c=*|--colors=*)
+      SBU_USE_COLORS="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -d=*|--random-run=*)
+      SBU_RANDOM_RUN="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -h|--help)
+      _main__print_full_usage
+      exit ${SBU_SUCCESS_STATUS_CODE}
+      ;;
+      -f=*|--file-pattern=*)
+      SBU_TEST_FILE_PATTERN="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      --no-run)
+      SBU_NO_RUN="${SBU_YES}"
+      (( parsed_arguments++ ))
+      ;;
+      -o=*|--output-file=*)
+      SBU_JUNIT_REPORTER_OUTPUT_FILE="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -t=*|--test-pattern=*)
+      SBU_TEST_FUNCTION_PATTERN="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -r=*|--reporters=*)
+      SBU_REPORTERS="${argument#*=}"
+      (( parsed_arguments++ ))
+      ;;
+      -*|--*)
+      _main__print_illegal_option "${argument}"
       _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
-			;;
-		esac
-	done
+      ;;
+    esac
+  done
 }
 
-function 	_main__assert_reporters_are_known() {
+function  _main__assert_reporters_are_known() {
   reporter__for_each_reporter _main__fail_if_reporter_unknown
 }
 
@@ -1034,7 +1034,7 @@ function _main__get_script_name() {
 
 function _main__print_usage_and_exit_with_code() {
   _main__print_usage
-	exit $1
+  exit $1
 }
 
 function _main__print_full_usage() {

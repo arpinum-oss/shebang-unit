@@ -4,7 +4,7 @@ function global_setup() {
 }
 
 function setup() {
-	database__initialise
+  database__initialise
 }
 
 function teardown() {
@@ -18,6 +18,6 @@ function can_execute_function_for_a_given_pattern() {
 
   local called_functions=($(helper__get_called_functions))
   assertion__equal 2 "${#called_functions[@]}"
-	assertion__array_contains "my_test_function" "${called_functions[0]}"
-	assertion__array_contains "my_other_test_function" "${called_functions[1]}"
+  assertion__array_contains "my_test_function" "${called_functions[0]}"
+  assertion__array_contains "my_other_test_function" "${called_functions[1]}"
 }

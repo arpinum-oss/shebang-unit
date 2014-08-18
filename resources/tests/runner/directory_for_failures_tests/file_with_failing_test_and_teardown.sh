@@ -1,8 +1,8 @@
 function teardown() {
-	helper__function_called "${FUNCNAME}"
+  helper__function_called "${FUNCNAME}"
 }
 
 function failing_test_function() {
-	helper__function_called "${FUNCNAME}"
-	return 1
+  helper__function_called "${FUNCNAME}"
+  return 1
 }

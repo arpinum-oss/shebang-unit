@@ -4,7 +4,7 @@ function setup() {
 }
 
 function teardown() {
-	helper__teardown
+  helper__teardown
 }
 
 function can_report_tests_runs_without_failures() {

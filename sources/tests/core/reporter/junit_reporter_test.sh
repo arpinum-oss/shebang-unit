@@ -9,7 +9,7 @@ function teardown() {
   if [[ -e "${SBU_JUNIT_REPORTER_OUTPUT_FILE}" ]]; then
     rm "${SBU_JUNIT_REPORTER_OUTPUT_FILE}"
   fi
-	helper__teardown
+  helper__teardown
 }
 
 function can_report_tests_runs_without_failures() {

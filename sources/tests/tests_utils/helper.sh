@@ -4,7 +4,7 @@ function helper__use_silent_reporter() {
 }
 
 function helper__get_called_functions() {
-	database__get "called_functions"
+  database__get "called_functions"
 }
 
 function helper__function_called() {
