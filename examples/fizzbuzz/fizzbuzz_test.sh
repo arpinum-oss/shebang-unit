@@ -11,19 +11,23 @@ function fizzbuzz_should_enumerate_100_elements() {
 }
 
 function fizzbuzz_should_enumerate_fizz_for_3() {
-  assertion__equal "Fizz" "$(_get_value_for_number 3)"
+  _assert_value_for_number 3 "Fizz"
 }
 
 function fizzbuzz_should_enumerate_fizz_for_all_multiples_of_3() {
-  assertion__equal "Fizz" "$(_get_value_for_number 6)"
+  _assert_value_for_number 6 "Fizz"
 }
 
 function fizzbuzz_should_enumerate_buzz_for_5() {
-  assertion__equal "Buzz" "$(_get_value_for_number 5)"
+  _assert_value_for_number 5 "Buzz"
 }
 
 function fizzbuzz_should_enumerate_buzz_for_15() {
-  assertion__equal "FizzBuzz" "$(_get_value_for_number 15)"
+  _assert_value_for_number 15 "FizzBuzz"
+}
+
+function _assert_value_for_number() {
+  assertion__equal "$2" "$(_get_value_for_number $1)"
 }
 
 function _get_value_for_number() {

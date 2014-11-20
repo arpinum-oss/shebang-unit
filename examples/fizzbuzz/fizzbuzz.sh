@@ -14,11 +14,9 @@ function _fizzbuzz__get_value_for_number() {
 
 function _fizzbuzz__print_value_if_multiple() {
   local value=$1; local number=$2; local divisor=$3
-  if _fizzbuzz__number_is_multiple ${number} ${divisor}; then
-    printf "${value}"
-  else
-    printf ""
-  fi
+  _fizzbuzz__number_is_multiple ${number} ${divisor} \
+    && printf "${value}" \
+    || printf ""
 }
 
 function _fizzbuzz__number_is_multiple() {
@@ -27,9 +25,7 @@ function _fizzbuzz__number_is_multiple() {
 
 function _fizzbuzz__print_value_of_default_if_empty() {
   local value=$1; local default=$2
-  if [[ -n "${value}" ]]; then
-    printf "${value}"
-  else
-    printf "${default}"
-  fi
+  [[ -n "${value}" ]] \
+    && printf "${value}" \
+    || printf "${default}"
 }
