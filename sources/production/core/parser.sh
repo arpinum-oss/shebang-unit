@@ -14,5 +14,5 @@ function _parser__filter_private_functions() {
 }
 
 function _parser__get_function_name_from_declaration() {
-  sed "s/${SBU_FUNCTION_DECLARATION_REGEX}/\1/"
+  sed "s/${SBU_FUNCTION_DECLARATION_REGEX}/\2/"
 }

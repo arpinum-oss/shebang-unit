@@ -24,8 +24,7 @@ function can_execute_test_files_randomly() {
 }
 
 function can_execute_test_functions_randomly() {
-  local tests_dir="${TESTS_RESOURCES_DIR}/runner/\
-directory_with_a_lot_of_functions"
+  local tests_dir="${TESTS_RESOURCES_DIR}/runner/directory_with_a_lot_of_functions"
 
   runner__run_all_test_files "${tests_dir}"
 

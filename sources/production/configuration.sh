@@ -15,7 +15,7 @@ function configuration__load() {
   SBU_GLOBAL_TEARDOWN_FUNCTION_NAME="global_teardown"
   SBU_SETUP_FUNCTION_NAME="setup"
   SBU_TEARDOWN_FUNCTION_NAME="teardown"
-  SBU_FUNCTION_DECLARATION_REGEX="^[ ]*function[ ]*\(.*\)()"
+  SBU_FUNCTION_DECLARATION_REGEX="^[ ]*\(function\)\{0,1\}[ ]*\([A-Za-z\-_0-9]\{1,\}\)[ ]*\(([ ]*)\)\{0,1\}[ ]*{"
   SBU_PRIVATE_FUNCTION_NAME_REGEX="^_.*"
 
   # Default configuration that can be modified with shebang_unit parameters
