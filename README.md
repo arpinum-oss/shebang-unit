@@ -86,7 +86,7 @@ can_assert_that_status_code_is_success() {
 ```
 
 ```bash
-can_assert_that_status_code_is_success() {
+can_assert_that_status_code_is_failure() {
   false
 
   assertion__status_code_is_failure $?
