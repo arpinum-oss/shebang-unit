@@ -1,4 +1,4 @@
-function setup() {
+setup() {
   database__initialise
   results__test_files_start_running
   SBU_USE_COLOR=${SBU_NO}
@@ -6,23 +6,23 @@ function setup() {
   SBU_ERROR_FD=1
 }
 
-function teardown() {
+teardown() {
   database__release
 }
 
-function prints_summary_with_singular_nouns_for_no_test() {
+prints_summary_with_singular_nouns_for_no_test() {
   local summary="$(simple_reporter__test_files_end_running)"
 
   assertion__string_contains "${summary}" "0 test, 0 failure, 0 skipped"
 }
 
-function prints_summary_with_singular_nouns_for_1_test() {
+prints_summary_with_singular_nouns_for_1_test() {
   local summary="$(simple_reporter__test_files_end_running)"
 
   assertion__string_contains "${summary}" "0 test, 0 failure, 0 skipped"
 }
 
-function prints_summary_with_plural_nouns_for_several_tests() {
+prints_summary_with_plural_nouns_for_several_tests() {
   results__increment_successful_tests
   results__increment_successful_tests
   results__increment_successful_tests

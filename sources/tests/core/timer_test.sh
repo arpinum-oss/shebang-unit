@@ -1,12 +1,12 @@
-function setup() {
+setup() {
   database__initialise
 }
 
-function teardown() {
+teardown() {
   database__release
 }
 
-function can_get_time_elapsed() {
+can_get_time_elapsed() {
   mock__make_function_prints "system__get_date_in_seconds" "12"
   timer__store_current_time "id"
   mock__make_function_prints "system__get_date_in_seconds" "38"
@@ -16,7 +16,7 @@ function can_get_time_elapsed() {
   assertion__equal "26" "${elapsed}"
 }
 
-function can_get_time_elapsed_for_several_timers() {
+can_get_time_elapsed_for_several_timers() {
   mock__make_function_prints "system__get_date_in_seconds" "10"
   timer__store_current_time "first_timer"
 
@@ -33,7 +33,7 @@ function can_get_time_elapsed_for_several_timers() {
   assertion__equal "20" "${second_time_elapsed}"
 }
 
-function when_the_current_time_has_not_been_stored_the_elapsed_time_is_0() {
+when_the_current_time_has_not_been_stored_the_elapsed_time_is_0() {
   mock__make_function_prints "system__get_date_in_seconds" "1337"
 
   local elapsed="$(timer__get_time_elapsed "id")"

@@ -26,7 +26,7 @@ Now you don't have any excuse for not practicing some sexy Test-Driven Developme
 ### Basic equality for newbies
 
 ```bash
-function can_assert_equality() {
+can_assert_equality() {
   assertion__equal 4 $((3+1))
 }
 ```
@@ -34,25 +34,25 @@ function can_assert_equality() {
 ### Awesome string assertions
 
 ```bash
-function can_assert_that_string_contains_another_one() {
+can_assert_that_string_contains_another_one() {
   assertion__string_contains "Cool dog is cool" "cool"
 }
 ```
 
 ```bash
-function can_assert_that_string_does_not_contain_another_one() {
+can_assert_that_string_does_not_contain_another_one() {
   assertion__string_does_not_contain "Monorail cat" "Caturday"
 }
 ```
 
 ```bash
-function can_assert_that_string_is_empty() {
+can_assert_that_string_is_empty() {
   assertion__string_empty ""
 }
 ```
 
 ```bash
-function can_assert_that_string_is_not_empty() {
+can_assert_that_string_is_not_empty() {
   assertion__string_not_empty "Don't feed the zombies"
 }
 ```
@@ -60,7 +60,7 @@ function can_assert_that_string_is_not_empty() {
 ### Rocket science array assertions
 
 ```bash
-function can_assert_that_array_contains_element() {
+can_assert_that_array_contains_element() {
   local lost_numbers=(4 8 15 16 23 42)
 
   assertion__array_contains 15 "${lost_numbers[@]}"
@@ -68,7 +68,7 @@ function can_assert_that_array_contains_element() {
 ```
 
 ```bash
-function can_assert_that_array_does_not_contain_element() {
+can_assert_that_array_does_not_contain_element() {
   local lost_numbers=(4 8 15 16 23 42)
 
   assertion__array_does_not_contain 1337 "${lost_numbers[@]}"
@@ -78,7 +78,7 @@ function can_assert_that_array_does_not_contain_element() {
 ### Magic command assertions
 
 ```bash
-function can_assert_that_status_code_is_success() {
+can_assert_that_status_code_is_success() {
   true
 
   assertion__status_code_is_success $?
@@ -86,7 +86,7 @@ function can_assert_that_status_code_is_success() {
 ```
 
 ```bash
-function can_assert_that_status_code_is_success() {
+can_assert_that_status_code_is_success() {
   false
 
   assertion__status_code_is_failure $?
@@ -94,13 +94,13 @@ function can_assert_that_status_code_is_success() {
 ```
 
 ```bash
-function can_assert_that_command_is_successful() {
+can_assert_that_command_is_successful() {
   assertion__successful true
 }
 ```
 
 ```bash
-function can_assert_that_command_is_failing() {
+can_assert_that_command_is_failing() {
   assertion__failing false
 }
 ```
@@ -110,7 +110,7 @@ function can_assert_that_command_is_failing() {
 > <cite>(Puppeteer, Ghost in the Shell)</cite>
 
 ```bash
-function can_mock_pwd_to_do_nothing() {
+can_mock_pwd_to_do_nothing() {
   mock__make_function_do_nothing "pwd"
 
   assertion__equal "" "$(pwd)"
@@ -118,7 +118,7 @@ function can_mock_pwd_to_do_nothing() {
 ```
 
 ```bash
-function can_mock_pwd_to_print_root() {
+can_mock_pwd_to_print_root() {
   mock__make_function_prints "pwd" "/"
 
   assertion__equal "/" "$(pwd)"
@@ -126,7 +126,7 @@ function can_mock_pwd_to_print_root() {
 ```
 
 ```bash
-function can_mock_pwd_to_call_a_custom_function() {
+can_mock_pwd_to_call_a_custom_function() {
   mock__make_function_call "pwd" "printf hello"
 
   assertion__equal "hello" "$(pwd)"
@@ -195,7 +195,7 @@ Test function pattern can be changed with `-t` or `--test-pattern` options. The 
 **sheban_unit** doesn't need any annotation to recognise a test function. Just write un *public* (see below) function like :
 
 ```bash
-function one_kitten_plus_another_is_equal_to_two_kittens() {
+one_kitten_plus_another_is_equal_to_two_kittens() {
   ...
 }
 
@@ -204,7 +204,7 @@ function one_kitten_plus_another_is_equal_to_two_kittens() {
 You can also use *private* functions to make your tests more explicit. Just prefix your functions by `_` :
 
 ```bash
-function my_super_explicit_test_use_private_functions() {
+my_super_explicit_test_use_private_functions() {
   _arrange_the_mess
   
   _act_like_a_pro
@@ -212,7 +212,7 @@ function my_super_explicit_test_use_private_functions() {
   _assert_some_stuff
 }
 
-function _arrange_the_mess() {
+_arrange_the_mess() {
   ...
 }
 

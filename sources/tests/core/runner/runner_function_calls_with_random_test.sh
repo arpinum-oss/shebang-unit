@@ -1,17 +1,17 @@
-function global_setup() {
+global_setup() {
   helper__use_silent_reporter
   SBU_RANDOM_RUN=${SBU_YES}
 }
 
-function setup() {
+setup() {
   database__initialise
 }
 
-function teardown() {
+teardown() {
   database__release
 }
 
-function can_execute_test_files_randomly() {
+can_execute_test_files_randomly() {
   local tests_dir="${TESTS_RESOURCES_DIR}/runner/directory_with_a_lot_of_files"
 
   runner__run_all_test_files "${tests_dir}"
@@ -23,7 +23,7 @@ function can_execute_test_files_randomly() {
   assertion__different "${ordered}" "${actual}"
 }
 
-function can_execute_test_functions_randomly() {
+can_execute_test_functions_randomly() {
   local tests_dir="${TESTS_RESOURCES_DIR}/runner/directory_with_a_lot_of_functions"
 
   runner__run_all_test_files "${tests_dir}"

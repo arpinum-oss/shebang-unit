@@ -1,17 +1,17 @@
-function global_setup() {
+global_setup() {
   _TESTS_DIRECTORY="${TESTS_RESOURCES_DIR}/runner/directory_with_tests_only"
   helper__use_silent_reporter
 }
 
-function setup() {
+setup() {
   database__initialise
 }
 
-function teardown() {
+teardown() {
   database__release
 }
 
-function can_execute_function_for_a_given_pattern() {
+can_execute_function_for_a_given_pattern() {
   SBU_TEST_FUNCTION_PATTERN="my_*"
 
   runner__run_all_test_files "${_TESTS_DIRECTORY}"

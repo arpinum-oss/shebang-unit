@@ -1,3 +1,3 @@
-function f_06() {
+f_06() {
   helper__function_called "${FUNCNAME}"
 }

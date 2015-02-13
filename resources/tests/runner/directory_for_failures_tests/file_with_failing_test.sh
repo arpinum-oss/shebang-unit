@@ -1,8 +1,8 @@
-function global_teardown() {
+global_teardown() {
   helper__function_called "${FUNCNAME}"
 }
 
-function failing_test_function() {
+failing_test_function() {
   helper__function_called "${FUNCNAME}"
   return 1
 }

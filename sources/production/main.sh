@@ -1,4 +1,4 @@
-function main__main() {
+main__main() {
   configuration__load
   _main__initialise
   local parsed_arguments=0
@@ -14,16 +14,16 @@ function main__main() {
   fi
 }
 
-function _main__initialise() {
+_main__initialise() {
   database__initialise
   trap _main__release EXIT
 }
 
-function _main__release() {
+_main__release() {
   database__release
 }
 
-function _main__parse_arguments() {
+_main__parse_arguments() {
   local argument
   for argument in "$@"; do
     case "${argument}" in
@@ -70,11 +70,11 @@ function _main__parse_arguments() {
   done
 }
 
-function  _main__assert_reporters_are_known() {
+ _main__assert_reporters_are_known() {
   reporter__for_each_reporter _main__fail_if_reporter_unknown
 }
 
-function _main__fail_if_reporter_unknown() {
+_main__fail_if_reporter_unknown() {
   if ! system__array_contains "${reporter}" "simple" "dots" "junit"; then
     system__print_line \
       "$(_main__get_script_name): unknown reporter <${reporter}>"
@@ -82,30 +82,30 @@ function _main__fail_if_reporter_unknown() {
   fi
 }
 
-function _main__print_illegal_option() {
+_main__print_illegal_option() {
   local option="${1%=*}"
   option="${option#-}"
   option="${option#-}"
   system__print_line "$(_main__get_script_name): illegal option -- ${option}"
 }
 
-function _main__assert_only_one_argument_left() {
+_main__assert_only_one_argument_left() {
   if (( $1 > 1 )); then
     system__print_line "$(_main__get_script_name): only one path is allowed"
     _main__print_usage_and_exit_with_code ${SBU_FAILURE_STATUS_CODE}
   fi
 }
 
-function _main__get_script_name() {
+_main__get_script_name() {
   basename "${BASH_SOURCE[0]}"
 }
 
-function _main__print_usage_and_exit_with_code() {
+_main__print_usage_and_exit_with_code() {
   _main__print_usage
   exit $1
 }
 
-function _main__print_full_usage() {
+_main__print_full_usage() {
   _main__print_usage
   local script="$(_main__get_script_name)"
   system__print_new_line
@@ -135,13 +135,13 @@ function _main__print_full_usage() {
     run all tests files ending with test.sh in sources/test"
 }
 
-function _main__print_usage() {
+_main__print_usage() {
   system__print_line "\
 usage: $(_main__get_script_name) [options] path
        run all tests in path"
 }
 
-function _main__print_api_cheat_sheet_and_exit() {
+_main__print_api_cheat_sheet_and_exit() {
   system__print_line "\
 [assertions]
   assertion__equal (value, other)

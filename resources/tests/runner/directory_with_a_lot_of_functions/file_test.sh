@@ -1,39 +1,39 @@
-function f_a() {
+f_a() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_b() {
+f_b() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_c() {
+f_c() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_d() {
+f_d() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_e() {
+f_e() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_f() {
+f_f() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_g() {
+f_g() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_h() {
+f_h() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_i() {
+f_i() {
   helper__function_called "${FUNCNAME}"
 }
 
-function f_j() {
+f_j() {
   helper__function_called "${FUNCNAME}"
 }

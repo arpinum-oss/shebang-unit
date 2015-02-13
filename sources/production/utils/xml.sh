@@ -1,4 +1,4 @@
-function xml__encode_text() {
+xml__encode_text() {
   local encoded=${1//\&/\&amp\;}
   encoded=${encoded//\</\&lt\;}
   encoded=${encoded//\>/\&gt\;}

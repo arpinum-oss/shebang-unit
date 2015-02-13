@@ -1,3 +1,3 @@
-function failing_test_function() {
+failing_test_function() {
   return 1
 }
