@@ -50,19 +50,19 @@ can_print_without_color_if_colors_are_turned_off() {
 a_contained_value_is_contained_by_the_array() {
   local array=("a" "the element" "c")
 
-  assertion__successful system__array_contains "the element" "${array[@]}"
+  assertion__successful array__contains "the element" "${array[@]}"
 }
 
 a_not_contained_value_is_not_contained_by_the_array() {
   local array=("a" "the element" "c")
 
-  assertion__failing system__array_contains "the" "${array[@]}"
+  assertion__failing array__contains "the" "${array[@]}"
 }
 
 can_print_array() {
   local array=("a" "123" "douze")
 
-  local string="$(system__print_array "${array[@]}")"
+  local string="$(array__print "${array[@]}")"
 
   local expected="a
 123

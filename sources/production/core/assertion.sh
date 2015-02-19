@@ -37,7 +37,7 @@ assertion__string_not_empty() {
 assertion__array_contains() {
   local element=$1
   shift 1
-  if ! system__array_contains "${element}" "$@"; then
+  if ! array__contains "${element}" "$@"; then
     local array_as_string="$(system__pretty_print_array "$@")"
     _assertion__failed \
       "Array: <${array_as_string}> does not contain: <${element}>."
@@ -47,7 +47,7 @@ assertion__array_contains() {
 assertion__array_does_not_contain() {
   local element=$1
   shift 1
-  if system__array_contains "${element}" "$@"; then
+  if array__contains "${element}" "$@"; then
     local array_as_string="$(system__pretty_print_array "$@")"
     _assertion__failed \
       "Array: <${array_as_string}> contains: <${element}>."

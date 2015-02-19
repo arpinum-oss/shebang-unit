@@ -45,7 +45,7 @@ _file_runner__get_randomized_test_functions_if_needed() {
   if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}" ]]; then
     system__randomize_array "$@"
   else
-    system__print_array "$@"
+    array__print "$@"
   fi
 }
 
@@ -60,7 +60,7 @@ _file_runner__run_global_teardown_if_exists() {
 }
 
 _file_runner__function_is_a_test() {
-  ! system__array_contains "$1" \
+  ! array__contains "$1" \
                       "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
                       "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
                       "${SBU_SETUP_FUNCTION_NAME}" \
@@ -70,7 +70,7 @@ _file_runner__function_is_a_test() {
 _file_runner__call_function_if_exists() {
   local function=$1
   shift 1
-  if system__array_contains "${function}" "${public_functions[@]}"; then
+  if array__contains "${function}" "${public_functions[@]}"; then
     "${function}"
   fi
 }

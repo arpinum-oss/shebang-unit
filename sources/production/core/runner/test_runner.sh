@@ -40,7 +40,7 @@ _test_runner__parse_test_function_result() {
 _test_runner__call_function_if_exits() {
   local function=$1
   shift 1
-  if system__array_contains "${function}" "$@"; then
+  if array__contains "${function}" "$@"; then
     "${function}"
   fi
 }

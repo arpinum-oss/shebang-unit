@@ -21,7 +21,7 @@ _runner__get_test_files_in_directory() {
   if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}"  ]]; then
     files=($(system__randomize_array "${files[@]}"))
   fi
-  system__print_array "${files[@]}"
+  array__print "${files[@]}"
 }
 
 runner__tests_are_successful() {

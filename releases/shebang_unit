@@ -97,7 +97,7 @@ assertion__string_not_empty() {
 assertion__array_contains() {
   local element=$1
   shift 1
-  if ! system__array_contains "${element}" "$@"; then
+  if ! array__contains "${element}" "$@"; then
     local array_as_string="$(system__pretty_print_array "$@")"
     _assertion__failed \
       "Array: <${array_as_string}> does not contain: <${element}>."
@@ -107,7 +107,7 @@ assertion__array_contains() {
 assertion__array_does_not_contain() {
   local element=$1
   shift 1
-  if system__array_contains "${element}" "$@"; then
+  if array__contains "${element}" "$@"; then
     local array_as_string="$(system__pretty_print_array "$@")"
     _assertion__failed \
       "Array: <${array_as_string}> contains: <${element}>."
@@ -200,7 +200,7 @@ _runner__get_test_files_in_directory() {
   if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}"  ]]; then
     files=($(system__randomize_array "${files[@]}"))
   fi
-  system__print_array "${files[@]}"
+  array__print "${files[@]}"
 }
 
 runner__tests_are_successful() {
@@ -256,7 +256,7 @@ _file_runner__get_randomized_test_functions_if_needed() {
   if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}" ]]; then
     system__randomize_array "$@"
   else
-    system__print_array "$@"
+    array__print "$@"
   fi
 }
 
@@ -271,7 +271,7 @@ _file_runner__run_global_teardown_if_exists() {
 }
 
 _file_runner__function_is_a_test() {
-  ! system__array_contains "$1" \
+  ! array__contains "$1" \
                       "${SBU_GLOBAL_SETUP_FUNCTION_NAME}" \
                       "${SBU_GLOBAL_TEARDOWN_FUNCTION_NAME}" \
                       "${SBU_SETUP_FUNCTION_NAME}" \
@@ -281,7 +281,7 @@ _file_runner__function_is_a_test() {
 _file_runner__call_function_if_exists() {
   local function=$1
   shift 1
-  if system__array_contains "${function}" "${public_functions[@]}"; then
+  if array__contains "${function}" "${public_functions[@]}"; then
     "${function}"
   fi
 }
@@ -426,7 +426,7 @@ _test_runner__parse_test_function_result() {
 _test_runner__call_function_if_exits() {
   local function=$1
   shift 1
-  if system__array_contains "${function}" "$@"; then
+  if array__contains "${function}" "$@"; then
     "${function}"
   fi
 }
@@ -889,7 +889,7 @@ system__print_new_line() {
   printf "\n"
 }
 
-system__array_contains() {
+array__contains() {
   local value=$1
   shift 1
   local i
@@ -901,7 +901,7 @@ system__array_contains() {
   return ${SBU_FAILURE_STATUS_CODE}
 }
 
-system__print_array() {
+array__print() {
   local element
   for element in "$@"; do
     system__print_line "${element}"
@@ -1021,7 +1021,7 @@ _main__parse_arguments() {
 }
 
 _main__fail_if_reporter_unknown() {
-  if ! system__array_contains "${reporter}" "simple" "dots" "junit"; then
+  if ! array__contains "${reporter}" "simple" "dots" "junit"; then
     system__print_line \
       "$(_main__get_script_name): unknown reporter <${reporter}>"
     exit ${SBU_FAILURE_STATUS_CODE}

@@ -75,7 +75,7 @@ _main__parse_arguments() {
 }
 
 _main__fail_if_reporter_unknown() {
-  if ! system__array_contains "${reporter}" "simple" "dots" "junit"; then
+  if ! array__contains "${reporter}" "simple" "dots" "junit"; then
     system__print_line \
       "$(_main__get_script_name): unknown reporter <${reporter}>"
     exit ${SBU_FAILURE_STATUS_CODE}

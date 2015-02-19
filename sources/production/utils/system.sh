@@ -35,7 +35,7 @@ system__print_new_line() {
   printf "\n"
 }
 
-system__array_contains() {
+array__contains() {
   local value=$1
   shift 1
   local i
@@ -47,7 +47,7 @@ system__array_contains() {
   return ${SBU_FAILURE_STATUS_CODE}
 }
 
-system__print_array() {
+array__print() {
   local element
   for element in "$@"; do
     system__print_line "${element}"
