@@ -1,5 +1,5 @@
 configuration__load() {
-  # yes/no representation used with shebang_unit parameters to activate
+  # yes/no representation used with shebang-unit parameters to activate
   # stuff like colors
   SBU_YES="yes"
   SBU_NO="no"
@@ -18,8 +18,8 @@ configuration__load() {
   SBU_FUNCTION_DECLARATION_REGEX="^[ ]*\(function\)\{0,1\}[ ]*\([A-Za-z0-9_-]\{1,\}\)[ ]*\(([ ]*)\)\{0,1\}[ ]*{"
   SBU_PRIVATE_FUNCTION_NAME_REGEX="^_.*"
 
-  # Default configuration that can be modified with shebang_unit parameters
-  # For more information see shebang_unit usages
+  # Default configuration that can be modified with shebang-unit parameters
+  # For more information see shebang-unit usages
   SBU_TEST_FILE_PATTERN="*_test.sh"
   SBU_TEST_FUNCTION_PATTERN="*"
   SBU_USE_COLORS="${SBU_YES}"
@@ -31,7 +31,7 @@ configuration__load() {
   SBU_SUCCESS_STATUS_CODE=0
   SBU_FAILURE_STATUS_CODE=1
   SBU_VALUE_SEPARATOR=","
-  SBU_TEMP_DIR="/tmp/.shebang_unit"
+  SBU_TEMP_DIR="/tmp/.shebang-unit"
   SBU_LAST_ASSERTION_MSG_KEY="last_assertion_message"
   SBU_NO_RUN="${SBU_NO}"
   SBU_STANDARD_FD=42

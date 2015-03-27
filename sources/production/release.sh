@@ -1,4 +1,4 @@
-_RELEASED_ARTIFACT_FILENAME='shebang_unit'
+_RELEASED_ARTIFACT_FILENAME='shebang-unit'
 _ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.."; pwd)"
 _SOURCES_DIR="${_ROOT_DIR}/sources/production"
 _RELEASE_DIR="${_ROOT_DIR}/releases"

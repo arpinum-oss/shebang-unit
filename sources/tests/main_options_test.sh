@@ -89,7 +89,7 @@ cannot_define_unkown_reporter() {
   message="$(${_MAIN} --reporters="unknown" "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
-  local expected="shebang_unit: unknown reporter <unknown>"
+  local expected="shebang-unit: unknown reporter <unknown>"
   assertion__equal "${expected}" "${message}"
 }
 
@@ -99,7 +99,7 @@ unkown_reporter_is_printed_without_characters_evaluation() {
   message="$(${_MAIN} --reporters="%s" "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
-  local expected="shebang_unit: unknown reporter <%s>"
+  local expected="shebang-unit: unknown reporter <%s>"
   assertion__equal "${expected}" "${message}"
 }
 
@@ -109,7 +109,7 @@ cannot_define_known_and_unkown_reporter() {
   message="$(${_MAIN} --reporters="simple,unknown" "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
-  local expected="shebang_unit: unknown reporter <unknown>"
+  local expected="shebang-unit: unknown reporter <unknown>"
   assertion__equal "${expected}" "${message}"
 }
 
@@ -119,7 +119,7 @@ cannot_use_unknown_option_with_value() {
   message="$(${_MAIN} --iks=plop "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
-  assertion__string_contains "${message}" "shebang_unit: illegal option -- iks"
+  assertion__string_contains "${message}" "shebang-unit: illegal option -- iks"
   assertion__string_contains "${message}" "usage:"
 }
 
@@ -129,7 +129,7 @@ unkown_option_is_printed_without_characters_evaluation() {
   message="$(${_MAIN} --%s=plop "${_TEST_DIR}")"
 
   assertion__status_code_is_failure $?
-  assertion__string_contains "${message}" "shebang_unit: illegal option -- %s"
+  assertion__string_contains "${message}" "shebang-unit: illegal option -- %s"
   assertion__string_contains "${message}" "usage:"
 }
 
@@ -150,7 +150,7 @@ cannot_use_unknown_option() {
 
   message="$(${_MAIN} --iks "${_TEST_DIR}")"
 
-  assertion__string_contains "${message}" "shebang_unit: illegal option -- iks"
+  assertion__string_contains "${message}" "shebang-unit: illegal option -- iks"
 }
 
 cannot_use_unknown_short_option_with_value() {
@@ -158,7 +158,7 @@ cannot_use_unknown_short_option_with_value() {
 
   message="$(${_MAIN} -x=plop "${_TEST_DIR}")"
 
-  assertion__string_contains "${message}" "shebang_unit: illegal option -- x"
+  assertion__string_contains "${message}" "shebang-unit: illegal option -- x"
 }
 
 cannot_use_unknown_short_option() {
@@ -166,7 +166,7 @@ cannot_use_unknown_short_option() {
 
   message="$(${_MAIN} -x "${_TEST_DIR}")"
 
-  assertion__string_contains "${message}" "shebang_unit: illegal option -- x"
+  assertion__string_contains "${message}" "shebang-unit: illegal option -- x"
 }
 
 can_print_full_usage_for_help_option() {
@@ -194,7 +194,7 @@ cannot_use_more_than_one_argument_after_options() {
   message="$(${_MAIN} "${_TEST_DIR}" "an illegal second argument")"
 
   assertion__status_code_is_failure $?
-  local expected="shebang_unit: only one path is allowed"
+  local expected="shebang-unit: only one path is allowed"
   assertion__string_contains "${message}" "${expected}"
   assertion__string_contains "${message}" "usage:"
 }
