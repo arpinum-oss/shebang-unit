@@ -10,4 +10,4 @@ RUN mkdir /src
 VOLUME /src
 WORKDIR /src
 
-CMD ["/app/shebang-unit", "."]
+CMD "/app/shebang-unit" "${SBU_OPTS}" "."
