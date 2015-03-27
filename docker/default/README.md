@@ -10,13 +10,15 @@ To run unit tests in your project:
 
     docker run --rm -v "$(pwd):/src" michaelborde/shebang-unit
 
-Arguments are passed to shebang-unit. Ex with reporter and color options:
+You can pass arguments to *shebang-unit* with `SBU_OPTS` env variable.
+
+Example with reporter and color options:
 
     docker run --rm -v "$(pwd):/src" -e SBU_OPTS="-r=dots -c=no" michaelborde/shebang-unit
 
 ## Lightweight image
 
-Default image is based on ubuntu but you can also use the *light* tag based on Alpine. If your project is a pure Bash kata, the small set of binaries should work.
+Default image is based on ubuntu but you can also use the `light` tag based on Alpine. If your project is a pure Bash kata, the small set of binaries should work.
 
 
 [shebang-unit]: https://github.com/arpinum/shebang-unit
