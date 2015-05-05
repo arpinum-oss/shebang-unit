@@ -10,16 +10,18 @@ runner__run_all_test_files() {
 
 _runner__run_all_test_files_with_pattern_in_directory() {
   local file
-  local files=($(_runner__get_test_files_in_directory "$1"))
+  local files
+  array__from_lines files <<< "$(_runner__get_test_files_in_directory "$1")"
   for file in "${files[@]}"; do
     file_runner__run_test_file "${file}"
   done
 }
 
 _runner__get_test_files_in_directory() {
-  local files=($(find "$1" -name "${SBU_TEST_FILE_PATTERN}" | sort))
+  local files
+  array__from_lines files <<< "$(find "$1" -name "${SBU_TEST_FILE_PATTERN}" | sort)"
   if [[ "${SBU_RANDOM_RUN}" == "${SBU_YES}"  ]]; then
-    files=($(system__randomize_array "${files[@]}"))
+    array__from_lines files <<< "$(system__randomize_array "${files[@]}")"
   fi
   array__print "${files[@]}"
 }

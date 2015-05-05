@@ -47,6 +47,11 @@ array__contains() {
   return ${SBU_FAILURE_STATUS_CODE}
 }
 
+array__from_lines() {
+  local IFS=$'\n'
+  eval "$1=(\$(</dev/stdin))"
+}
+
 array__print() {
   local element
   for element in "$@"; do
@@ -74,7 +79,7 @@ system__randomize_array() {
     local random_index=$(( $(system__random) % ${#copy[@]} ))
     system__print_line "${copy[${random_index}]}"
     unset copy[${random_index}]
-    copy=(${copy[@]})
+    copy=("${copy[@]}")
   done
 }
 

@@ -134,3 +134,54 @@ can_randomize_array() {
   local actual_as_string="$(system__pretty_print_array "${actual[@]}")"
   assertion__different "${ordred_as_string}" "${actual_as_string}"
 }
+
+randomize_array_preserve_spaces() {
+  local ordered=("a 1" "b 2" "c 3" "d 4" "e 5")
+
+  local actual
+  array__from_lines actual <<< "$(system__randomize_array "${ordered[@]}")"
+
+  assertion__equal 5 "${#actual[@]}"
+  assertion__array_contains "a 1" "${actual[@]}"
+  assertion__array_contains "b 2" "${actual[@]}"
+  assertion__array_contains "c 3" "${actual[@]}"
+  local ordred_as_string="$(system__pretty_print_array "${ordered[@]}")"
+  local actual_as_string="$(system__pretty_print_array "${actual[@]}")"
+  assertion__different "${ordred_as_string}" "${actual_as_string}"
+}
+
+can_get_array_from_lines() {
+  local expected=(1 2)
+  local actual
+  array__from_lines actual <<< "1
+2"
+
+  local expected_as_string="$(system__pretty_print_array "${expected[@]}")"
+  local actual_as_string="$(system__pretty_print_array "${actual[@]}")"
+  assertion__equal "${expected_as_string}" "${actual_as_string}"
+}
+
+getting_array_from_lines_preserve_spaces() {
+  local expected=("1 3" "2 4")
+  local actual
+  array__from_lines actual <<< "1 3
+2 4"
+
+  local expected_as_string="$(system__pretty_print_array "${expected[@]}")"
+  local actual_as_string="$(system__pretty_print_array "${actual[@]}")"
+  assertion__equal "${expected_as_string}" "${actual_as_string}"
+}
+
+can_get_array_from_lines_calling_a_function() {
+  local expected=("plop.sh" "un deux.sh" "test.sh")
+  local actual
+  array__from_lines actual <<< "$(_array)"
+
+  local expected_as_string="$(system__pretty_print_array "${expected[@]}")"
+  local actual_as_string="$(system__pretty_print_array "${actual[@]}")"
+  assertion__equal "${expected_as_string}" "${actual_as_string}"
+}
+
+_array() {
+  printf "plop.sh\nun deux.sh\ntest.sh\n"
+}

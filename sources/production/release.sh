@@ -34,7 +34,7 @@ release__execute_for_each_module() {
 }
 
 _release__append_runner_call_in_release_file() {
-  _release__append_to_release_file 'main__main $@'
+  _release__append_to_release_file 'main__main "$@"'
 }
 
 _release__append_module_to_release_file() {
