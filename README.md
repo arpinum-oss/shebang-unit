@@ -206,9 +206,9 @@ You can also use *private* functions to make your tests more explicit. Just pref
 ```bash
 my_super_explicit_test_use_private_functions() {
   _arrange_the_mess
-  
+
   _act_like_a_pro
-  
+
   _assert_some_stuff
 }
 
@@ -224,7 +224,7 @@ _arrange_the_mess() {
 You can use special functions to arrange or clean the mess :
 
 * `setup` : called before each test in a file
-* `teardown` : called after each test in a file 
+* `teardown` : called after each test in a file
 * `global_setup` : called once before all tests in a file
 * `global_teardown` : called once after all tests in a file
 
@@ -246,7 +246,7 @@ SBU_USE_COLORS="${SBU_NO}"
 
 ## Special thanks
 
-The imperial guards of **shebang-unit**: 
+The imperial guards of **shebang-unit**:
 
 * [PotatoesMaster]
 
@@ -264,7 +264,7 @@ You should have received a copy of the GNU General Public License along with **s
 [Etat build travis]: https://travis-ci.org/arpinum/shebang-unit.png?branch=master
 [Etat build drone]: https://drone.io/github.com/arpinum/shebang-unit/status.png
 [xUnit]: http://wikipedia.org/wiki/XUnit
-[releases/shebang-unit]: https://github.com/arpinum/shebang-unit/blob/master/releases/shebang-unit
-[examples/fizzbuzz]: https://github.com/arpinum/shebang-unit/tree/master/examples/fizzbuzz
+[releases/shebang-unit]: https://github.com/arpinum-oss/shebang-unit/blob/master/releases/shebang-unit
+[examples/fizzbuzz]: https://github.com/arpinum-oss/shebang-unit/tree/master/examples/fizzbuzz
 [http://www.gnu.org/licenses/lgpl.html]: http://www.gnu.org/licenses/lgpl.html
 [PotatoesMaster]: https://github.com/PotatoesMaster

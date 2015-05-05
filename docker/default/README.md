@@ -21,5 +21,5 @@ Example with reporter and color options:
 Default image is based on ubuntu but you can also use the `light` tag based on Alpine. If your project is a pure Bash kata, the small set of binaries should work.
 
 
-[shebang-unit]: https://github.com/arpinum/shebang-unit
+[shebang-unit]: https://github.com/arpinum-oss/shebang-unit
 [xUnit]: http://wikipedia.org/wiki/XUnit
