@@ -135,19 +135,16 @@ can_randomize_array() {
   assertion__different "${ordred_as_string}" "${actual_as_string}"
 }
 
-randomize_array_preserve_spaces() {
+randomize_array_preserves_spaces() {
   local ordered=("a 1" "b 2" "c 3" "d 4" "e 5")
-
   local actual
+
   array__from_lines actual <<< "$(system__randomize_array "${ordered[@]}")"
 
   assertion__equal 5 "${#actual[@]}"
   assertion__array_contains "a 1" "${actual[@]}"
   assertion__array_contains "b 2" "${actual[@]}"
   assertion__array_contains "c 3" "${actual[@]}"
-  local ordred_as_string="$(system__pretty_print_array "${ordered[@]}")"
-  local actual_as_string="$(system__pretty_print_array "${actual[@]}")"
-  assertion__different "${ordred_as_string}" "${actual_as_string}"
 }
 
 can_get_array_from_lines() {

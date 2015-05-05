@@ -26,7 +26,6 @@ system__print_line() {
   system__print_new_line
 }
 
-
 system__print() {
   printf "%s" "$1"
 }

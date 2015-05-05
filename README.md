@@ -192,7 +192,7 @@ Test function pattern can be changed with `-t` or `--test-pattern` options. The 
 
 ## Convention over configuration
 
-**sheban_unit** doesn't need any annotation to recognise a test function. Just write un *public* (see below) function like :
+**sheban_unit** doesn't need any annotation to recognise a test function. Just write a *public* (see below) function like :
 
 ```bash
 one_kitten_plus_another_is_equal_to_two_kittens() {
@@ -244,10 +244,15 @@ Or, if you would rather live in dark and definitively turn off colors :
 SBU_USE_COLORS="${SBU_NO}"
 ```
 
+## Special thanks
+
+The imperial guards of **shebang-unit**: 
+
+* [PotatoesMaster]
 
 ## License
 
-Copyright (C) 2013, Arpinum
+Copyright (C) 2015, Arpinum
 
 **shebang-unit** is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -262,3 +267,4 @@ You should have received a copy of the GNU General Public License along with **s
 [releases/shebang-unit]: https://github.com/arpinum/shebang-unit/blob/master/releases/shebang-unit
 [examples/fizzbuzz]: https://github.com/arpinum/shebang-unit/tree/master/examples/fizzbuzz
 [http://www.gnu.org/licenses/lgpl.html]: http://www.gnu.org/licenses/lgpl.html
+[PotatoesMaster]: https://github.com/PotatoesMaster
