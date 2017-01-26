@@ -1,4 +1,4 @@
-# shebang-unit [![Travis badge]](https://travis-ci.org/arpinum/shebang-unit)
+# shebang-unit [![Travis badge]](https://travis-ci.org/arpinum-oss/shebang-unit)
 
 > Bang bang, my baby shot me down.
 > <cite>(Cher)</cite>
@@ -261,7 +261,7 @@ Copyright (C) 2015, Arpinum
 You should have received a copy of the GNU General Public License along with **shebang-unit**.  If not, see [http://www.gnu.org/licenses/lgpl.html].
 
 
-[Travis badge]: https://travis-ci.org/arpinum/shebang-unit.png?branch=master
+[Travis badge]: https://travis-ci.org/arpinum-oss/shebang-unit.png?branch=master
 [xUnit]: http://wikipedia.org/wiki/XUnit
 [releases/shebang-unit]: https://github.com/arpinum-oss/shebang-unit/blob/master/releases/shebang-unit
 [examples/fizzbuzz]: https://github.com/arpinum-oss/shebang-unit/tree/master/examples/fizzbuzz
