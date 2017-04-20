@@ -5,9 +5,9 @@ can_make_function_do_nothing() {
 }
 
 can_make_function_prints_something() {
-  mock__make_function_prints "_my_function" "something"
+  mock__make_function_prints "_my_function" "i say something"
 
-  assertion__equal "something" "$(_my_function)"
+  assertion__equal "i say something" "$(_my_function)"
 }
 
 can_make_function_call_another_one() {
