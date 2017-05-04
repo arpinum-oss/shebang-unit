@@ -9,7 +9,7 @@ This image allows you to test your project in an isolated container.
 To run unit tests in your project:
 
 ```
-docker run --rm -v "$(pwd):/src" michaelborde/shebang-unit
+docker run --rm -v "$(pwd):/src" arpinum/shebang-unit
 ```
 
 *shebang-unit* is Docker entrypoint so you can pass arguments.
@@ -17,7 +17,7 @@ docker run --rm -v "$(pwd):/src" michaelborde/shebang-unit
 Example with reporter and color options:
 
 ```
-docker run --rm -v "$(pwd):/src" michaelborde/shebang-unit -r=dots -c=no .
+docker run --rm -v "$(pwd):/src" arpinum/shebang-unit -r=dots -c=no .
 ```
 
 ## Lightweight image
