@@ -244,6 +244,10 @@ Or, if you would rather live in dark and definitively turn off colors :
 SBU_USE_COLORS="${SBU_NO}"
 ```
 
+## Docker ##
+
+Oh boy you can also run **shebang-unit** in a docker container. Just look at the [Docker documentation].
+
 ## Special thanks
 
 The imperial guards of **shebang-unit**:
@@ -256,6 +260,7 @@ The imperial guards of **shebang-unit**:
 
 [Travis badge]: https://travis-ci.org/arpinum-oss/shebang-unit.png?branch=master
 [xUnit]: http://wikipedia.org/wiki/XUnit
-[releases/shebang-unit]: https://github.com/arpinum-oss/shebang-unit/blob/master/releases/shebang-unit
-[examples/fizzbuzz]: https://github.com/arpinum-oss/shebang-unit/tree/master/examples/fizzbuzz
+[releases/shebang-unit]: releases/shebang-unit
+[examples/fizzbuzz]: examples/fizzbuzz
 [PotatoesMaster]: https://github.com/PotatoesMaster
+[Docker documentation]: docker/default/README.md
